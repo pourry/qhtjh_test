@@ -1,13 +1,25 @@
 package com.example.spring_boot_mode.config.encrypt.sm2;
 
 
+import cn.hutool.core.codec.BCD;
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.BCUtil;
+import cn.hutool.crypto.ECKeyUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.SM2;
+import org.apache.coyote.http11.filters.VoidInputFilter;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 /*
 * SM2算法：
@@ -25,10 +37,37 @@ import java.security.KeyPair;
 * 安全强度比RSA 2048位高，
 * 但运算速度快于RSA。
 * */
+/*
+编码方式：
+* Base64：  （8进制编码）  隐蔽性好（不易被人直接识别的形式）
+                        速度慢些，编码后相对较小
+                        Base64 编码主要用在传输、存储、表示二进制领域，
+                        不能算得上加密，只是无法直接看到明文。
+                        也可以通过打乱 Base64 编码来进行加密。
+* BCD：      可读性好
+* Hex：     （16进制编码） 隐蔽性好（不易被人直接识别的形式）
+                        速度明显快，但体积要大
+* */
+//数据加密 数字签名  使用
+@Component
 public class SM2Util {
-    public static void main(String[] args) {
-        testzdy();
+
+    public static final String PRIVATE_KEY = "AMZV/XoubbgwJ9FI4GOCsNjzLr3g1IFuH0zy5xioSTrq";
+    public static final String PUBLIC_KEY = "BADzMdWdLCXY+Vei1jmDtgpmX1mvQs08RHBXiShAbkDjfjI4macS709u6hgG6xn0Wk/a1y1zgITCZVxQUGkil44=";
+
+
+
+    //随机秘钥对
+    public static  void testsj(){
+        String text = "test测试";
+        SM2 sm2 = SmUtil.sm2();
+        String sencod = sm2.encryptBase64(text, KeyType.PublicKey);
+        String sdecod = StrUtil.utf8Str(sm2.decryptStr(sencod,KeyType.PrivateKey));
+        System.out.println(sencod);
+        System.out.println(sdecod);
     }
+
+
     //自定义秘钥对
   public static   void testzdy(){
       String text = "test测试";
@@ -46,9 +85,64 @@ public class SM2Util {
       String encStr = sm2obj.encryptBcd(text, KeyType.PublicKey);
       byte[] decStr = sm2obj.decryptFromBcd(encStr,KeyType.PrivateKey);
       String strdecStr = StrUtil.utf8Str(decStr);
-      System.out.println(encStr);
 
+      System.out.println(Base64.encode(priKey));
+      System.out.println(Base64.encode(pubKey));
+      System.out.println(encStr);
       System.out.println(strdecStr);
   }
+
+  //生成 公钥、私钥
+    public static void testsc(){
+        SM2 sm2 = SmUtil.sm2();
+        //私钥
+        byte[] privateKeyb = BCUtil.encodeECPrivateKey(sm2.getPrivateKey());
+        //公钥
+        PublicKey publicKeyStr = sm2.getPublicKey();
+        byte[] publicKeyb = ((BCECPublicKey) publicKeyStr).getQ().getEncoded(false);
+
+        String privateKey = Base64.encode(privateKeyb);
+        String publicKey = Base64.encode(publicKeyb);
+        System.out.println("Base64编码的SM2私钥："+privateKey);
+        System.out.println("Base64编码的SM2公钥："+publicKey);
+        System.out.println("\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\");
+        privateKey = HexUtil.encodeHexStr(privateKeyb);
+        publicKey = HexUtil.encodeHexStr(publicKey);
+        System.out.println("Hex编码的SM2私钥："+privateKey);
+        System.out.println("Hex编码的SM2公钥："+publicKey);
+    }
+
+    //SM2 加密
+    public static String encrypt(String data) {
+        SM2 sm2 = SmUtil.sm2(ECKeyUtil.toSm2PrivateParams(PRIVATE_KEY), ECKeyUtil.toSm2PublicParams(PUBLIC_KEY));
+        String encryptBcd = sm2.encryptBcd(data, KeyType.PublicKey);
+        if (StrUtil.isNotBlank(encryptBcd)) {
+            // 生成的加密密文会带04，因为前端sm-crypto默认的是1-C1C3C2模式，这里需去除04才能正常解密
+            if (encryptBcd.startsWith("04")) {
+                encryptBcd = encryptBcd.substring(2);
+            }
+            // 前端解密时只能解纯小写形式的16进制数据，这里需要将所有大写字母转化为小写
+            encryptBcd = encryptBcd.toLowerCase();
+        }
+        return encryptBcd;
+    }
+
+    //SM2 解密
+    public static String decrypt(String encryptData) throws Exception {
+        if (StrUtil.isBlank(encryptData)) {
+            throw new RuntimeException("解密串为空，解密失败");
+        }
+        SM2 sm2 = SmUtil.sm2(Base64.decode(PRIVATE_KEY),Base64.decode(PUBLIC_KEY));
+        // BC库解密时密文开头必须带04，如果没带04则需补齐
+        if (!encryptData.startsWith("04")) {
+            encryptData = "04".concat(encryptData);
+        }
+        byte[] decryptFromBcd = sm2.decryptFromBcd(encryptData, KeyType.PrivateKey);
+        if (decryptFromBcd != null && decryptFromBcd.length > 0) {
+            return StrUtil.utf8Str(decryptFromBcd);
+        } else {
+            throw new Exception("密文解密失败");
+        }
+    }
 
 }
