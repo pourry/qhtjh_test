@@ -4,6 +4,7 @@ package com.example.spring_boot_mode.config.encrypt.sm3;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.digest.SM3;
 import com.example.spring_boot_mode.entity.Test;
+import org.bouncycastle.crypto.digests.SM3Digest;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
