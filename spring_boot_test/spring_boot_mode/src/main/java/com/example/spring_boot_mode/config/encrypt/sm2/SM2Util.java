@@ -69,6 +69,8 @@ public class SM2Util {
 
         PRIVATE_KEY = HexUtil.encodeHexStr(privateKeyb);
         PUBLIC_KEY = HexUtil.encodeHexStr(publicKeyb);
+        System.out.println("私钥："+PRIVATE_KEY);
+        System.out.println("公钥："+PUBLIC_KEY);
     }
 
 
