@@ -11,6 +11,7 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.SM2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.http11.filters.VoidInputFilter;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
@@ -49,12 +50,64 @@ import java.security.PublicKey;
                         速度明显快，但体积要大
 * */
 //数据加密 数字签名  使用
+@Slf4j
 @Component
 public class SM2Util {
 
-    public static final String PRIVATE_KEY = "AMZV/XoubbgwJ9FI4GOCsNjzLr3g1IFuH0zy5xioSTrq";
-    public static final String PUBLIC_KEY = "BADzMdWdLCXY+Vei1jmDtgpmX1mvQs08RHBXiShAbkDjfjI4macS709u6hgG6xn0Wk/a1y1zgITCZVxQUGkil44=";
+    public static String PRIVATE_KEY;
+    public static String PUBLIC_KEY;
 
+
+    //每次重启自动耍小心sm2的 公钥和私钥
+    static {
+        SM2 sm2 = SmUtil.sm2();
+        //私钥
+        byte[] privateKeyb = BCUtil.encodeECPrivateKey(sm2.getPrivateKey());
+        //公钥
+        PublicKey publicKeyStr = sm2.getPublicKey();
+        byte[] publicKeyb = ((BCECPublicKey) publicKeyStr).getQ().getEncoded(false);
+
+        PRIVATE_KEY = HexUtil.encodeHexStr(privateKeyb);
+        PUBLIC_KEY = HexUtil.encodeHexStr(publicKeyb);
+    }
+
+
+    //SM2 加密
+    public static String encrypt(String data) {
+        SM2 sm2 = SmUtil.sm2(HexUtil.decodeHex(PRIVATE_KEY),HexUtil.decodeHex(PUBLIC_KEY));
+        //ECKeyUtil.toSm2PrivateParams  可以自动识别  base64 和 hex
+//        SM2 sm2 = SmUtil.sm2(ECKeyUtil.toSm2PrivateParams(PRIVATE_KEY), ECKeyUtil.toSm2PublicParams(PUBLIC_KEY));
+        String encryptBcd = sm2.encryptBcd(data, KeyType.PublicKey);
+        if (StrUtil.isNotBlank(encryptBcd)) {
+            // 生成的加密密文会带04，因为前端sm-crypto默认的是1-C1C3C2模式，这里需去除04才能正常解密
+            if (encryptBcd.startsWith("04")) {
+                encryptBcd = encryptBcd.substring(2);
+            }
+            // 前端解密时只能解纯小写形式的16进制数据，这里需要将所有大写字母转化为小写
+            encryptBcd = encryptBcd.toLowerCase();
+        }
+        return encryptBcd;
+    }
+
+    //SM2 解密
+    public static String decrypt(String encryptData) {
+        if (StrUtil.isBlank(encryptData)) {
+            throw new RuntimeException("解密串为空，解密失败");
+        }
+        SM2 sm2 = SmUtil.sm2(HexUtil.decodeHex(PRIVATE_KEY),HexUtil.decodeHex(PUBLIC_KEY));
+        // BC库解密时密文开头必须带04，如果没带04则需补齐
+        if (!encryptData.startsWith("04")) {
+            encryptData = "04".concat(encryptData);
+        }
+        byte[] decryptFromBcd = sm2.decryptFromBcd(encryptData, KeyType.PrivateKey);
+        if (decryptFromBcd != null && decryptFromBcd.length > 0) {
+            return StrUtil.utf8Str(decryptFromBcd);
+        } else {
+            log.info("密文解密失败------------------failed--------------------");
+            return null;
+        }
+
+    }
 
 
     //随机秘钥对
@@ -112,37 +165,6 @@ public class SM2Util {
         System.out.println("Hex编码的SM2公钥："+publicKey);
     }
 
-    //SM2 加密
-    public static String encrypt(String data) {
-        SM2 sm2 = SmUtil.sm2(ECKeyUtil.toSm2PrivateParams(PRIVATE_KEY), ECKeyUtil.toSm2PublicParams(PUBLIC_KEY));
-        String encryptBcd = sm2.encryptBcd(data, KeyType.PublicKey);
-        if (StrUtil.isNotBlank(encryptBcd)) {
-            // 生成的加密密文会带04，因为前端sm-crypto默认的是1-C1C3C2模式，这里需去除04才能正常解密
-            if (encryptBcd.startsWith("04")) {
-                encryptBcd = encryptBcd.substring(2);
-            }
-            // 前端解密时只能解纯小写形式的16进制数据，这里需要将所有大写字母转化为小写
-            encryptBcd = encryptBcd.toLowerCase();
-        }
-        return encryptBcd;
-    }
 
-    //SM2 解密
-    public static String decrypt(String encryptData) throws Exception {
-        if (StrUtil.isBlank(encryptData)) {
-            throw new RuntimeException("解密串为空，解密失败");
-        }
-        SM2 sm2 = SmUtil.sm2(Base64.decode(PRIVATE_KEY),Base64.decode(PUBLIC_KEY));
-        // BC库解密时密文开头必须带04，如果没带04则需补齐
-        if (!encryptData.startsWith("04")) {
-            encryptData = "04".concat(encryptData);
-        }
-        byte[] decryptFromBcd = sm2.decryptFromBcd(encryptData, KeyType.PrivateKey);
-        if (decryptFromBcd != null && decryptFromBcd.length > 0) {
-            return StrUtil.utf8Str(decryptFromBcd);
-        } else {
-            throw new Exception("密文解密失败");
-        }
-    }
 
 }
