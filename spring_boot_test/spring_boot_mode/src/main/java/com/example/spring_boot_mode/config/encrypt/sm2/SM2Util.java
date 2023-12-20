@@ -51,7 +51,6 @@ import java.security.PublicKey;
 * */
 //数据加密 数字签名  使用
 @Slf4j
-@Component
 public class SM2Util {
 
     public static String PRIVATE_KEY;
@@ -71,6 +70,9 @@ public class SM2Util {
         PUBLIC_KEY = HexUtil.encodeHexStr(publicKeyb);
         System.out.println("私钥："+PRIVATE_KEY);
         System.out.println("公钥："+PUBLIC_KEY);
+    }
+    public static String getPublicKey(){
+        return PUBLIC_KEY;
     }
 
 

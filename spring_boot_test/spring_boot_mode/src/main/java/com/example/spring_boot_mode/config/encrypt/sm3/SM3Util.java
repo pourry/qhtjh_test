@@ -2,14 +2,6 @@ package com.example.spring_boot_mode.config.encrypt.sm3;
 
 
 import cn.hutool.crypto.SmUtil;
-import cn.hutool.crypto.digest.SM3;
-import com.example.spring_boot_mode.entity.Test;
-import org.bouncycastle.crypto.digests.SM3Digest;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /*
@@ -21,12 +13,6 @@ import java.util.Map;
 
 //摘要签名算法   以及防止重复攻击
 public class SM3Util {
-    public static void main(String[] args) {
-        String str = "hello2023";
-        System.out.println("-----------------------");
-        System.out.println("69f5c5c5413eaf9543b1e35ce6aa60d0eab217764e3f9d621e30785c8471e08f");
-        System.out.println(toSM3(str));
-    }
 
 
 
