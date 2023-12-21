@@ -70,6 +70,12 @@
             <version>8.0.19</version>
         </dependency>
         <!--结束-->
+        <!--redis 链接依赖 开始-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!--结束-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
