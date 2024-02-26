@@ -54,44 +54,12 @@
         </dependency>
         <!--结束-->
 
-        <!--工作流 flowable 依赖开始-->
+<!--        工作流 flowable 依赖开始-->
         <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-spring-boot-starter</artifactId>
-            <version>6.7.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.flowable</groupId>
-            <artifactId>flowable-spring-boot-starter-basic</artifactId>
             <version>6.8.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.flowable</groupId>
-            <artifactId>flowable-ui-common</artifactId>
-            <version>6.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.flowable</groupId>
-            <artifactId>flowable-ui-modeler-rest</artifactId>
-            <version>6.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.flowable</groupId>
-            <artifactId>flowable-idm-spring-configurator</artifactId>
-            <version>6.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.flowable</groupId>
-            <artifactId>flowable-ui-idm-rest</artifactId>
-            <version>6.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.flowable</groupId>
-            <artifactId>flowable-ui-idm-conf</artifactId>
-            <version>6.8.0</version>
-        </dependency>
-        <!--结束-->
-
 
         <!--数据库连接依赖 开始-->
         <dependency>
@@ -100,6 +68,13 @@
             <version>8.0.19</version>
         </dependency>
         <!--结束-->
+        <!--mybatis 开始-->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+        <!-- 结束-->
         <!--redis 链接依赖 开始-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
