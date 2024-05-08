@@ -1,7 +1,6 @@
 package com.example.spring_boot_mode.utils.redis;
 
 import com.example.spring_boot_mode.utils.UUidUtil;
-import liquibase.pro.packaged.L;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
