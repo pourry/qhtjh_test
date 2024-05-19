@@ -6,14 +6,14 @@ spring:
   datasource:
     mode:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://120.26.138.3:3308/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
+      jdbc-url: jdbc:mysql://localhost:3306/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
       username: root
-      password: 123456
+      password: l1998C12r05
     flowable:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://120.26.138.3:3308/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
+      jdbc-url: jdbc:mysql://localhost:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
       username: root
-      password: 123456
+      password: l1998C12r05
 #reids链接
 #  redis:
 #    port: 6379
