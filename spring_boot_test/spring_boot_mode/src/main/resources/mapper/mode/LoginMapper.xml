@@ -4,9 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.example.spring_boot_mode.dao.LoginDao">
+<mapper namespace="com.example.spring_boot_mode.dao.mode.LoginDao">
 
-    <select id="getalltest" resultType="map">
-        select  * from test_table
-    </select>
+
 </mapper>

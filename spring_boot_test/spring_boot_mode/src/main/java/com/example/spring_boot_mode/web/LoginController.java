@@ -2,6 +2,8 @@ package com.example.spring_boot_mode.web;
 
 import com.example.spring_boot_mode.config.encrypt.sm2.SM2Util;
 import com.example.spring_boot_mode.entity.ResponseObjectEntity;
+import com.example.spring_boot_mode.entity.flowable.Flowable;
+import com.example.spring_boot_mode.entity.mode.SysUser;
 import com.example.spring_boot_mode.service.Loginservice;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.redis.RedisSafe;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/login")
@@ -31,7 +32,12 @@ public class LoginController {
     }
     @GetMapping("getalltest")
     public ResponseObjectEntity getalltest(){
-        List<Map<String,String>> relist= loginservice.getalltest();
+        List<SysUser> relist= loginservice.getSysUser();
+        return ResponseUtil.success(relist);
+    }
+    @GetMapping("getflowabletest")
+    public ResponseObjectEntity getflowable(){
+        List<Flowable> relist= loginservice.getflowable();
         return ResponseUtil.success(relist);
     }
 }
