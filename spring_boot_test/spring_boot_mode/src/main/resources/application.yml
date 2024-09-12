@@ -40,3 +40,7 @@ flowable:
 # 将 databaseSchemaUpdate 设置为true， 当Flowable 发现库与数据库表结构不一致时，会自动将数据库表结构升级值新版本
   database-schema-update: true
 
+#设置token超时时间(秒)
+token:
+  expiration-s: 60
+

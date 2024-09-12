@@ -41,6 +41,12 @@
         </dependency>
 
         <!--加密使用的jar包 开始-->
+        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-json -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-json</artifactId>
+            <version>5.8.27</version>
+        </dependency>
 
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -55,11 +61,11 @@
         <!--结束-->
 
 <!--        工作流 flowable 依赖开始-->
-<!--        <dependency>-->
-<!--            <groupId>org.flowable</groupId>-->
-<!--            <artifactId>flowable-spring-boot-starter</artifactId>-->
-<!--            <version>6.7.2</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter</artifactId>
+            <version>6.7.2</version>
+        </dependency>
 
         <!--数据库连接依赖 开始-->
         <dependency>
@@ -104,6 +110,12 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
+        <!-- 生成token-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
 
     </dependencies>
 

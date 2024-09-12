@@ -5,6 +5,26 @@
 
 
 <mapper namespace="com.example.spring_boot_mode.dao.mode.LoginDao">
+    <resultMap id="LoginMap" type="com.example.spring_boot_mode.entity.mode.SysUser">
+        <!--    property:实体类中       column:数据库中字段          -->
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="nickName" column="nickName"/>
+        <result property="email" column="email"/>
+    </resultMap>
+    <sql id="selectLogin">
+        select id,
+               username,
+               password,
+               nickName,
+               email
+               from  sys_user
+    </sql>
 
+    <select id="tologin" resultMap="LoginMap">
+        <include refid="selectLogin"/>
+        where  username = #{username}
+    </select>
 
 </mapper>

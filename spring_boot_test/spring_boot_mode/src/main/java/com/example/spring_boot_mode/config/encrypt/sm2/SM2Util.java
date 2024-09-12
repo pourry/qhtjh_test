@@ -57,7 +57,7 @@ public class SM2Util {
     public static String PUBLIC_KEY;
 
 
-    //每次重启自动耍小心sm2的 公钥和私钥
+    //每次重启自动刷新sm2的 公钥和私钥
     static {
         SM2 sm2 = SmUtil.sm2();
         //私钥
@@ -73,6 +73,9 @@ public class SM2Util {
     }
     public static String getPublicKey(){
         return PUBLIC_KEY;
+    }
+    public static String getPrivateKey(){
+        return PRIVATE_KEY;
     }
 
 
