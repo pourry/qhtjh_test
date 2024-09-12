@@ -8,7 +8,7 @@ import com.example.spring_boot_mode.exception.ThrowMsgException;
 import com.example.spring_boot_mode.service.Loginservice;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.redis.RedisSafe;
-import org.omg.CORBA.OBJECT_NOT_EXIST;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +22,9 @@ import java.util.Map;
 @RequestMapping("/login")
 public class LoginController {
 
+    static {
+        System.out.println("静态语句块执行了");
+    }
     @Autowired
     RedisSafe redisSafe;
     @Autowired
@@ -45,7 +48,6 @@ public class LoginController {
         return ResponseUtil.success(relist);
     }
 
-
     @PostMapping("/login")
     public ResponseObjectEntity tologin(SysUser sysUser){
         try{
@@ -56,4 +58,5 @@ public class LoginController {
         }
 
     }
+
 }
