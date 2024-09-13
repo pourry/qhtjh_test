@@ -93,7 +93,7 @@ public class TokenUtill {
     /**
      * 判断token是否已经失效
      */
-    private boolean isTokenExpired(String token) {
+    public static boolean isTokenExpired(String token) {
         Date expiredDate = getClaimsFromToken(token).getExpiration();
         return expiredDate.before(new Date());
     }
