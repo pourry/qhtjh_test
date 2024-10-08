@@ -38,11 +38,12 @@ public class TokenInterceptor implements HandlerInterceptor {
         //获取token
         String token = request.getHeader("Authorization");
         if (!StringUtils.isEmpty(token)) {
-            if(TokenUtill.isTokenExpired(token)){
-                return true;
-            }else {
-                return false;
-            }
+            return true;
+//            if(TokenUtill.isTokenExpired(token)){
+//                return true;
+//            }else {
+//                return false;
+//            }
 
         }else {
             return false;
