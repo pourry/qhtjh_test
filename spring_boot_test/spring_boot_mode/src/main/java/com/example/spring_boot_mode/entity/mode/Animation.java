@@ -2,7 +2,7 @@ package com.example.spring_boot_mode.entity.mode;
 
 import com.example.spring_boot_mode.utils.PagingUtil;
 
-public class Animation extends PagingUtil {
+public class Animation extends PagingUtil{
 
     private String id;
     private String name;
@@ -12,9 +12,7 @@ public class Animation extends PagingUtil {
     private String hasend;
     private String pictureURL;
 
-    public Animation(int pageNumber,int pageSize) {
-        super(pageNumber,pageSize);
-    }
+
 
     public String getId() {
         return id;
