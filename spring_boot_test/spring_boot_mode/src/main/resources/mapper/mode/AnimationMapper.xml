@@ -48,9 +48,32 @@
               )
 
     </insert>
+    <update id="toedit" parameterType="com.example.spring_boot_mode.entity.mode.Animation">
+        update animation
+        <set>
+            <if test="name != null and name != ''"> name =#{name},</if>
+            <if test="address != null and address != ''"> address =#{address},</if>
+            <if test="notes != null and notes != ''"> notes =#{notes},</if>
+            <if test="alias != null and alias != ''"> alias =#{alias},</if>
+            <if test="hasend != null and hasend != ''"> hasend =#{hasend},</if>
+            <if test="pictureURL != null and pictureURL != ''"> pictureURL =#{hasend},</if>
+        </set>
+        where id = #{id}
+    </update>
     <select id="getList" resultMap="AnimationMap" parameterType="com.example.spring_boot_mode.entity.mode.Animation">
         <include refid="selectAnimation"/>
 
     </select>
+    <select id="getone" parameterType="string" resultMap="AnimationMap">
+        <include refid="selectAnimation"/>
+        where id = #{id}
+    </select>
+    <delete id="todelet" >
+        delete from animation
+        where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
 
 </mapper>

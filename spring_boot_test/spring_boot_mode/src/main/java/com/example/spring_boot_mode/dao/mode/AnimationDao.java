@@ -10,4 +10,10 @@ public interface AnimationDao {
     int toadd(Animation animation);
 
     List<Animation> getList(Animation animation);
+
+    int toedit(Animation animation);
+
+    Animation getone(String id);
+
+    int todelet(String[] ids);
 }

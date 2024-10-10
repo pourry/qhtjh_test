@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AnimationServiceImpl implements AnimationService {
@@ -21,14 +22,47 @@ public class AnimationServiceImpl implements AnimationService {
         animation.setId(UUidUtil.getuuid());
         int reint = animationDao.toadd(animation);
         if (reint>0){
-            return ResponseUtil.success("新增成功");
+            return ResponseUtil.success("成功");
         }
-        return ResponseUtil.error("新增失败");
+        return ResponseUtil.error("失败");
     }
 
     @Override
     public ResponseObjectEntity getList(Animation animation) {
         List<Animation> animationList = animationDao.getList(animation);
         return ResponseUtil.success(animationList);
+    }
+
+    @Override
+    public ResponseObjectEntity toedit(Animation animation) {
+        int reint = animationDao.toedit(animation);
+        if (reint>0){
+            return ResponseUtil.success("成功");
+        }else {
+            return ResponseUtil.error("失败");
+        }
+    }
+
+    @Override
+    public ResponseObjectEntity getone(String id) {
+        Animation animation = animationDao.getone(id);
+        if (!Objects.isNull(animation)){
+            return ResponseUtil.success(animation);
+        }else {
+            return ResponseUtil.error("未查询到");
+        }
+    }
+
+    @Override
+    public ResponseObjectEntity todelet(String[] ids) {
+        if (ids == null ||ids.length<=0){
+            return ResponseUtil.error("删除失败");
+        }
+        int reint = animationDao.todelet(ids);
+        if (reint >0){
+            return ResponseUtil.success("成功");
+        }else {
+            return ResponseUtil.error("失败");
+        }
     }
 }

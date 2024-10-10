@@ -8,4 +8,10 @@ public interface AnimationService {
     ResponseObjectEntity toadd(Animation animation);
 
     ResponseObjectEntity getList(Animation animationVo);
+
+    ResponseObjectEntity toedit(Animation animation);
+
+    ResponseObjectEntity getone(String id);
+
+    ResponseObjectEntity todelet(String[] ids);
 }

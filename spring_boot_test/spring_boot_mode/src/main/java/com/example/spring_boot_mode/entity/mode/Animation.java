@@ -1,8 +1,6 @@
 package com.example.spring_boot_mode.entity.mode;
 
-import com.example.spring_boot_mode.utils.PagingUtil;
-
-public class Animation extends PagingUtil{
+public class Animation {
 
     private String id;
     private String name;
