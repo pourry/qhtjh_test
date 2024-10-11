@@ -28,8 +28,8 @@ public class AnimationServiceImpl implements AnimationService {
     }
 
     @Override
-    public ResponseObjectEntity getList(Animation animation) {
-        List<Animation> animationList = animationDao.getList(animation);
+    public ResponseObjectEntity getList(int passOver,int pageSize,Animation animation) {
+        List<Animation> animationList = animationDao.getList(passOver,pageSize,animation);
         return ResponseUtil.success(animationList);
     }
 

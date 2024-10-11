@@ -9,6 +9,7 @@ public class Animation {
     private String alias;
     private String hasend;
     private String pictureURL;
+    private String sscollector;
 
 
 
@@ -66,6 +67,14 @@ public class Animation {
 
     public void setPictureURL(String pictureURL) {
         this.pictureURL = pictureURL;
+    }
+
+    public String getSscollector() {
+        return sscollector;
+    }
+
+    public void setSscollector(String sscollector) {
+        this.sscollector = sscollector;
     }
 
     @Override

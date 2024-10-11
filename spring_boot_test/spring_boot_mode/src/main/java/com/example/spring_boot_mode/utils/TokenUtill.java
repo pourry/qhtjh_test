@@ -8,6 +8,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -64,15 +66,35 @@ public class TokenUtill {
         }
         return claims;
     }
+    //获取用户信息
+    public static SysUser getSysUser(HttpServletRequest request) {
+        String token =  request.getHeader("Authorization");
+        SysUser sysUser = null;
+        try {
+           Claims claims = Jwts.parser()
+                    .setSigningKey(SM2Util.getPrivateKey())
+                    .parseClaimsJws(token)
+                    .getBody();
+            if (!Objects.isNull(claims)) {
+                sysUser = new SysUser();
+                sysUser.setId(claims.get("CLAIM_KEY_USER_ID").toString());
+            }else {
+                throw new Exception("token未解析到用户信息");
+            }
+        } catch (Exception e) {
+            log.error("JWT格式验证失败:{}", token);
+        }
+        return sysUser;
+    }
 
     /**
      * 从token中获取登录用户名
      */
-    public String getUserNameFromToken(String token) {
+    public static String getUserNameFromToken(String token) {
         String username;
         try {
             Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
+            username = claims.get("CLAIM_KEY_USERNAME").toString();
         } catch (Exception e) {
             username = null;
         }

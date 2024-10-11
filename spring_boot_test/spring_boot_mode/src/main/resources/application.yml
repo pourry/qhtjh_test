@@ -42,5 +42,5 @@ flowable:
 
 #设置token超时时间(秒)
 token:
-  expiration-s: 60
+  expiration-s: 3600
 

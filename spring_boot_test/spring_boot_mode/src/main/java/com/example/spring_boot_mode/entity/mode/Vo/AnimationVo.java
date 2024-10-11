@@ -3,8 +3,8 @@ package com.example.spring_boot_mode.entity.mode.Vo;
 import com.example.spring_boot_mode.entity.mode.Animation;
 
 public class AnimationVo extends Animation {
-    private int pageNumber;
-    private int pageSize;
+    private int pageNumber = 1;
+    private int pageSize = 10;
     private int total;
     private int passOver;
 
@@ -33,13 +33,11 @@ public class AnimationVo extends Animation {
     }
 
     public int getPassOver() {
-        return passOver;
+        return (this.pageNumber-1)*this.pageSize;
     }
 
     public void setPassOver(int passOver) {
         this.passOver = passOver;
     }
-    public  void getpassOver(){
-        this.passOver = (this.pageNumber-1)*this.pageSize;
-    }
+
 }

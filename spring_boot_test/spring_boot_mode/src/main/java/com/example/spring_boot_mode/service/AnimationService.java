@@ -7,7 +7,7 @@ import com.example.spring_boot_mode.entity.ResponseObjectEntity;
 public interface AnimationService {
     ResponseObjectEntity toadd(Animation animation);
 
-    ResponseObjectEntity getList(Animation animationVo);
+    ResponseObjectEntity getList(int passOver,int pageSize,Animation animation);
 
     ResponseObjectEntity toedit(Animation animation);
 

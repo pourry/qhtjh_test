@@ -19,4 +19,11 @@ public class ResponseUtil {
         ResponseObjectEntity responseObjectEntity = new ResponseObjectEntity(403, false, object);
         return responseObjectEntity;
     }
+    public static ResponseObjectEntity tokenExpire(Object object){
+        if (object == null){
+            object = "请求错误，请稍后重试。。。";
+        }
+        ResponseObjectEntity responseObjectEntity = new ResponseObjectEntity(410, false, object);
+        return responseObjectEntity;
+    }
 }
