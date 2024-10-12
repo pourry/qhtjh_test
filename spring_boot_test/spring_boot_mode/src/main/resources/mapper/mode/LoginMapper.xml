@@ -26,5 +26,25 @@
         <include refid="selectLogin"/>
         where  username = #{username}
     </select>
+    <insert id="tosignUp">
+        insert into sys_user
+        (
+        id,
+        username,
+        password,
+        nickName,
+        email
+        )values
+        (
+        #{id},
+        #{username},
+        #{password},
+        #{nickName},
+        #{email}
+        )
+    </insert>
+    <select id="tocheckname" resultType="int">
+        select count(username) from sys_user where username = #{username}
+    </select>
 
 </mapper>

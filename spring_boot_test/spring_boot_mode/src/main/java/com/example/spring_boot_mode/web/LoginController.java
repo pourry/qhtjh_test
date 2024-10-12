@@ -58,5 +58,27 @@ public class LoginController {
         }
 
     }
+    //验证 注册的用户名是否重复
+    @PostMapping("/tocheckname")
+    public ResponseObjectEntity tocheckname(String username){
+        try{
+            ResponseObjectEntity responseObjectEntity = loginservice.tocheckname(username);
+            return responseObjectEntity;
+        }catch (ThrowMsgException e){
+            return ResponseUtil.error(e.getMessage());
+        }
+
+    }
+
+    @PostMapping("/signUp")
+    public ResponseObjectEntity tosignUp(SysUser sysUser){
+        try{
+            ResponseObjectEntity responseObjectEntity = loginservice.tosignUp(sysUser);
+            return responseObjectEntity;
+        }catch (ThrowMsgException e){
+            return ResponseUtil.error(e.getMessage());
+        }
+
+    }
 
 }

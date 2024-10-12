@@ -8,4 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 public interface LoginDao extends BaseMapper<SysUser> {
 
     SysUser tologin(String username);
+
+    int tosignUp(SysUser sysUser);
+
+    int tocheckname(String username);
 }
