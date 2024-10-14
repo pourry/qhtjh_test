@@ -76,6 +76,16 @@
         </where>
         limit #{passOver},#{pageSize}
     </select>
+    <select id="gettotal" resultType="int">
+        select  count(id) from animation
+        <where>
+            <if test="sscollector != null and sscollector !=''">and sscollector = #{sscollector}</if>
+            <if test="name != null and name != ''">and (   name like concat('%',#{name},'%')
+                or alias like concat('%',#{name},'%')
+                or hasend like concat('%',#{name},'%')
+                )</if>
+        </where>
+    </select>
     <select id="getone" parameterType="string" resultMap="AnimationMap">
         <include refid="selectAnimation"/>
         where id = #{id}

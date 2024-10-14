@@ -11,6 +11,7 @@ import com.example.spring_boot_mode.utils.TokenUtill;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
@@ -22,7 +23,7 @@ public class AnimationController {
     private AnimationService animationService;
 
     @PostMapping("toadd")
-    public ResponseObjectEntity toadd(Animation animation, HttpServletRequest request  ){
+    public ResponseObjectEntity toadd(Animation animation,@RequestParam("file") MultipartFile file, HttpServletRequest request  ){
         SysUser sysUser = TokenUtill.getSysUser(request);
         if (Objects.isNull(sysUser)){
             return ResponseUtil.tokenExpire("token失效，请重新登录");
@@ -45,7 +46,7 @@ public class AnimationController {
             return ResponseUtil.tokenExpire("token失效，请重新登录");
         }
         animation.setSscollector(sysUser.getId());
-        ResponseObjectEntity responseObjectEntity = animationService.getList(animationVo.getPassOver(), animationVo.getPageSize(),animation);
+        ResponseObjectEntity responseObjectEntity = animationService.getList(animationVo.getPageNumber(),animationVo.getPassOver(), animationVo.getPageSize(),animation);
         return responseObjectEntity;
     }
     @GetMapping("getone/{id}")

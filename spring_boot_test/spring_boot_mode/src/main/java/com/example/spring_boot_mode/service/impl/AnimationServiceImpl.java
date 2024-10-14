@@ -4,10 +4,12 @@ import com.example.spring_boot_mode.dao.mode.AnimationDao;
 import com.example.spring_boot_mode.entity.mode.Animation;
 import com.example.spring_boot_mode.entity.ResponseObjectEntity;
 import com.example.spring_boot_mode.service.AnimationService;
+import com.example.spring_boot_mode.utils.PagingUtil;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.UUidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -27,10 +29,12 @@ public class AnimationServiceImpl implements AnimationService {
         return ResponseUtil.error("失败");
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResponseObjectEntity getList(int passOver,int pageSize,Animation animation) {
+    public ResponseObjectEntity getList(int pageNumber,int passOver,int pageSize,Animation animation) {
+        int total = animationDao.gettotal(animation);
         List<Animation> animationList = animationDao.getList(passOver,pageSize,animation);
-        return ResponseUtil.success(animationList);
+        return ResponseUtil.success(new PagingUtil(pageNumber,pageSize,animationList,total));
     }
 
     @Override

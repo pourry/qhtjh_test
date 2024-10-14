@@ -17,4 +17,6 @@ public interface AnimationDao {
     Animation getone(String id);
 
     int todelet(String[] ids);
+
+    int gettotal(Animation animation);
 }
