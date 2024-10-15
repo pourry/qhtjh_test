@@ -5,7 +5,7 @@
 
 
 <mapper namespace="com.example.spring_boot_mode.dao.mode.AnimationPicturesDao">
-    <resultMap id="AnimationPicturesMap" type="com.example.spring_boot_mode.entity.mode.AnmationPictures">
+    <resultMap id="AnimationPicturesMap" type="com.example.spring_boot_mode.entity.mode.AnimationPictures">
         <!--    property:实体类中       column:数据库中字段          -->
         <result property="id" column="id"/>
         <result property="ssanimationid" column="ssanimationid"/>
@@ -13,7 +13,6 @@
         <result property="pictureName" column="pictureName"/>
         <result property="pictureLogic" column="pictureLogic"/>
         <result property="picturePath" column="picturePath"/>
-        <result property="pictureLocalPath" column="pictureLocalPath"/>
     </resultMap>
 
     <sql id="selectAnimationPictures">
@@ -22,10 +21,43 @@
                pictureUrl,
                pictureName,
                pictureLogic,
-               picturePath,
-               pictureLocalPath
+               picturePath
 
-        from  animation
+        from  anmation_pictures
     </sql>
+    <insert id="insertpictures" >
+        insert into anmation_pictures (id,
+                                       ssanimationid,
+                                       pictureUrl,
+                                       pictureName,
+                                       pictureLogic,
+                                       picturePath)
+                                       values
+                                       <foreach collection="pictures" separator="," item="picture">
+                                           (
+                                           #{picture.id},
+                                           #{picture.ssanimationid},
+                                           #{picture.pictureUrl},
+                                           #{picture.pictureName},
+                                           #{picture.pictureLogic},
+                                           #{picture.picturePath}
+                                           )
+                                       </foreach>
+    </insert>
+    <select id="selectByanimationIds" resultMap="AnimationPicturesMap">
+        select id,
+        ssanimationid,
+        (picturePath+'\'+pictureLogic) as pictureUrl,
+        pictureName,
+        pictureLogic,
+        picturePath
 
+        from  anmation_pictures
+        <where>
+            ssanimationid in
+            <foreach collection="animationIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </where>
+    </select>
 </mapper>

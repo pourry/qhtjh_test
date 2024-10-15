@@ -44,3 +44,8 @@ flowable:
 token:
   expiration-s: 3600
 
+picture:
+  localorcloud: localPictureSave
+  animation:
+    path: D:\picture\animation
+

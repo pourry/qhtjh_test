@@ -1,13 +1,12 @@
 package com.example.spring_boot_mode.entity.mode;
 
-public class AnmationPictures {
+public class AnimationPictures {
     private String id;
     private String ssanimationid;
     private String pictureUrl;
     private String pictureName;
     private String pictureLogic;
     private String picturePath;
-    private String pictureLocalPath;
 
     public String getId() {
         return id;
@@ -57,11 +56,4 @@ public class AnmationPictures {
         this.picturePath = picturePath;
     }
 
-    public String getPictureLocalPath() {
-        return pictureLocalPath;
-    }
-
-    public void setPictureLocalPath(String pictureLocalPath) {
-        this.pictureLocalPath = pictureLocalPath;
-    }
 }

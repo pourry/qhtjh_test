@@ -1,5 +1,7 @@
 package com.example.spring_boot_mode.entity.mode;
 
+import java.util.List;
+
 public class Animation {
 
     private String id;
@@ -10,6 +12,7 @@ public class Animation {
     private String hasend;
     private String pictureURL;
     private String sscollector;
+    private List<AnimationPictures> pictures;
 
 
 
@@ -75,6 +78,14 @@ public class Animation {
 
     public void setSscollector(String sscollector) {
         this.sscollector = sscollector;
+    }
+
+    public List<AnimationPictures> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<AnimationPictures> pictures) {
+        this.pictures = pictures;
     }
 
     @Override

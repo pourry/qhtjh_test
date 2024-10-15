@@ -9,12 +9,12 @@ import java.io.*;
 import java.util.List;
 
 @Slf4j
-@Component
+@Component("localPictureSave")
 public class LocalPictureSave implements PictureSave {
 
     @Override
     public boolean savefiles(MultipartFile multipartFile, String path,String uuid) {
-        if (multipartFile != null){
+        if (multipartFile == null){
             return false;
         }
             //验证 文件夹是否存在 没有则创建
