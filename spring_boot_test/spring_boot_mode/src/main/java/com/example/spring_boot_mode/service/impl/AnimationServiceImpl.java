@@ -10,6 +10,7 @@ import com.example.spring_boot_mode.utils.UUidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,13 +20,17 @@ public class AnimationServiceImpl implements AnimationService {
     @Autowired
     private AnimationDao animationDao;
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResponseObjectEntity toadd(Animation animation) {
+    public ResponseObjectEntity toadd(Animation animation, MultipartFile[] file) {
+        //添加
         animation.setId(UUidUtil.getuuid());
         int reint = animationDao.toadd(animation);
         if (reint>0){
             return ResponseUtil.success("成功");
         }
+        //添加 文件
+        
         return ResponseUtil.error("失败");
     }
 

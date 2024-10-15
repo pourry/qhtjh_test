@@ -23,13 +23,13 @@ public class AnimationController {
     private AnimationService animationService;
 
     @PostMapping("toadd")
-    public ResponseObjectEntity toadd(Animation animation,@RequestParam("file") MultipartFile file, HttpServletRequest request  ){
+    public ResponseObjectEntity toadd(Animation animation,@RequestParam("file") MultipartFile[] file, HttpServletRequest request  ){
         SysUser sysUser = TokenUtill.getSysUser(request);
         if (Objects.isNull(sysUser)){
             return ResponseUtil.tokenExpire("token失效，请重新登录");
         }
         animation.setSscollector(sysUser.getId());
-        ResponseObjectEntity responseObjectEntity = animationService.toadd(animation);
+        ResponseObjectEntity responseObjectEntity = animationService.toadd(animation,file);
         return responseObjectEntity;
     }
     @PostMapping("toedit")

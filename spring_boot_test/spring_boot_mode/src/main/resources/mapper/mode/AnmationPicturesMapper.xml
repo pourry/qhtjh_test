@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.example.spring_boot_mode.dao.mode.AnimationPicturesDao">
+    <resultMap id="AnimationPicturesMap" type="com.example.spring_boot_mode.entity.mode.AnmationPictures">
+        <!--    property:实体类中       column:数据库中字段          -->
+        <result property="id" column="id"/>
+        <result property="ssanimationid" column="ssanimationid"/>
+        <result property="pictureUrl" column="pictureUrl"/>
+        <result property="pictureName" column="pictureName"/>
+        <result property="pictureLogic" column="pictureLogic"/>
+        <result property="picturePath" column="picturePath"/>
+        <result property="pictureLocalPath" column="pictureLocalPath"/>
+    </resultMap>
+
+    <sql id="selectAnimationPictures">
+        select id,
+               ssanimationid,
+               pictureUrl,
+               pictureName,
+               pictureLogic,
+               picturePath,
+               pictureLocalPath
+
+        from  animation
+    </sql>
+
+</mapper>
