@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface PictureSave {
     public boolean savefiles(MultipartFile multipartFile,String path,String uuid);
+
+    public boolean deletefiles(String filePath);
 }

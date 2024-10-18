@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.example.spring_boot_mode.dao.mode.AnimationDao">
-    <resultMap id="AnimationMap" type="com.example.spring_boot_mode.entity.mode.Animation">
+<mapper namespace="com.example.spring_boot_mode.dao.mode.GameDao">
+    <resultMap id="GameMap" type="com.example.spring_boot_mode.entity.mode.Game">
         <!--    property:实体类中       column:数据库中字段          -->
         <result property="id" column="id"/>
         <result property="name" column="name"/>
@@ -19,7 +19,7 @@
         <result property="hasendLabel" column="hasendLabel"/>
 
     </resultMap>
-    <sql id="selectAnimation">
+    <sql id="selectGame">
         select id,
                name,
                address,
@@ -30,10 +30,10 @@
                pictureURL,
                sscollector,
                createTime
-        from  animation
+        from  game
     </sql>
-    <insert id="toadd" parameterType="com.example.spring_boot_mode.entity.mode.Animation" >
-        insert into animation
+    <insert id="toadd" parameterType="com.example.spring_boot_mode.entity.mode.Game" >
+        insert into game
         (
             id,
             name,
@@ -60,8 +60,8 @@
               )
 
     </insert>
-    <update id="toedit" parameterType="com.example.spring_boot_mode.entity.mode.Animation">
-        update animation
+    <update id="toedit" >
+        update game
         <set>
             <if test="name != null and name != ''"> name =#{name},</if>
             <if test="address != null and address != ''"> address =#{address},</if>
@@ -75,8 +75,8 @@
         </set>
         where id = #{id}
     </update>
-    <select id="getList" resultMap="AnimationMap">
-        <include refid="selectAnimation"/>
+    <select id="getList" resultMap="GameMap">
+        <include refid="selectGame"/>
         <where>
            <if test="animation.sscollector != null and animation.sscollector !=''">and sscollector = #{animation.sscollector}</if>
            <if test="animation.name != null and animation.name != ''">and (   name like concat('%',#{animation.name},'%')
@@ -88,7 +88,7 @@
         limit #{passOver},#{pageSize}
     </select>
     <select id="gettotal" resultType="int">
-        select  count(id) from animation
+        select  count(id) from game
         <where>
             <if test="sscollector != null and sscollector !=''">and sscollector = #{sscollector}</if>
             <if test="name != null and name != ''">and (   name like concat('%',#{name},'%')
@@ -97,12 +97,12 @@
                 )</if>
         </where>
     </select>
-    <select id="getone" parameterType="string" resultMap="AnimationMap">
-        <include refid="selectAnimation"/>
+    <select id="getone" parameterType="string" resultMap="GameMap">
+        <include refid="selectGame"/>
         where id = #{id}
     </select>
     <delete id="todelet" >
-        delete from animation
+        delete from game
         where id in
         <foreach collection="ids" item="id" open="(" close=")" separator=",">
             #{id}

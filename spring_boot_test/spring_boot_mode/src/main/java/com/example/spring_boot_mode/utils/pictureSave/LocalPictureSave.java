@@ -65,4 +65,14 @@ public class LocalPictureSave implements PictureSave {
 
         return false;
     }
+
+    @Override
+    public boolean deletefiles(String filePath) {
+        File file = new File(filePath);
+
+        if(file.exists()) {
+            return file.delete();
+        }
+        return true;
+    }
 }

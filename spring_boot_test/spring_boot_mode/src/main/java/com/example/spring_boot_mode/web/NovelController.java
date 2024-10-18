@@ -1,14 +1,13 @@
 package com.example.spring_boot_mode.web;
 
 
-import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
-import com.example.spring_boot_mode.entity.mode.Animation;
 import com.example.spring_boot_mode.entity.ResponseObjectEntity;
-import com.example.spring_boot_mode.entity.mode.AnimationPictures;
-import com.example.spring_boot_mode.entity.mode.SysUser;
+import com.example.spring_boot_mode.entity.mode.*;
 import com.example.spring_boot_mode.entity.mode.Vo.AnimationVo;
+import com.example.spring_boot_mode.entity.mode.Vo.NovelVo;
 import com.example.spring_boot_mode.service.AnimationService;
+import com.example.spring_boot_mode.service.NovelService;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.TokenUtill;
 import org.springframework.beans.BeanUtils;
@@ -22,55 +21,55 @@ import java.util.Objects;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/animation")
-public class AnimationController {
+@RequestMapping("/novel")
+public class NovelController {
     @Autowired
-    private AnimationService animationService;
+    private NovelService novelService;
 
     @PostMapping("toadd")
-    public ResponseObjectEntity toadd(Animation animation,@RequestParam(value = "file",required = false) MultipartFile[] file, HttpServletRequest request  ){
+    public ResponseObjectEntity toadd(Novel novel, @RequestParam(value = "file",required = false) MultipartFile[] file, HttpServletRequest request  ){
         SysUser sysUser = TokenUtill.getSysUser(request);
         if (Objects.isNull(sysUser)){
             return ResponseUtil.tokenExpire("token失效，请重新登录");
         }
-        animation.setSscollector(sysUser.getId());
-        animation.setObject(null);
-        ResponseObjectEntity responseObjectEntity = animationService.toadd(animation,file);
+        novel.setSscollector(sysUser.getId());
+        novel.setObject(null);
+        ResponseObjectEntity responseObjectEntity = novelService.toadd(novel,file);
         return responseObjectEntity;
     }
     @PostMapping("toedit")
-    public ResponseObjectEntity toedit(Animation animation ,@RequestParam(value = "file",required = false) MultipartFile[] file, HttpServletRequest request){
+    public ResponseObjectEntity toedit(Novel novel ,@RequestParam(value = "file",required = false) MultipartFile[] file, HttpServletRequest request){
         SysUser sysUser = TokenUtill.getSysUser(request);
         if (Objects.isNull(sysUser)){
             return ResponseUtil.tokenExpire("token失效，请重新登录");
         }
-        animation.setSscollector(sysUser.getId());
-        List<AnimationPictures> list=JSONUtil.toList( JSONUtil.parseArray(animation.getObject()) ,AnimationPictures.class);
-        animation.setPictures(list);
-        ResponseObjectEntity responseObjectEntity = animationService.toedit(animation,file);
+        novel.setSscollector(sysUser.getId());
+        List<NovelPictures> list=JSONUtil.toList( JSONUtil.parseArray(novel.getObject()) ,NovelPictures.class);
+        novel.setPictures(list);
+        ResponseObjectEntity responseObjectEntity = novelService.toedit(novel,file);
         return responseObjectEntity;
     }
     @GetMapping("getList")
-    public ResponseObjectEntity getList(AnimationVo animationVo, HttpServletRequest request){
-        Animation animation = new Animation();
-        BeanUtils.copyProperties(animationVo,animation);
+    public ResponseObjectEntity getList(NovelVo novelVo, HttpServletRequest request){
+        Novel novel = new Novel();
+        BeanUtils.copyProperties(novelVo,novel);
         SysUser sysUser = TokenUtill.getSysUser(request);
         if (Objects.isNull(sysUser)){
             return ResponseUtil.tokenExpire("token失效，请重新登录");
         }
-        animation.setSscollector(sysUser.getId());
-        ResponseObjectEntity responseObjectEntity = animationService.getList(animationVo.getPageNumber(),animationVo.getPassOver(), animationVo.getPageSize(),animation);
+        novelVo.setSscollector(sysUser.getId());
+        ResponseObjectEntity responseObjectEntity = novelService.getList(novelVo.getPageNumber(),novelVo.getPassOver(), novelVo.getPageSize(),novel);
         return responseObjectEntity;
     }
     @GetMapping("getone/{id}")
     public ResponseObjectEntity getone(@PathVariable("id")String id){
 
-        ResponseObjectEntity responseObjectEntity = animationService.getone(id);
+        ResponseObjectEntity responseObjectEntity = novelService.getone(id);
         return responseObjectEntity;
     }
     @PostMapping("todelete/{ids}")
     public ResponseObjectEntity todelete(@PathVariable("ids")String[] ids){
-        ResponseObjectEntity responseObjectEntity = animationService.todelet(ids);
+        ResponseObjectEntity responseObjectEntity = novelService.todelet(ids);
         return responseObjectEntity;
     }
 }

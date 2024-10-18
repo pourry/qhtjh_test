@@ -1,9 +1,8 @@
 package com.example.spring_boot_mode.entity.mode;
 
 import java.util.List;
-import java.util.Objects;
 
-public class Animation {
+public class Comic {
 
     private String id;
     private String name;
@@ -13,10 +12,18 @@ public class Animation {
     private String hasend;
     private String pictureURL;
     private String sscollector;
-    private List<AnimationPictures> pictures;
+    private List<ComicPictures> pictures;
     private String createTime;
     private Object object;
     private String hasendLabel;
+
+    public String getHasendLabel() {
+        return hasendLabel;
+    }
+
+    public void setHasendLabel(String hasendLabel) {
+        this.hasendLabel = hasendLabel;
+    }
 
     public Object getObject() {
         return object;
@@ -98,17 +105,17 @@ public class Animation {
         this.sscollector = sscollector;
     }
 
-    public List<AnimationPictures> getPictures() {
+    public List<ComicPictures> getPictures() {
         return pictures;
     }
 
-    public void setPictures(List<AnimationPictures> pictures) {
+    public void setPictures(List<ComicPictures> pictures) {
         this.pictures = pictures;
     }
 
     @Override
     public String toString() {
-        return "Animation{" +
+        return "Comic{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +

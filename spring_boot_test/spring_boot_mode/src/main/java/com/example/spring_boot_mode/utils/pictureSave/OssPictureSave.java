@@ -11,4 +11,9 @@ public class OssPictureSave implements PictureSave{
     public boolean savefiles(MultipartFile multipartFile,String path,String uuid) {
         return false;
     }
+
+    @Override
+    public boolean deletefiles(String filePath) {
+        return false;
+    }
 }

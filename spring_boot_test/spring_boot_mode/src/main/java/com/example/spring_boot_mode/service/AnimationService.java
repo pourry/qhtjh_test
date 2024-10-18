@@ -10,7 +10,7 @@ public interface AnimationService {
 
     ResponseObjectEntity getList(int pageNumber,int passOver,int pageSize,Animation animation);
 
-    ResponseObjectEntity toedit(Animation animation);
+    ResponseObjectEntity toedit(Animation animation,MultipartFile[] file);
 
     ResponseObjectEntity getone(String id);
 

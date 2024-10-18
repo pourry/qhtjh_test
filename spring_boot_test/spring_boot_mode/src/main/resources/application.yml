@@ -23,6 +23,10 @@ spring:
           url: jdbc:mysql://localhost:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
           username: root
           password: l1998C12r05
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -46,6 +50,20 @@ token:
 
 picture:
   localorcloud: localPictureSave
+  localoriginPath: file:D:/picture/
+  mappinglocaloriginPath: /localPicture/**
   animation:
     path: D:\picture\animation
+    mappingPath: http://localhost:${server.port}/localPicture/animation/
+  comic:
+    path: D:\picture\comic
+    mappingPath: http://localhost:${server.port}/localPicture/comic/
+  novel:
+    path: D:\picture\novel
+    mappingPath: http://localhost:${server.port}/localPicture/novel/
+  game:
+    path: D:\picture\game
+    mappingPath: http://localhost:${server.port}/localPicture/game/
+filter:
+  allowPath: '"/login/**","/localPicture/**"'
 

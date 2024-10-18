@@ -1,8 +1,8 @@
 package com.example.spring_boot_mode.entity.mode;
 
-public class AnimationPictures {
+public class NovelPictures {
     private String id;
-    private String ssanimationid;
+    private String ssnovelid;
     private String pictureUrl;
     private String pictureName;
     private String pictureLogic;
@@ -25,12 +25,12 @@ public class AnimationPictures {
         this.id = id;
     }
 
-    public String getSsanimationid() {
-        return ssanimationid;
+    public String getSsnovelid() {
+        return ssnovelid;
     }
 
-    public void setSsanimationid(String ssanimationid) {
-        this.ssanimationid = ssanimationid;
+    public void setSsnovelid(String ssnovelid) {
+        this.ssnovelid = ssnovelid;
     }
 
     public String getPictureUrl() {

@@ -4,11 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.example.spring_boot_mode.dao.mode.AnimationPicturesDao">
-    <resultMap id="AnimationPicturesMap" type="com.example.spring_boot_mode.entity.mode.AnimationPictures">
+<mapper namespace="com.example.spring_boot_mode.dao.mode.GamePicturesDao">
+    <resultMap id="NovelPicturesMap" type="com.example.spring_boot_mode.entity.mode.GamePictures">
         <!--    property:实体类中       column:数据库中字段          -->
         <result property="id" column="id"/>
-        <result property="ssanimationid" column="ssanimationid"/>
+        <result property="ssgameid" column="ssgameid"/>
         <result property="pictureUrl" column="pictureUrl"/>
         <result property="pictureName" column="pictureName"/>
         <result property="pictureLogic" column="pictureLogic"/>
@@ -16,20 +16,20 @@
         <result property="createTime" column="createTime"/>
     </resultMap>
 
-    <sql id="selectAnimationPictures">
+    <sql id="selectGamePictures">
         select id,
-               ssanimationid,
+               ssgameid,
                pictureUrl,
                pictureName,
                pictureLogic,
                picturePath,
                createTime
 
-        from  anmation_pictures
+        from  game_pictures
     </sql>
     <insert id="insertpictures" >
-        insert into anmation_pictures (id,
-                                       ssanimationid,
+        insert into game_pictures (id,
+                                       ssgameid,
                                        pictureUrl,
                                        pictureName,
                                        pictureLogic,
@@ -39,7 +39,7 @@
                                        <foreach collection="pictures" separator="," item="picture">
                                            (
                                            #{picture.id},
-                                           #{picture.ssanimationid},
+                                           #{picture.ssgameid},
                                            #{picture.pictureUrl},
                                            #{picture.pictureName},
                                            #{picture.pictureLogic},
@@ -48,18 +48,18 @@
                                            )
                                        </foreach>
     </insert>
-    <select id="selectByanimationIds" resultMap="AnimationPicturesMap">
+    <select id="selectByanimationIds" resultMap="NovelPicturesMap">
         select id,
-        ssanimationid,
+        ssgameid,
          pictureUrl,
         pictureName,
         pictureLogic,
         picturePath,
         createTime
 
-        from  anmation_pictures
+        from  game_pictures
         where
-            ssanimationid in
+        ssgameid in
             <foreach collection="animationIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
@@ -67,28 +67,28 @@
     <select id="selectPathByanimationIds" resultType="String">
         select
         concat(picturePath ,'\\', pictureLogic) as picturePath
-        from  anmation_pictures
+        from  game_pictures
         where
-        ssanimationid in
+        ssgameid in
         <foreach collection="ids" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
     </select>
-    <select id="selectIdByanimationId"  resultMap="AnimationPicturesMap">
-        <include refid="selectAnimationPictures"/>
+    <select id="selectIdByanimationId"  resultMap="NovelPicturesMap">
+        <include refid="selectGamePictures"/>
         where
-        ssanimationid = #{id}
+        ssgameid = #{id}
     </select>
     <delete id="deleteByids" >
-        delete from anmation_pictures
+        delete from game_pictures
         where id in
         <foreach collection="ids" separator="," open="(" close=")" item="id">
             #{id}
         </foreach>
     </delete>
     <delete id="deleteByanmationids" >
-        delete from anmation_pictures
-        where ssanimationid in
+        delete from game_pictures
+        where ssgameid in
         <foreach collection="ids" separator="," open="(" close=")" item="id">
             #{id}
         </foreach>
