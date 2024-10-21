@@ -68,7 +68,11 @@ public class NovelController {
         return responseObjectEntity;
     }
     @PostMapping("todelete/{ids}")
-    public ResponseObjectEntity todelete(@PathVariable("ids")String[] ids){
+    public ResponseObjectEntity todelete(@PathVariable("ids")String[] ids, HttpServletRequest request){
+        SysUser sysUser = TokenUtill.getSysUser(request);
+        if (Objects.isNull(sysUser)){
+            return ResponseUtil.tokenExpire("token失效，请重新登录");
+        }
         ResponseObjectEntity responseObjectEntity = novelService.todelet(ids);
         return responseObjectEntity;
     }

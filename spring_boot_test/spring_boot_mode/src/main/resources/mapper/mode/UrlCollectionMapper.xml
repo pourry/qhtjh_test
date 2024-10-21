@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.example.spring_boot_mode.dao.mode.UrlCollectionDao">
+    <resultMap id="UrlCollectionMap" type="com.example.spring_boot_mode.entity.mode.UrlCollection">
+        <!--    property:实体类中       column:数据库中字段          -->
+        <result property="id" column="id"/>
+        <result property="urlname" column="urlname"/>
+        <result property="url" column="url"/>
+        <result property="urllogopath" column="urllogopath"/>
+        <result property="ssurltypeid" column="ssurltypeid"/>
+        <result property="notes" column="notes"/>
+        <result property="sscollector" column="sscollector"/>
+        <result property="createTime" column="createTime"/>
+    </resultMap>
+
+    <sql id="selectUrlCollection">
+        select id,
+               urlname,
+               url,
+               urllogopath,
+               ssurltypeid,
+               notes,
+               sscollector,
+               createTime
+
+        from  url_collection
+    </sql>
+    <select id="selectbytypeids" resultMap="UrlCollectionMap">
+        <include refid="selectUrlCollection"/>
+        where ssurltypeid in
+        <foreach collection="typeids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <insert id="toadd" >
+        insert into url_collection
+        (
+        id,
+        urlname,
+        url,
+        urllogopath,
+        ssurltypeid,
+        notes,
+        sscollector,
+        createTime
+        )
+        values
+        (
+        #{id},
+        #{urlname},
+        #{url},
+        #{urllogopath},
+        #{ssurltypeid},
+        #{notes},
+        #{sscollector},
+        #{createTime}
+        )
+    </insert>
+    <update id="toedit" >
+        update url_collection
+        <set>
+            <if test="urlname != null and urlname != ''">urlname =#{urlname},</if>
+            <if test="url != null and url != ''">url =#{url},</if>
+            <if test="urllogopath != null and urllogopath != ''">urllogopath =#{urllogopath},</if>
+            <if test="ssurltypeid != null and ssurltypeid != ''">ssurltypeid =#{ssurltypeid},</if>
+            <if test="notes != null and notes != ''">notes =#{notes},</if>
+            <if test="sscollector != null and sscollector != ''">sscollector =#{sscollector},</if>
+            <if test="createTime != null and createTime != ''">createTime =#{createTime},</if>
+
+        </set>
+        where  id = #{id}
+    </update>
+    <delete id="todelete" >
+    delete from url_collection
+    where id in
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">
+        #{id}
+    </foreach>
+    </delete>
+</mapper>
