@@ -22,6 +22,8 @@ public class UrlCollectionServiceImpl implements UrlCollectionService {
         urlCollection.setId(UUidUtil.getuuid());
         urlCollection.setCreateTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
         urlCollection.setSscollector(userid);
+        int count = urlCollectionDao.selectcountbytypeidanduserid(urlCollection.getSsurltypeid(),userid);
+        urlCollection.setSort(count);
         int toaddflag = urlCollectionDao.toadd(urlCollection);
         if (toaddflag>0){
             return ResponseUtil.success("成功");

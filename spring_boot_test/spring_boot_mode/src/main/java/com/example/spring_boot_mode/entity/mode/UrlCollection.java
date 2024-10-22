@@ -9,7 +9,7 @@ public class UrlCollection {
     private String notes;
     private String sscollector;
     private String createTime;
-    private String sort;
+    private int sort;
 
     public String getId() {
         return id;
@@ -75,11 +75,11 @@ public class UrlCollection {
         this.createTime = createTime;
     }
 
-    public String getSort() {
+    public int getSort() {
         return sort;
     }
 
-    public void setSort(String sort) {
+    public void setSort(int sort) {
         this.sort = sort;
     }
 }

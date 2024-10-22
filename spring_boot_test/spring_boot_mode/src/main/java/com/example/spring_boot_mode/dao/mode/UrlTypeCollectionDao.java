@@ -14,4 +14,6 @@ public interface UrlTypeCollectionDao {
     int toedit(UrlTypeCollection urlTypeCollection);
 
     int todelete(String[] ids);
+
+    int selectcountbyuserId(String userid);
 }

@@ -95,4 +95,8 @@
         #{id}
     </foreach>
     </delete>
+    <select id="selectcountbytypeidanduserid" resultType="int">
+        select count(id) from url_collection
+        where ssurltypeid =#{ssurltypeid} and sscollector =#{userid}
+    </select>
 </mapper>

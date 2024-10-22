@@ -55,6 +55,8 @@ public class UrlTypeCollectionServiceImpl implements UrlTypeCollectionService {
         urlTypeCollection.setId(UUidUtil.getuuid());
         urlTypeCollection.setCreateTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
         urlTypeCollection.setSscollector(userid);
+        int count = urlTypeCollectionDao.selectcountbyuserId(userid);
+        urlTypeCollection.setSort(count);
         int toaddflag = urlTypeCollectionDao.toadd(urlTypeCollection);
         if (toaddflag>0){
             return ResponseUtil.success("成功");
