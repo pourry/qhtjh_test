@@ -11,6 +11,7 @@ import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.UUidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,8 +71,12 @@ public class UrlTypeCollectionServiceImpl implements UrlTypeCollectionService {
         return ResponseUtil.error("失败");
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ResponseObjectEntity todelete(String[] ids) {
+        //删除其下的所有元素
+        //
+        urlCollectionDao.todeleteBytypeId(ids);
         int toeditflag =  urlTypeCollectionDao.todelete(ids);
         if (toeditflag>0){
             return ResponseUtil.success("成功");

@@ -15,6 +15,7 @@
         <result property="notes" column="notes"/>
         <result property="sscollector" column="sscollector"/>
         <result property="createTime" column="createTime"/>
+        <result property="sort" column="sort"/>
     </resultMap>
 
     <sql id="selectUrlCollection">
@@ -25,7 +26,9 @@
                ssurltypeid,
                notes,
                sscollector,
-               createTime
+               createTime,
+               sort
+
 
         from  url_collection
     </sql>
@@ -35,6 +38,7 @@
         <foreach collection="typeids" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
+        order by sort asc
     </select>
     <insert id="toadd" >
         insert into url_collection
@@ -46,7 +50,8 @@
         ssurltypeid,
         notes,
         sscollector,
-        createTime
+        createTime,
+        sort
         )
         values
         (
@@ -57,7 +62,8 @@
         #{ssurltypeid},
         #{notes},
         #{sscollector},
-        #{createTime}
+        #{createTime},
+        #{sort}
         )
     </insert>
     <update id="toedit" >
@@ -70,6 +76,7 @@
             <if test="notes != null and notes != ''">notes =#{notes},</if>
             <if test="sscollector != null and sscollector != ''">sscollector =#{sscollector},</if>
             <if test="createTime != null and createTime != ''">createTime =#{createTime},</if>
+            <if test="sort != null and sort != ''">sort =#{sort},</if>
 
         </set>
         where  id = #{id}
@@ -77,6 +84,13 @@
     <delete id="todelete" >
     delete from url_collection
     where id in
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">
+        #{id}
+    </foreach>
+    </delete>
+    <delete id="todeleteBytypeId">
+    delete from url_collection
+    where ssurltypeid in
     <foreach collection="ids" item="id" open="(" close=")" separator=",">
         #{id}
     </foreach>

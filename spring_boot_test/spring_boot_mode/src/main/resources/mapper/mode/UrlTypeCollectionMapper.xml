@@ -11,19 +11,22 @@
         <result property="typename" column="typename"/>
         <result property="sscollector" column="sscollector"/>
         <result property="createTime" column="createTime"/>
+        <result property="sort" column="sort"/>
     </resultMap>
 
     <sql id="selectUrlTypeCollection">
         select id,
                typename,
                sscollector,
-               createTime
+               createTime,
+               sort
         from  url_type_collection
     </sql>
     <select id="selectbyuserId" resultMap="UrlTypeCollectionMap">
         <include refid="selectUrlTypeCollection"/>
         where
         sscollector = #{id}
+        order by sort asc
     </select>
     <insert id="toadd" >
         insert into url_type_collection
@@ -31,13 +34,15 @@
         id,
         typename,
         sscollector,
-        createTime
+        createTime,
+        sort
         )
         values (
         #{id},
         #{typename},
         #{sscollector},
-        #{createTime}
+        #{createTime},
+        #{sort}
         )
     </insert>
     <update id="toedit" >
@@ -46,6 +51,7 @@
             <if test="typename != null and typename != ''">typename =#{typename},</if>
             <if test="sscollector != null and sscollector != ''">sscollector =#{sscollector},</if>
             <if test="createTime != null and createTime != ''">createTime =#{createTime},</if>
+            <if test="sort != null and sort != ''">sort =#{sort},</if>
         </set>
         where  id = #{id}
     </update>

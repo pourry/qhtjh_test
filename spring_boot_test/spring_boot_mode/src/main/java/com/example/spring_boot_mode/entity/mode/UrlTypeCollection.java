@@ -8,6 +8,7 @@ public class UrlTypeCollection {
     private String sscollector;
     private String createTime;
     private List<UrlCollection> children;
+    private String sort;
 
     public String getId() {
         return id;
@@ -47,5 +48,13 @@ public class UrlTypeCollection {
 
     public void setChildren(List<UrlCollection> children) {
         this.children = children;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 }

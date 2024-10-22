@@ -14,4 +14,6 @@ public interface UrlCollectionDao {
     int toedit(UrlCollection urlCollection);
 
     int todelete(String[] ids);
+
+    int todeleteBytypeId(String[] ids);
 }
