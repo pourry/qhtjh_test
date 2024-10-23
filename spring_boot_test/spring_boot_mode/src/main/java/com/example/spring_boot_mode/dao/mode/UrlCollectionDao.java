@@ -19,4 +19,12 @@ public interface UrlCollectionDao {
     int todeleteBytypeId(String[] ids);
 
     int selectcountbytypeidanduserid(@Param("ssurltypeid") String ssurltypeid,@Param("userid") String userid);
+
+    List<UrlCollection> selectallbytwoid(@Param("dropid") String dropid,@Param("dragid") String dragid);
+
+    int deletebytwoid(@Param("dropid") String dropid,@Param("dragid") String dragid);
+
+    int insertList(List<UrlCollection> urlCollections);
+
+    UrlCollection selectbyid(String id);
 }

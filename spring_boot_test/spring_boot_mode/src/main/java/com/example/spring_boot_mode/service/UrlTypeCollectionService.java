@@ -11,4 +11,6 @@ public interface UrlTypeCollectionService {
     ResponseObjectEntity toedit(UrlTypeCollection urlTypeCollection);
 
     ResponseObjectEntity todelete(String[] ids);
+
+    ResponseObjectEntity tochange( String dropid,String dragid,String type);
 }

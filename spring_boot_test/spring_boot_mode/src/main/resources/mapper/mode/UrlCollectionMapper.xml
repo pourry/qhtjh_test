@@ -99,4 +99,50 @@
         select count(id) from url_collection
         where ssurltypeid =#{ssurltypeid} and sscollector =#{userid}
     </select>
+    <select id="selectallbytwoid" resultMap="UrlCollectionMap">
+        <include refid="selectUrlCollection"/>
+        where  id = #{dragid}
+        or ssurltypeid =
+        (select ssurltypeid from url_collection where id =#{dropid})
+
+    </select>
+    <delete id="deletebytwoid" >
+         delete from url_collection
+         where  id = #{dragid}
+         or ssurltypeid =
+         (select ssurltypeid from
+          ( select ssurltypeid from url_collection where id =#{dropid}) as temp)
+    </delete>
+    <insert id="insertList">
+                insert into url_collection
+        (
+        id,
+        urlname,
+        url,
+        urllogopath,
+        ssurltypeid,
+        notes,
+        sscollector,
+        createTime,
+        sort
+        )
+        values
+        <foreach collection="urlCollections" separator="," item="item">
+            (
+            #{item.id},
+            #{item.urlname},
+            #{item.url},
+            #{item.urllogopath},
+            #{item.ssurltypeid},
+            #{item.notes},
+            #{item.sscollector},
+            #{item.createTime},
+            #{item.sort}
+            )
+        </foreach>
+    </insert>
+    <select id="selectbyid" resultMap="UrlCollectionMap">
+        <include refid="selectUrlCollection"/>
+        where id = #{id}
+    </select>
 </mapper>

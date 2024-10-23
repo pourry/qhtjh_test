@@ -55,4 +55,14 @@ public class UrlTypeCollectionController {
         return responseObjectEntity;
     }
 
+    @PostMapping("/tochange")                                 //     锚点节点id           被拖拽的节点id
+    public ResponseObjectEntity tochange( String dropid,  String dragid, String dropType,HttpServletRequest request){
+        SysUser sysUser = TokenUtill.getSysUser(request);
+        if (Objects.isNull(sysUser)){
+            return ResponseUtil.tokenExpire("token失效，请重新登录");
+        }
+        ResponseObjectEntity responseObjectEntity = urlTypeCollectionService.tochange(dropid,dragid,dropType);
+        return responseObjectEntity;
+    }
+
 }
