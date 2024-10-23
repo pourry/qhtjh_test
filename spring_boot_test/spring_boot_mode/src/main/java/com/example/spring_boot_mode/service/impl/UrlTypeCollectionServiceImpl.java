@@ -128,11 +128,13 @@ public class UrlTypeCollectionServiceImpl implements UrlTypeCollectionService {
                 break;
             }
         }
-        //升序拍
+        //升序拍 o1-o2
         urlCollections =urlCollections.stream().sorted((o1, o2) -> {return o1.getSort() - o2.getSort();}).collect(Collectors.toList());
-        urlCollections.add(urlCollection);
+
         int sort = 0;
+        //此时拖动节点未进入循环列表
         for (int i = 0; i < urlCollections.size(); i++) {
+            //说明拖动节点在目标位置的后面
             if("after".equals(type)){
                 urlCollections.get(i).setSort(sort);
                 sort++;
@@ -142,12 +144,15 @@ public class UrlTypeCollectionServiceImpl implements UrlTypeCollectionService {
                 urlCollection.setSort(sort);
                 sort++;
             }
+            //说明拖动节点在目标位置的前面
             if("before".equals(type)){
                 urlCollections.get(i).setSort(sort);
                 sort++;
             }
 
         }
+        //设置好序号之后  加入到循环列表中
+        urlCollections.add(urlCollection);
         int insert =urlCollectionDao.deletebytwoid(dropid, dragid);
         if(insert <=0){
             return false;
@@ -171,7 +176,7 @@ public class UrlTypeCollectionServiceImpl implements UrlTypeCollectionService {
         }
         //升序拍
         urlTypeCollections =urlTypeCollections.stream().sorted((o1, o2) -> {return o1.getSort() - o2.getSort();}).collect(Collectors.toList());
-        urlTypeCollections.add(urlTypeCollection);
+
         int sort = 0;
         for (int i = 0; i < urlTypeCollections.size(); i++) {
             if("after".equals(type)){
@@ -186,8 +191,8 @@ public class UrlTypeCollectionServiceImpl implements UrlTypeCollectionService {
                 urlTypeCollections.get(i).setSort(sort);
                 sort++;
             }
-
         }
+        urlTypeCollections.add(urlTypeCollection);
         int insert =urlTypeCollectionDao.deletebytwoid(dropid, dragid);
         if(insert <=0){
             return false;

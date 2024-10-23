@@ -78,7 +78,7 @@
          where  id = #{dragid}
          or sscollector =
          (select sscollector from
-         (select sscollector from url_collection where id =#{dropid}) as temp)
+         (select sscollector from url_type_collection where id =#{dropid}) as temp)
     </delete>
     <insert id="insertList">
         insert into url_type_collection

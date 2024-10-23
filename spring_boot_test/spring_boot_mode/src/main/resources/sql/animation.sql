@@ -173,7 +173,7 @@ CREATE TABLE `novel` (
 DROP TABLE IF EXISTS `novel_pictures`;
 CREATE TABLE `novel_pictures` (
   `id` varchar(64) NOT NULL,
-  `ssnovelid` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `ssnovelid` varchar(64) CHARACTER  DEFAULT NULL,
   `pictureUrl` varchar(255) DEFAULT NULL,
   `pictureName` varchar(255) DEFAULT NULL,
   `pictureLogic` varchar(255) DEFAULT NULL,
