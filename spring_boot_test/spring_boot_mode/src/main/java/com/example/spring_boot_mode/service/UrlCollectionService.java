@@ -9,4 +9,6 @@ public interface UrlCollectionService {
     ResponseObjectEntity toedit(UrlCollection urlCollection);
 
     ResponseObjectEntity todelete(String[] ids);
+
+    ResponseObjectEntity tosavelogo(UrlCollection urlCollection);
 }

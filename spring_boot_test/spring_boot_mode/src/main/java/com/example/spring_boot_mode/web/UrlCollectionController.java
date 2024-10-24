@@ -22,6 +22,18 @@ public class UrlCollectionController {
     @Autowired
     UrlCollectionService urlCollectionService;
 
+
+    //存储url的logo
+    @PostMapping("/tosavelogo")
+    public ResponseObjectEntity tosavelogo(UrlCollection urlCollection, HttpServletRequest request){
+        SysUser sysUser = TokenUtill.getSysUser(request);
+        if (Objects.isNull(sysUser)){
+            return ResponseUtil.tokenExpire("token失效，请重新登录");
+        }
+        ResponseObjectEntity responseObjectEntity = urlCollectionService.tosavelogo(urlCollection);
+        return responseObjectEntity;
+    }
+
     @PostMapping("/toadd")
     public ResponseObjectEntity toadd(UrlCollection urlCollection, HttpServletRequest request){
         SysUser sysUser = TokenUtill.getSysUser(request);

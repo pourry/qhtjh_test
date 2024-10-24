@@ -48,4 +48,13 @@ public class UrlCollectionServiceImpl implements UrlCollectionService {
         }
         return ResponseUtil.error("失败");
     }
+
+    @Override
+    public ResponseObjectEntity tosavelogo(UrlCollection urlCollection) {
+        int toeditflag = urlCollectionDao.toedit(urlCollection);
+        if (toeditflag>0){
+            return ResponseUtil.success(urlCollection);
+        }
+        return ResponseUtil.error("失败");
+    }
 }
