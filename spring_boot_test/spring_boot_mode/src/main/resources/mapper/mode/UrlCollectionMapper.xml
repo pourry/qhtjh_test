@@ -16,6 +16,7 @@
         <result property="sscollector" column="sscollector"/>
         <result property="createTime" column="createTime"/>
         <result property="sort" column="sort"/>
+        <result property="share" column="share"/>
     </resultMap>
 
     <sql id="selectUrlCollection">
@@ -27,7 +28,8 @@
                notes,
                sscollector,
                createTime,
-               sort
+               sort,
+               share
 
 
         from  url_collection
@@ -51,7 +53,8 @@
         notes,
         sscollector,
         createTime,
-        sort
+        sort,
+        share
         )
         values
         (
@@ -63,7 +66,8 @@
         #{notes},
         #{sscollector},
         #{createTime},
-        #{sort}
+        #{sort},
+        #{share}
         )
     </insert>
     <update id="toedit" >
@@ -77,6 +81,7 @@
             <if test="sscollector != null and sscollector != ''">sscollector =#{sscollector},</if>
             <if test="createTime != null and createTime != ''">createTime =#{createTime},</if>
             <if test="sort != null and sort != ''">sort =#{sort},</if>
+            <if test="share != null ">share =#{share,jdbcType=INTEGER},</if>
 
         </set>
         where  id = #{id}
@@ -124,7 +129,8 @@
         notes,
         sscollector,
         createTime,
-        sort
+        sort,
+        share
         )
         values
         <foreach collection="urlCollections" separator="," item="item">
@@ -137,7 +143,8 @@
             #{item.notes},
             #{item.sscollector},
             #{item.createTime},
-            #{item.sort}
+            #{item.sort},
+            #{item.share}
             )
         </foreach>
     </insert>

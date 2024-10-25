@@ -10,6 +10,7 @@ public class UrlCollection {
     private String sscollector;
     private String createTime;
     private int sort;
+    private Boolean share;
 
     public String getId() {
         return id;
@@ -81,5 +82,13 @@ public class UrlCollection {
 
     public void setSort(int sort) {
         this.sort = sort;
+    }
+
+    public Boolean getShare() {
+        return share;
+    }
+
+    public void setShare(Boolean share) {
+        this.share = share;
     }
 }
