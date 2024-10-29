@@ -11,6 +11,7 @@ public class UrlCollection {
     private String createTime;
     private int sort;
     private Boolean share;
+    private String shareTime;
 
     public String getId() {
         return id;
@@ -90,5 +91,13 @@ public class UrlCollection {
 
     public void setShare(Boolean share) {
         this.share = share;
+    }
+
+    public String getShareTime() {
+        return shareTime;
+    }
+
+    public void setShareTime(String shareTime) {
+        this.shareTime = shareTime;
     }
 }

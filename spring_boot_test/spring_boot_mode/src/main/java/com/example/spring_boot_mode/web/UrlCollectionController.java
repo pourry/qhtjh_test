@@ -8,10 +8,7 @@ import com.example.spring_boot_mode.service.UrlCollectionService;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.TokenUtill;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
@@ -22,6 +19,12 @@ public class UrlCollectionController {
     @Autowired
     UrlCollectionService urlCollectionService;
 
+    //首页 url收藏展示
+    @GetMapping("/urlshow")
+    public ResponseObjectEntity urlshow(){
+        ResponseObjectEntity responseObjectEntity = urlCollectionService.urlshow();
+        return responseObjectEntity;
+    }
 
     //存储url的logo
     @PostMapping("/tosavelogo")

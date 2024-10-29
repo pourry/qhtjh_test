@@ -11,4 +11,6 @@ public interface UrlCollectionService {
     ResponseObjectEntity todelete(String[] ids);
 
     ResponseObjectEntity tosavelogo(UrlCollection urlCollection);
+
+    ResponseObjectEntity urlshow();
 }

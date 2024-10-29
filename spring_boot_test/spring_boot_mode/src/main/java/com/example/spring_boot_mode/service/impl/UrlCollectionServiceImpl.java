@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UrlCollectionServiceImpl implements UrlCollectionService {
@@ -22,6 +23,9 @@ public class UrlCollectionServiceImpl implements UrlCollectionService {
         urlCollection.setId(UUidUtil.getuuid());
         urlCollection.setCreateTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
         urlCollection.setSscollector(userid);
+        if(urlCollection.getShare()){
+            urlCollection.setShareTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+        }
         int count = urlCollectionDao.selectcountbytypeidanduserid(urlCollection.getSsurltypeid(),userid);
         urlCollection.setSort(count);
         int toaddflag = urlCollectionDao.toadd(urlCollection);
@@ -33,6 +37,14 @@ public class UrlCollectionServiceImpl implements UrlCollectionService {
 
     @Override
     public ResponseObjectEntity toedit(UrlCollection urlCollection) {
+        UrlCollection urlCollectionold = urlCollectionDao.selectbyid(urlCollection.getId());
+        //如果 之前未被展示
+        if (!urlCollectionold.getShare()){
+            //当 现在展示
+            if(urlCollection.getShare()){
+                urlCollection.setShareTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+            }
+        }
         int toeditflag = urlCollectionDao.toedit(urlCollection);
         if (toeditflag>0){
             return ResponseUtil.success("成功");
@@ -56,5 +68,11 @@ public class UrlCollectionServiceImpl implements UrlCollectionService {
             return ResponseUtil.success(urlCollection);
         }
         return ResponseUtil.error("失败");
+    }
+
+    @Override
+    public ResponseObjectEntity urlshow() {
+        List<UrlCollection> urlCollections = urlCollectionDao.urlshow();
+        return ResponseUtil.success(urlCollections);
     }
 }

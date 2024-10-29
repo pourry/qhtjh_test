@@ -27,4 +27,6 @@ public interface UrlCollectionDao {
     int insertList(List<UrlCollection> urlCollections);
 
     UrlCollection selectbyid(String id);
+
+    List<UrlCollection> urlshow();
 }

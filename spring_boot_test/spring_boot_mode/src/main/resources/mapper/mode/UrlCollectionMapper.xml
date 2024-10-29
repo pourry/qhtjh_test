@@ -17,6 +17,7 @@
         <result property="createTime" column="createTime"/>
         <result property="sort" column="sort"/>
         <result property="share" column="share"/>
+        <result property="shareTime" column="shareTime"/>
     </resultMap>
 
     <sql id="selectUrlCollection">
@@ -29,7 +30,8 @@
                sscollector,
                createTime,
                sort,
-               share
+               share,
+               shareTime
 
 
         from  url_collection
@@ -54,7 +56,8 @@
         sscollector,
         createTime,
         sort,
-        share
+        share,
+        shareTime
         )
         values
         (
@@ -67,7 +70,8 @@
         #{sscollector},
         #{createTime},
         #{sort},
-        #{share}
+        #{share},
+        #{shareTime}
         )
     </insert>
     <update id="toedit" >
@@ -82,6 +86,7 @@
             <if test="createTime != null and createTime != ''">createTime =#{createTime},</if>
             <if test="sort != null and sort != ''">sort =#{sort},</if>
             <if test="share != null ">share =#{share,jdbcType=INTEGER},</if>
+            <if test="shareTime != null  and createTime != ''">shareTime =#{shareTime},</if>
 
         </set>
         where  id = #{id}
@@ -130,7 +135,8 @@
         sscollector,
         createTime,
         sort,
-        share
+        share,
+        shareTime
         )
         values
         <foreach collection="urlCollections" separator="," item="item">
@@ -144,12 +150,17 @@
             #{item.sscollector},
             #{item.createTime},
             #{item.sort},
-            #{item.share}
+            #{item.share},
+            #{item.shareTime}
             )
         </foreach>
     </insert>
     <select id="selectbyid" resultMap="UrlCollectionMap">
         <include refid="selectUrlCollection"/>
         where id = #{id}
+    </select>
+    <select id="urlshow" resultMap="UrlCollectionMap">
+        <include refid="selectUrlCollection"/>
+        order by shareTime desc
     </select>
 </mapper>
