@@ -11,6 +11,6 @@ public class WebFilterConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new TokenInterceptor())
                 .addPathPatterns("/**")//拦截器拦截所有请求
-                .excludePathPatterns("/login/**","/localPicture/**");//无需拦截路径
+                .excludePathPatterns("/login/**","/localPicture/**","/**/public/**");//无需拦截路径
     }
 }

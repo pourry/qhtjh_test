@@ -47,6 +47,9 @@ public class NovelServiceImpl implements NovelService {
         //添加
         novel.setId(UUidUtil.getuuid());
         novel.setCreateTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+        if(novel.getShare()){
+            novel.setShareTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+        }
         int reint = novelDao.toadd(novel);
         if (reint<=0){
             return ResponseUtil.success("失败");
@@ -110,7 +113,13 @@ public class NovelServiceImpl implements NovelService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResponseObjectEntity toedit(Novel novel,MultipartFile[] file) {
-
+        //如果 之前未被展示
+        if (novel.getShare() ==null || !novel.getShare()){
+            //当 现在展示
+            if(novel.getShare()){
+                novel.setShareTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+            }
+        }
         int reint = novelDao.toedit(novel);
         if (reint<=0){
             return ResponseUtil.error("失败");

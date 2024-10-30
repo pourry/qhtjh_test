@@ -48,6 +48,9 @@ public class GameServiceImpl implements GameService {
         //添加
         game.setId(UUidUtil.getuuid());
         game.setCreateTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+        if(game.getShare()){
+            game.setShareTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+        }
         int reint = gameDao.toadd(game);
         if (reint<=0){
             return ResponseUtil.success("失败");
@@ -111,7 +114,13 @@ public class GameServiceImpl implements GameService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResponseObjectEntity toedit(Game game,MultipartFile[] file) {
-
+        //如果 之前未被展示
+        if (game.getShare() ==null || !game.getShare()){
+            //当 现在展示
+            if(game.getShare()){
+                game.setShareTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+            }
+        }
         int reint = gameDao.toedit(game);
         if (reint<=0){
             return ResponseUtil.error("失败");

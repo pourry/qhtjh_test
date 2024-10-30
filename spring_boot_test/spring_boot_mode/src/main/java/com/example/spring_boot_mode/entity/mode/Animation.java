@@ -17,6 +17,8 @@ public class Animation {
     private String createTime;
     private Object object;
     private String hasendLabel;
+    private Boolean share;
+    private String shareTime;
 
     public Object getObject() {
         return object;
@@ -104,6 +106,30 @@ public class Animation {
 
     public void setPictures(List<AnimationPictures> pictures) {
         this.pictures = pictures;
+    }
+
+    public String getHasendLabel() {
+        return hasendLabel;
+    }
+
+    public void setHasendLabel(String hasendLabel) {
+        this.hasendLabel = hasendLabel;
+    }
+
+    public Boolean getShare() {
+        return share;
+    }
+
+    public void setShare(Boolean share) {
+        this.share = share;
+    }
+
+    public String getShareTime() {
+        return shareTime;
+    }
+
+    public void setShareTime(String shareTime) {
+        this.shareTime = shareTime;
     }
 
     @Override

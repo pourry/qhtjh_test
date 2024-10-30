@@ -161,6 +161,19 @@
     </select>
     <select id="urlshow" resultMap="UrlCollectionMap">
         <include refid="selectUrlCollection"/>
+        where share = 1
+
         order by shareTime desc
+        limit 20
+    </select>
+    <select id="urlhot" resultType="map">
+      select
+        count(urllogopath) countpath,
+        urllogopath,
+        REPLACE(urllogopath,'favicon.ico','') url
+        from  url_collection
+        where share = 1
+        group by urllogopath
+        limit 30
     </select>
 </mapper>

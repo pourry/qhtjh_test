@@ -16,6 +16,8 @@ public class Comic {
     private String createTime;
     private Object object;
     private String hasendLabel;
+    private Boolean share;
+    private String shareTime;
 
     public String getHasendLabel() {
         return hasendLabel;
@@ -112,6 +114,23 @@ public class Comic {
     public void setPictures(List<ComicPictures> pictures) {
         this.pictures = pictures;
     }
+
+    public Boolean getShare() {
+        return share;
+    }
+
+    public void setShare(Boolean share) {
+        this.share = share;
+    }
+
+    public String getShareTime() {
+        return shareTime;
+    }
+
+    public void setShareTime(String shareTime) {
+        this.shareTime = shareTime;
+    }
+
 
     @Override
     public String toString() {

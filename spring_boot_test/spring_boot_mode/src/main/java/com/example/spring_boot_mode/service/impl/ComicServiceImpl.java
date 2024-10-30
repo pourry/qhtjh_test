@@ -47,6 +47,9 @@ public class ComicServiceImpl implements ComicService {
         //添加
         comic.setId(UUidUtil.getuuid());
         comic.setCreateTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+        if(comic.getShare()){
+            comic.setShareTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+        }
         int reint = comicDao.toadd(comic);
         if (reint<=0){
             return ResponseUtil.success("失败");
@@ -110,7 +113,13 @@ public class ComicServiceImpl implements ComicService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResponseObjectEntity toedit(Comic comic,MultipartFile[] file) {
-
+        //如果 之前未被展示
+        if (comic.getShare() ==null || !comic.getShare()){
+            //当 现在展示
+            if(comic.getShare()){
+                comic.setShareTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+            }
+        }
         int reint = comicDao.toedit(comic);
         if (reint<=0){
             return ResponseUtil.error("失败");

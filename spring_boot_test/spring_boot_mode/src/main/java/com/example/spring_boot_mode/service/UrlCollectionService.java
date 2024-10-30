@@ -13,4 +13,6 @@ public interface UrlCollectionService {
     ResponseObjectEntity tosavelogo(UrlCollection urlCollection);
 
     ResponseObjectEntity urlshow();
+
+    ResponseObjectEntity urlhot();
 }

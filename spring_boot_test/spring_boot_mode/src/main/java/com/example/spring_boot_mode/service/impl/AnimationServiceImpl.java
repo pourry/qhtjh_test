@@ -43,6 +43,9 @@ public class AnimationServiceImpl implements AnimationService {
         //添加
         animation.setId(UUidUtil.getuuid());
         animation.setCreateTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+        if(animation.getShare()){
+            animation.setShareTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+        }
         int reint = animationDao.toadd(animation);
         if (reint<=0){
             return ResponseUtil.success("失败");
@@ -106,7 +109,13 @@ public class AnimationServiceImpl implements AnimationService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResponseObjectEntity toedit(Animation animation,MultipartFile[] file) {
-
+        //如果 之前未被展示
+        if (animation.getShare() ==null || !animation.getShare()){
+            //当 现在展示
+            if(animation.getShare()){
+                animation.setShareTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss",new Date()));
+            }
+        }
         int reint = animationDao.toedit(animation);
         if (reint<=0){
             return ResponseUtil.error("失败");

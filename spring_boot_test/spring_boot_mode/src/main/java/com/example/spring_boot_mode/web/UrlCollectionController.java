@@ -19,8 +19,14 @@ public class UrlCollectionController {
     @Autowired
     UrlCollectionService urlCollectionService;
 
+    //首页 url热度查询展示
+    @GetMapping("/public/urlhot")
+    public ResponseObjectEntity urlhot(){
+        ResponseObjectEntity responseObjectEntity = urlCollectionService.urlhot();
+        return responseObjectEntity;
+    }
     //首页 url收藏展示
-    @GetMapping("/urlshow")
+    @GetMapping("/public/urlshow")
     public ResponseObjectEntity urlshow(){
         ResponseObjectEntity responseObjectEntity = urlCollectionService.urlshow();
         return responseObjectEntity;

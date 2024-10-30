@@ -17,6 +17,8 @@
         <result property="sscollector" column="sscollectors"/>
         <result property="createTime" column="createTime"/>
         <result property="hasendLabel" column="hasendLabel"/>
+        <result property="share" column="share"/>
+        <result property="shareTime" column="shareTime"/>
 
     </resultMap>
     <sql id="selectComic">
@@ -29,7 +31,9 @@
                hasendLabel,
                pictureURL,
                sscollector,
-               createTime
+               createTime,
+               share,
+               shareTime
         from  comic
     </sql>
     <insert id="toadd" parameterType="com.example.spring_boot_mode.entity.mode.Comic" >
@@ -44,7 +48,9 @@
             hasendLabel,
             pictureURL,
             sscollector,
-            createTime
+            createTime,
+            share,
+            shareTime
         )
         values(
                #{id},
@@ -56,7 +62,9 @@
                #{hasendLabel},
                #{pictureURL},
                #{sscollector},
-               #{createTime}
+               #{createTime},
+               #{share},
+               #{shareTime}
               )
 
     </insert>
@@ -72,6 +80,8 @@
             <if test="pictureURL != null and pictureURL != ''"> pictureURL =#{pictureURL},</if>
             <if test="sscollector != null and sscollector != ''"> sscollector =#{sscollector},</if>
             <if test="createTime != null and createTime != ''"> createTime =#{createTime},</if>
+            <if test="share != null and share != ''"> share =#{share},</if>
+            <if test="shareTime != null and shareTime != ''"> shareTime =#{shareTime},</if>
         </set>
         where id = #{id}
     </update>
