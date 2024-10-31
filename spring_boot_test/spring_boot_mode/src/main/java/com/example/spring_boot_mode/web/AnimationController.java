@@ -27,6 +27,7 @@ public class AnimationController {
     @Autowired
     private AnimationService animationService;
 
+
     @PostMapping("toadd")
     public ResponseObjectEntity toadd(Animation animation,@RequestParam(value = "file",required = false) MultipartFile[] file, HttpServletRequest request  ){
         SysUser sysUser = TokenUtill.getSysUser(request);

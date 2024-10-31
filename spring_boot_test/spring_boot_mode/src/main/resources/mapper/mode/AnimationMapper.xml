@@ -119,4 +119,11 @@
         </foreach>
     </delete>
 
+    <select id="getAnimationShow" resultMap="AnimationMap">
+        <include refid="selectAnimation"/>
+        where share = 1
+        order by shareTime desc
+        limit 10
+    </select>
+
 </mapper>

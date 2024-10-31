@@ -20,4 +20,6 @@ public interface ComicDao {
     int todelet(String[] ids);
 
     int gettotal(Comic comic);
+
+    List<Comic> getComicShow();
 }

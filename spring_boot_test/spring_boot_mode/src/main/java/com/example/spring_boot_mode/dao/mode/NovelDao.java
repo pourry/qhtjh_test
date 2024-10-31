@@ -20,4 +20,6 @@ public interface NovelDao {
     int todelet(String[] ids);
 
     int gettotal(Novel novel);
+
+    List<Novel> getNovelShow();
 }

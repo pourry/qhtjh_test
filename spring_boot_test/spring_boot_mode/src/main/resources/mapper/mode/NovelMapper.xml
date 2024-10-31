@@ -119,4 +119,11 @@
         </foreach>
     </delete>
 
+    <select id="getNovelShow" resultMap="NovelMap">
+        <include refid="selectNovel"/>
+        where share = 1
+        order by shareTime desc
+        limit 10
+    </select>
+
 </mapper>

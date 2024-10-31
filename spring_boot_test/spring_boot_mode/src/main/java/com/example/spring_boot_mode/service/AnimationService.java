@@ -15,4 +15,5 @@ public interface AnimationService {
     ResponseObjectEntity getone(String id);
 
     ResponseObjectEntity todelet(String[] ids);
+
 }

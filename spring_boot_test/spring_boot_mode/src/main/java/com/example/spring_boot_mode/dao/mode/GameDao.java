@@ -20,4 +20,6 @@ public interface GameDao {
     int todelet(String[] ids);
 
     int gettotal(Game game);
+
+    List<Game> getGameShow();
 }
