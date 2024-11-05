@@ -10,7 +10,7 @@ public class UrlCollection {
     private String sscollector;
     private String createTime;
     private int sort;
-    private Boolean share;
+    private Boolean share = false;
     private String shareTime;
 
     public String getId() {

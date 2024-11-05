@@ -54,7 +54,7 @@ picture:
   mappinglocaloriginPath: /localPicture/**
   animation:
     path: D:\picture\animation
-    mappingPath: http://localhost:${server.port}/localPicture/animation/
+    mappingPath: http://localhost:${server.port}/localPicture/animation/  #映射地址
   comic:
     path: D:\picture\comic
     mappingPath: http://localhost:${server.port}/localPicture/comic/

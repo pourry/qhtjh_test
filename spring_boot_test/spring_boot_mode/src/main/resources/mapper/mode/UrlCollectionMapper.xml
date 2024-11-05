@@ -173,7 +173,7 @@
         REPLACE(urllogopath,'favicon.ico','') url
         from  url_collection
         where share = 1
-        group by urllogopath
+        group by sscollector,urllogopath
         limit 30
     </select>
 </mapper>

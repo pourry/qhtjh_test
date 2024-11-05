@@ -63,6 +63,7 @@
             <foreach collection="animationIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
+        order by createTime desc;
     </select>
     <select id="selectPathByanimationIds" resultType="String">
         select
