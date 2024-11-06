@@ -5,6 +5,8 @@
 
 
 <mapper namespace="com.example.spring_boot_mode.dao.flowable.FlowableDao">
-
+    <select id="testFlowAble" resultType="map">
+    select * from  flowable
+</select>
 
 </mapper>

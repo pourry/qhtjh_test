@@ -10,19 +10,16 @@ server:
 #    url: jdbc:mysql://localhost:3306/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
 spring:
   datasource:
-    dynamic:
-      primary: mode
-      datasource:
-        mode:
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://localhost:3306/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
-          username: root
-          password: l1998C12r05
-        flowable:
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://localhost:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
-          username: root
-          password: l1998C12r05
+    mode:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
+      username: root
+      password: l1998C12r05
+    flowable:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
+      username: root
+      password: l1998C12r05
   servlet:
     multipart:
       max-file-size: 50MB

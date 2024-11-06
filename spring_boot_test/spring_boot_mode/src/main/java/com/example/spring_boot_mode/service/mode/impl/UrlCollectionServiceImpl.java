@@ -1,9 +1,9 @@
-package com.example.spring_boot_mode.service.impl;
+package com.example.spring_boot_mode.service.mode.impl;
 
 import com.example.spring_boot_mode.dao.mode.UrlCollectionDao;
 import com.example.spring_boot_mode.entity.ResponseObjectEntity;
 import com.example.spring_boot_mode.entity.mode.UrlCollection;
-import com.example.spring_boot_mode.service.UrlCollectionService;
+import com.example.spring_boot_mode.service.mode.UrlCollectionService;
 import com.example.spring_boot_mode.utils.DateUtil;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.UUidUtil;

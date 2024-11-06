@@ -1,57 +1,62 @@
-//package com.example.spring_boot_mode.config.datasource;
-//
-//import org.apache.ibatis.session.SqlSessionFactory;
-//import org.mybatis.spring.SqlSessionFactoryBean;
-//import org.mybatis.spring.SqlSessionTemplate;
-//import org.mybatis.spring.annotation.MapperScan;
-//import org.springframework.beans.factory.annotation.Qualifier;
-//import org.springframework.boot.context.properties.ConfigurationProperties;
-//import org.springframework.boot.jdbc.DataSourceBuilder;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.context.annotation.Primary;
-//import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-//
-//import javax.sql.DataSource;
-//
-//@Configuration
-//@MapperScan(basePackages = "com.example.spring_boot_mode.dao",
-//        sqlSessionFactoryRef = "modeSqlSessionFactory")
-//public class ModeDataSouceConfig {
-//
-//        // 将这个对象放入Spring容器中
-//        @Bean(name = "modeDataSource")
-//        // 表示这个数据源是默认数据源
-//        @Primary
-//        // 读取application.properties中的配置参数映射成为一个对象
-//        // prefix表示参数的前缀
-//        @ConfigurationProperties(prefix = "spring.datasource.mode")
-//        public DataSource getDateSource1()
-//        {
-//            return DataSourceBuilder.create().build();
-//        }
-//
-//        @Bean(name = "modeSqlSessionFactory")
-//        // 表示这个数据源是默认数据源
-//        @Primary
-//        // @Qualifier表示查找Spring容器中名字为test1DataSource的对象
-//        public SqlSessionFactory modeSqlSessionFactory(@Qualifier("modeDataSource") DataSource datasource)
-//                throws Exception
-//        {
-//            SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-//            bean.setDataSource(datasource);
-//            bean.setMapperLocations(
-//                    // 设置mybatis的xml所在位置
-//                    new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/mode/*.xml"));
-//            return bean.getObject();
-//        }
-//
-//        @Bean("modeSqlSessionTemplate")
-//        // 表示这个数据源是默认数据源
-//        @Primary
-//        public SqlSessionTemplate modeSqlSessionTemplate(
-//                @Qualifier("modeSqlSessionFactory") SqlSessionFactory sessionFactory)
-//        {
-//            return new SqlSessionTemplate(sessionFactory);
-//        }
-//}
+package com.example.spring_boot_mode.config.datasource;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import javax.sql.DataSource;
+
+@Configuration
+@MapperScan(basePackages = "com.example.spring_boot_mode.dao.mode",
+        sqlSessionFactoryRef = "modeSqlSessionFactory")
+public class ModeDataSouceConfig {
+
+
+    // mapper.xml所在地址
+    private static final String MAPPER_LOCATION = "classpath*:mapper/mode/*.xml";
+
+    /**
+     * 主数据源，Primary注解必须增加，它表示该数据源为默认数据源
+     * 项目中还可能存在其他的数据源，如获取时不指定名称，则默认获取这个数据源，如果不添加，则启动时候回报错
+     */
+    @Primary
+    @Bean(name = "modeDataSource")
+    // 读取spring.datasource.mode前缀的配置文件映射成对应的配置对象
+    @ConfigurationProperties(prefix = "spring.datasource.mode")
+    public DataSource dataSource() {
+        DataSource build = DataSourceBuilder.create().build();
+        return build;
+    }
+
+    /**
+     * 事务管理器，Primary注解作用同上
+     */
+    @Bean(name = "modeTransactionManager")
+    @Primary
+    public PlatformTransactionManager dataSourceTransactionManager(@Qualifier("modeDataSource") DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+    /**
+     * session工厂，Primary注解作用同上
+     */
+
+    @Bean(name = "modeSqlSessionFactory")
+    @Primary
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("modeDataSource") DataSource dataSource) throws Exception {
+        final SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
+        sessionFactoryBean.setDataSource(dataSource);
+        sessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(ModeDataSouceConfig.MAPPER_LOCATION));
+        return sessionFactoryBean.getObject();
+    }
+}

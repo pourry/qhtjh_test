@@ -1,21 +1,19 @@
-package com.example.spring_boot_mode.service.impl;
+package com.example.spring_boot_mode.service.mode.impl;
 
 import com.example.spring_boot_mode.dao.mode.UrlCollectionDao;
 import com.example.spring_boot_mode.dao.mode.UrlTypeCollectionDao;
 import com.example.spring_boot_mode.entity.ResponseObjectEntity;
 import com.example.spring_boot_mode.entity.mode.UrlCollection;
 import com.example.spring_boot_mode.entity.mode.UrlTypeCollection;
-import com.example.spring_boot_mode.service.UrlTypeCollectionService;
+import com.example.spring_boot_mode.service.mode.UrlTypeCollectionService;
 import com.example.spring_boot_mode.utils.DateUtil;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.UUidUtil;
-import javafx.print.Collation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;

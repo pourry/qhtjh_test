@@ -3,7 +3,7 @@ package com.example.spring_boot_mode.web;
 import com.example.spring_boot_mode.entity.ResponseObjectEntity;
 import com.example.spring_boot_mode.entity.mode.SysUser;
 import com.example.spring_boot_mode.entity.mode.UrlTypeCollection;
-import com.example.spring_boot_mode.service.UrlTypeCollectionService;
+import com.example.spring_boot_mode.service.mode.UrlTypeCollectionService;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.TokenUtill;
 import org.springframework.beans.factory.annotation.Autowired;

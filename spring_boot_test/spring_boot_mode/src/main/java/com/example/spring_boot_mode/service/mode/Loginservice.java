@@ -1,4 +1,4 @@
-package com.example.spring_boot_mode.service;
+package com.example.spring_boot_mode.service.mode;
 
 import com.example.spring_boot_mode.entity.ResponseObjectEntity;
 import com.example.spring_boot_mode.entity.flowable.Flowable;
@@ -9,8 +9,6 @@ import java.util.Map;
 
 public interface Loginservice {
     List<SysUser> getSysUser();
-
-    List<Flowable> getflowable();
 
     Map<String, Object> tologin(SysUser sysUser);
 

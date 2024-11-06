@@ -1,18 +1,14 @@
-package com.example.spring_boot_mode.service.impl;
+package com.example.spring_boot_mode.service.mode.impl;
 
 import com.example.spring_boot_mode.dao.mode.*;
 import com.example.spring_boot_mode.entity.ResponseObjectEntity;
 import com.example.spring_boot_mode.entity.mode.*;
-import com.example.spring_boot_mode.service.ACGService;
-import com.example.spring_boot_mode.service.ComicService;
-import com.example.spring_boot_mode.service.GameService;
-import com.example.spring_boot_mode.service.NovelService;
+import com.example.spring_boot_mode.service.mode.ACGService;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

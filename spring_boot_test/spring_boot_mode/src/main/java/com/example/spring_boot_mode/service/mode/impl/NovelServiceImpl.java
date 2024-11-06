@@ -1,15 +1,11 @@
-package com.example.spring_boot_mode.service.impl;
+package com.example.spring_boot_mode.service.mode.impl;
 
-import com.example.spring_boot_mode.dao.mode.ComicDao;
-import com.example.spring_boot_mode.dao.mode.ComicPicturesDao;
 import com.example.spring_boot_mode.dao.mode.NovelDao;
 import com.example.spring_boot_mode.dao.mode.NovelPicturesDao;
 import com.example.spring_boot_mode.entity.ResponseObjectEntity;
-import com.example.spring_boot_mode.entity.mode.Comic;
-import com.example.spring_boot_mode.entity.mode.ComicPictures;
 import com.example.spring_boot_mode.entity.mode.Novel;
 import com.example.spring_boot_mode.entity.mode.NovelPictures;
-import com.example.spring_boot_mode.service.NovelService;
+import com.example.spring_boot_mode.service.mode.NovelService;
 import com.example.spring_boot_mode.utils.DateUtil;
 import com.example.spring_boot_mode.utils.PagingUtil;
 import com.example.spring_boot_mode.utils.ResponseUtil;

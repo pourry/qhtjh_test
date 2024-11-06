@@ -1,8 +1,7 @@
 package com.example.spring_boot_mode.web;
 
 import com.example.spring_boot_mode.entity.ResponseObjectEntity;
-import com.example.spring_boot_mode.service.ACGService;
-import com.example.spring_boot_mode.service.AnimationService;
+import com.example.spring_boot_mode.service.mode.ACGService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -5,7 +5,7 @@ import com.example.spring_boot_mode.entity.ResponseObjectEntity;
 import com.example.spring_boot_mode.entity.flowable.Flowable;
 import com.example.spring_boot_mode.entity.mode.SysUser;
 import com.example.spring_boot_mode.exception.ThrowMsgException;
-import com.example.spring_boot_mode.service.Loginservice;
+import com.example.spring_boot_mode.service.mode.Loginservice;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.redis.RedisSafe;
 
@@ -40,11 +40,6 @@ public class LoginController {
     @GetMapping("getalltest")
     public ResponseObjectEntity getalltest(){
         List<SysUser> relist= loginservice.getSysUser();
-        return ResponseUtil.success(relist);
-    }
-    @GetMapping("getflowabletest")
-    public ResponseObjectEntity getflowable(){
-        List<Flowable> relist= loginservice.getflowable();
         return ResponseUtil.success(relist);
     }
 

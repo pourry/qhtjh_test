@@ -1,4 +1,4 @@
-package com.example.spring_boot_mode.service.impl;
+package com.example.spring_boot_mode.service.mode.impl;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -8,18 +8,14 @@ import com.example.spring_boot_mode.entity.ResponseObjectEntity;
 import com.example.spring_boot_mode.entity.flowable.Flowable;
 import com.example.spring_boot_mode.entity.mode.SysUser;
 import com.example.spring_boot_mode.exception.ThrowMsgException;
-import com.example.spring_boot_mode.service.Loginservice;
+import com.example.spring_boot_mode.service.mode.Loginservice;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.TokenUtill;
 import com.example.spring_boot_mode.utils.UUidUtil;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.jsonwebtoken.Jwts;
-
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +37,6 @@ public class LoginserviceImpl implements Loginservice {
         return loginDao.selectList(null);
     }
 
-    @DS("flowable")
-    @Override
-    public List<Flowable> getflowable() {
-        return flowableDao.selectList(null);
-    }
 
     @Override
     public Map<String, Object> tologin(SysUser sysUser) {
