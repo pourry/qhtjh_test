@@ -9,7 +9,13 @@ server:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
 spring:
+  main:
+    allow-bean-definition-overriding: true
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
+    username: root
+    password: l1998C12r05
     mode:
       driver-class-name: com.mysql.cj.jdbc.Driver
       jdbc-url: jdbc:mysql://localhost:3306/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
@@ -20,6 +26,7 @@ spring:
       jdbc-url: jdbc:mysql://localhost:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
       username: root
       password: l1998C12r05
+
   servlet:
     multipart:
       max-file-size: 50MB
@@ -27,7 +34,17 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath:mapper/**/*Mapper.xml
+    map-underscore-to-camel-case: true
+    jdbc-type-for-null: null
+    # 参数配置
+  configuration-properties:
+      # 配置流程引擎参数，详情可见 DatabaseConfiguration
+    blobType: BLOB
+    boolValue: TRUE
+      # 不要设置库名，否则会出现双库名 bug
+    prefix: ''
+  mapper-locations: classpath:mapper/**/*Mapper.xml, classpath:/META-INF/modeler-mybatis-mappings/*.xml
+
 #reids链接
 #  redis:
 #    port: 6379
@@ -37,9 +54,19 @@ mybatis-plus:
 #flowable
 #关闭定时任务
 flowable:
-  async-executor-activate: true
+  #关闭定时任务
+  async-executor-activate: false
 # 将 databaseSchemaUpdate 设置为true， 当Flowable 发现库与数据库表结构不一致时，会自动将数据库表结构升级值新版本
   database-schema-update: true
+  check-process-definitions: false
+  db-history-used: true
+  history-level: full
+  common:
+    app:
+      idm-url: http://localhost:8099/flowable-idm
+      idm-admin:
+        user: admin
+        password: admin
 
 #设置token超时时间(秒)
 token:
@@ -61,6 +88,4 @@ picture:
   game:
     path: D:\picture\game
     mappingPath: http://localhost:${server.port}/localPicture/game/
-filter:
-  allowPath: '"/login/**","/localPicture/**"'
 

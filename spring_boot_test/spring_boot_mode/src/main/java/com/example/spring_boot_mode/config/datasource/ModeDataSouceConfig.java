@@ -29,7 +29,6 @@ public class ModeDataSouceConfig {
      * 主数据源，Primary注解必须增加，它表示该数据源为默认数据源
      * 项目中还可能存在其他的数据源，如获取时不指定名称，则默认获取这个数据源，如果不添加，则启动时候回报错
      */
-    @Primary
     @Bean(name = "modeDataSource")
     // 读取spring.datasource.mode前缀的配置文件映射成对应的配置对象
     @ConfigurationProperties(prefix = "spring.datasource.mode")

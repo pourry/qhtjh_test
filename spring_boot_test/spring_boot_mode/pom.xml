@@ -15,6 +15,7 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
+        <flowable.version>6.7.2</flowable.version>
     </properties>
     <dependencies>
         <dependency>
@@ -61,16 +62,28 @@
         <!--结束-->
 
 <!--        工作流 flowable 依赖开始-->
+        <!--Flowable的核心依赖-->
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter-process</artifactId>
+            <version>${flowable.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-spring-boot-starter</artifactId>
-            <version>6.8.0</version>
+            <version>${flowable.version}</version>
         </dependency>
 
         <!--数据库连接依赖 开始-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <version>1.7.32</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.32</version>
         </dependency>
         <dependency>
