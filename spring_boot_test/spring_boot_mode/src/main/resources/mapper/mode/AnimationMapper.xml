@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.example.spring_boot_mode.dao.mode.AnimationDao">
-    <resultMap id="AnimationMap" type="com.example.spring_boot_mode.entity.mode.Animation">
+<mapper namespace="com.example.spring_boot_mode.model.dao.AnimationDao">
+    <resultMap id="AnimationMap" type="com.example.spring_boot_mode.model.entity.Animation">
         <!--    property:实体类中       column:数据库中字段          -->
         <result property="id" column="id"/>
         <result property="name" column="name"/>
@@ -36,7 +36,7 @@
                shareTime
         from  animation
     </sql>
-    <insert id="toadd" parameterType="com.example.spring_boot_mode.entity.mode.Animation" >
+    <insert id="toadd" parameterType="com.example.spring_boot_mode.model.entity.Animation" >
         insert into animation
         (
             id,
@@ -68,7 +68,7 @@
               )
 
     </insert>
-    <update id="toedit" parameterType="com.example.spring_boot_mode.entity.mode.Animation">
+    <update id="toedit" parameterType="com.example.spring_boot_mode.model.entity.Animation">
         update animation
         <set>
             <if test="name != null and name != ''"> name =#{name},</if>

@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.example.spring_boot_mode.dao.mode.GameDao">
-    <resultMap id="GameMap" type="com.example.spring_boot_mode.entity.mode.Game">
+<mapper namespace="com.example.spring_boot_mode.model.dao.GameDao">
+    <resultMap id="GameMap" type="com.example.spring_boot_mode.model.entity.Game">
         <!--    property:实体类中       column:数据库中字段          -->
         <result property="id" column="id"/>
         <result property="name" column="name"/>
@@ -34,7 +34,7 @@
                shareTime
         from  game
     </sql>
-    <insert id="toadd" parameterType="com.example.spring_boot_mode.entity.mode.Game" >
+    <insert id="toadd" parameterType="com.example.spring_boot_mode.model.entity.Game" >
         insert into game
         (
             id,

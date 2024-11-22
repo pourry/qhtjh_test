@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.example.spring_boot_mode.dao.mode.UrlTypeCollectionDao">
-    <resultMap id="UrlTypeCollectionMap" type="com.example.spring_boot_mode.entity.mode.UrlTypeCollection">
+<mapper namespace="com.example.spring_boot_mode.model.dao.UrlTypeCollectionDao">
+    <resultMap id="UrlTypeCollectionMap" type="com.example.spring_boot_mode.model.entity.UrlTypeCollection">
         <!--    property:实体类中       column:数据库中字段          -->
         <result property="id" column="id"/>
         <result property="typename" column="typename"/>

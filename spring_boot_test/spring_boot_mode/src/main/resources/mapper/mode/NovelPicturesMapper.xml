@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.example.spring_boot_mode.dao.mode.NovelPicturesDao">
-    <resultMap id="NovelPicturesMap" type="com.example.spring_boot_mode.entity.mode.NovelPictures">
+<mapper namespace="com.example.spring_boot_mode.model.dao.NovelPicturesDao">
+    <resultMap id="NovelPicturesMap" type="com.example.spring_boot_mode.model.entity.NovelPictures">
         <!--    property:实体类中       column:数据库中字段          -->
         <result property="id" column="id"/>
         <result property="ssnovelid" column="ssnovelid"/>

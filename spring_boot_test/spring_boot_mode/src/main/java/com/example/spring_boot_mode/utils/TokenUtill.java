@@ -1,15 +1,12 @@
 package com.example.spring_boot_mode.utils;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
 import com.example.spring_boot_mode.config.encrypt.sm2.SM2Util;
-import com.example.spring_boot_mode.entity.mode.SysUser;
+import com.example.spring_boot_mode.model.entity.SysUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

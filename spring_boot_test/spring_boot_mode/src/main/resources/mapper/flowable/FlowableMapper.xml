@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.example.spring_boot_mode.dao.flowable.FlowableDao">
+<mapper namespace="com.example.spring_boot_mode.flowable.dao.FlowableDao">
     <select id="testFlowAble" resultType="map">
     select * from  flowable
     </select>

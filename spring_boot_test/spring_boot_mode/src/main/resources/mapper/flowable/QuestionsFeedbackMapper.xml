@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.example.spring_boot_mode.flowable.dao.QuestionsFeedbackDao">
+    <select id="flowChart" resultType="map">
+    SELECT geby.BYTES_  as png  from act_re_procdef  as repro
+      left join act_ge_bytearray  as geby
+      on repro.DEPLOYMENT_ID_ = geby.DEPLOYMENT_ID_
+      <where>
+          geby.GENERATED_= 1
+          <if test="id != null and id != ''">and repro.ID_ =#{id}</if>
+      </where>
+
+
+    </select>
+
+</mapper>

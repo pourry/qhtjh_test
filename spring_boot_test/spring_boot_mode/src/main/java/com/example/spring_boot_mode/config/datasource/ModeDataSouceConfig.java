@@ -17,7 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@MapperScan(basePackages = "com.example.spring_boot_mode.dao.mode",
+@MapperScan(basePackages = "com.example.spring_boot_mode.model.dao",
         sqlSessionFactoryRef = "modeSqlSessionFactory")
 public class ModeDataSouceConfig {
 

@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.example.spring_boot_mode.dao.mode.NovelDao">
-    <resultMap id="NovelMap" type="com.example.spring_boot_mode.entity.mode.Novel">
+<mapper namespace="com.example.spring_boot_mode.model.dao.NovelDao">
+    <resultMap id="NovelMap" type="com.example.spring_boot_mode.model.entity.Novel">
         <!--    property:实体类中       column:数据库中字段          -->
         <result property="id" column="id"/>
         <result property="name" column="name"/>
@@ -36,7 +36,7 @@
                shareTime
         from  novel
     </sql>
-    <insert id="toadd" parameterType="com.example.spring_boot_mode.entity.mode.Novel" >
+    <insert id="toadd" parameterType="com.example.spring_boot_mode.model.entity.Novel" >
         insert into novel
         (
             id,
