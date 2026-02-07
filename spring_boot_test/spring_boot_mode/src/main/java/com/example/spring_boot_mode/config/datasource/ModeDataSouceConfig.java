@@ -30,6 +30,7 @@ public class ModeDataSouceConfig {
      * 项目中还可能存在其他的数据源，如获取时不指定名称，则默认获取这个数据源，如果不添加，则启动时候回报错
      */
     @Bean(name = "modeDataSource")
+    @Primary
     // 读取spring.datasource.mode前缀的配置文件映射成对应的配置对象
     @ConfigurationProperties(prefix = "spring.datasource.mode")
     public DataSource dataSource() {

@@ -97,7 +97,7 @@ public class FlowableControl {
                     .singleResult();
             String resourecName = "";
             resourecName = processDefinition.getDiagramResourceName();
-            resourecAsStream = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(),resourecName)
+            resourecAsStream = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(),resourecName);
             outputStream =response.getOutputStream();
             byte[] b = new byte[1024];
             int len = -1;

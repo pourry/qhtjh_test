@@ -12,10 +12,10 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
-    username: root
-    password: l1998C12r05
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
+#    username: root
+#    password: l1998C12r05
     mode:
       driver-class-name: com.mysql.cj.jdbc.Driver
       jdbc-url: jdbc:mysql://localhost:3306/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
@@ -61,6 +61,8 @@ flowable:
   check-process-definitions: false
   db-history-used: true
   history-level: full
+  datasource:
+    enable: false
   common:
     app:
       idm-url: http://localhost:8099/flowable-idm
@@ -88,4 +90,3 @@ picture:
   game:
     path: D:\picture\game
     mappingPath: http://localhost:${server.port}/localPicture/game/
-

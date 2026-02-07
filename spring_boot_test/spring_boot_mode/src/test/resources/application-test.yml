@@ -1,0 +1,35 @@
+# 测试环境配置
+server:
+  port: 8001
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    mode:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
+      username: root
+      password: l1998C12r05
+    flowable:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
+      username: root
+      password: l1998C12r05
+
+# 日志配置
+logging:
+  level:
+    com.example.spring_boot_mode: DEBUG
+    org.springframework.test: INFO
+
+# Flowable配置
+flowable:
+  async-executor-activate: false
+  database-schema-update: true
+  check-process-definitions: false
+  db-history-used: true
+  history-level: full
+  datasource:
+    enable: false
+  auto-deployment-enabled: false

@@ -11,6 +11,7 @@ import com.example.spring_boot_mode.utils.PagingUtil;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.UUidUtil;
 import com.example.spring_boot_mode.utils.pictureSave.PictureSave;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -76,7 +77,6 @@ public class AnimationServiceImpl implements AnimationService {
                 return ResponseUtil.error("失败");
             }
         }
-
 
         return ResponseUtil.success("成功");
     }
