@@ -63,15 +63,10 @@
         <!--结束-->
 
 <!--        工作流 flowable 依赖开始-->
-        <!--Flowable的核心依赖-->
+        <!--只引入 process starter，不引入全量 starter-->
         <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-spring-boot-starter-process</artifactId>
-            <version>${flowable.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.flowable</groupId>
-            <artifactId>flowable-spring-boot-starter</artifactId>
             <version>${flowable.version}</version>
         </dependency>
 
