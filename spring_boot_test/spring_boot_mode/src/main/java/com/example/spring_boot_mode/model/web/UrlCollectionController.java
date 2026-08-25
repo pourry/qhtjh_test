@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -68,5 +70,19 @@ public class UrlCollectionController {
         }
         ResponseObjectEntity responseObjectEntity = urlCollectionService.todelete(ids);
         return responseObjectEntity;
+    }
+
+    /**
+     * 批量验证网址可用性
+     * @param urls 待验证的网址列表 JSON
+     * @return 验证结果
+     */
+    @PostMapping("/validateUrls")
+    public ResponseObjectEntity validateUrls(@RequestBody List<Map<String, String>> urls, HttpServletRequest request){
+        SysUser sysUser = TokenUtill.getSysUser(request);
+        if (Objects.isNull(sysUser)){
+            return ResponseUtil.tokenExpire("token失效，请重新登录");
+        }
+        return urlCollectionService.validateUrls(urls);
     }
 }

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring_boot_mode.model.dao.FooterSectionDao">
+
+    <!-- 结果映射 -->
+    <resultMap id="FooterSectionMap" type="com.example.spring_boot_mode.model.entity.FooterSection">
+        <result property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="sort" column="sort"/>
+        <result property="enabled" column="enabled"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+    </resultMap>
+
+    <!-- 新增 -->
+    <insert id="toadd" parameterType="com.example.spring_boot_mode.model.entity.FooterSection">
+        INSERT INTO footer_section (id, type, title, content, sort, enabled, createTime, updateTime)
+        VALUES (#{id}, #{type}, #{title}, #{content}, #{sort}, #{enabled}, #{createTime}, #{updateTime})
+    </insert>
+
+    <!-- 修改 -->
+    <update id="toedit" parameterType="com.example.spring_boot_mode.model.entity.FooterSection">
+        UPDATE footer_section
+        <set>
+            <if test="type != null">type = #{type},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="updateTime != null">updateTime = #{updateTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="todelete" parameterType="java.lang.String">
+        DELETE FROM footer_section WHERE id = #{id}
+    </delete>
+
+    <!-- 查询全部（按排序升序） -->
+    <select id="selectAll" resultMap="FooterSectionMap">
+        SELECT id, type, title, content, sort, enabled, createTime, updateTime
+        FROM footer_section
+        ORDER BY sort ASC
+    </select>
+
+    <!-- 根据类型查询 -->
+    <select id="selectByType" parameterType="java.lang.String" resultMap="FooterSectionMap">
+        SELECT id, type, title, content, sort, enabled, createTime, updateTime
+        FROM footer_section
+        WHERE type = #{type}
+        ORDER BY sort ASC
+    </select>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" parameterType="java.lang.String" resultMap="FooterSectionMap">
+        SELECT id, type, title, content, sort, enabled, createTime, updateTime
+        FROM footer_section
+        WHERE id = #{id}
+    </select>
+
+</mapper>

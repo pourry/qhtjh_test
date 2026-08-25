@@ -23,13 +23,5 @@ logging:
     com.example.spring_boot_mode: DEBUG
     org.springframework.test: INFO
 
-# Flowable配置
-flowable:
-  async-executor-activate: false
-  database-schema-update: true
-  check-process-definitions: false
-  db-history-used: true
-  history-level: full
-  datasource:
-    enable: false
-  auto-deployment-enabled: false
+# 注意：Flowable 的配置已迁移至 FlowableConfig.java 中手动管理
+# FlowableProcessAutoConfiguration 已排除，不会在 test_all 数据库中建表

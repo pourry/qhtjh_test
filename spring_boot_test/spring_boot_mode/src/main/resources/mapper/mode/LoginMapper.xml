@@ -12,13 +12,25 @@
         <result property="password" column="password"/>
         <result property="nickName" column="nickName"/>
         <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="birthday" column="birthday"/>
+        <result property="gender" column="gender"/>
+        <result property="avatar" column="avatar"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
     </resultMap>
     <sql id="selectLogin">
         select id,
                username,
                password,
                nickName,
-               email
+               email,
+               phone,
+               birthday,
+               gender,
+               avatar,
+               createTime,
+               updateTime
                from  sys_user
     </sql>
 
@@ -33,18 +45,47 @@
         username,
         password,
         nickName,
-        email
+        email,
+        createTime
         )values
         (
         #{id},
         #{username},
         #{password},
         #{nickName},
-        #{email}
+        #{email},
+        #{createTime}
         )
     </insert>
     <select id="tocheckname" resultType="int">
         select count(username) from sys_user where username = #{username}
     </select>
+
+    <!-- 根据ID查询用户 -->
+    <select id="selectById" parameterType="java.lang.String" resultMap="LoginMap">
+        <include refid="selectLogin"/>
+        where id = #{id}
+    </select>
+
+    <!-- 更新用户基本信息 -->
+    <update id="updateInfo" parameterType="com.example.spring_boot_mode.model.entity.SysUser">
+        UPDATE sys_user
+        <set>
+            <if test="nickName != null">nickName = #{nickName},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="updateTime != null">updateTime = #{updateTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 更新密码 -->
+    <update id="updatePassword">
+        UPDATE sys_user SET password = #{newPassword}, updateTime = #{updateTime}
+        WHERE id = #{id} AND password = #{oldPassword}
+    </update>
 
 </mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring_boot_mode.model.dao.FooterLinkDao">
+
+    <!-- 结果映射 -->
+    <resultMap id="FooterLinkMap" type="com.example.spring_boot_mode.model.entity.FooterLink">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="url" column="url"/>
+        <result property="sort" column="sort"/>
+        <result property="enabled" column="enabled"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+    </resultMap>
+
+    <!-- 新增 -->
+    <insert id="toadd" parameterType="com.example.spring_boot_mode.model.entity.FooterLink">
+        INSERT INTO footer_link (id, name, url, sort, enabled, createTime, updateTime)
+        VALUES (#{id}, #{name}, #{url}, #{sort}, #{enabled}, #{createTime}, #{updateTime})
+    </insert>
+
+    <!-- 修改 -->
+    <update id="toedit" parameterType="com.example.spring_boot_mode.model.entity.FooterLink">
+        UPDATE footer_link
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="updateTime != null">updateTime = #{updateTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="todelete" parameterType="java.lang.String">
+        DELETE FROM footer_link WHERE id = #{id}
+    </delete>
+
+    <!-- 查询全部（按排序升序） -->
+    <select id="selectAll" resultMap="FooterLinkMap">
+        SELECT id, name, url, sort, enabled, createTime, updateTime
+        FROM footer_link
+        ORDER BY sort ASC
+    </select>
+
+    <!-- 查询启用的 -->
+    <select id="selectEnabled" resultMap="FooterLinkMap">
+        SELECT id, name, url, sort, enabled, createTime, updateTime
+        FROM footer_link
+        WHERE enabled = 1
+        ORDER BY sort ASC
+    </select>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" parameterType="java.lang.String" resultMap="FooterLinkMap">
+        SELECT id, name, url, sort, enabled, createTime, updateTime
+        FROM footer_link
+        WHERE id = #{id}
+    </select>
+
+</mapper>

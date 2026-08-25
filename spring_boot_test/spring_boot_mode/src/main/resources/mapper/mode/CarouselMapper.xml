@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring_boot_mode.model.dao.CarouselDao">
+
+    <!-- 结果映射 -->
+    <resultMap id="CarouselMap" type="com.example.spring_boot_mode.model.entity.Carousel">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="pictureLogic" column="pictureLogic"/>
+        <result property="picturePath" column="picturePath"/>
+        <result property="linkUrl" column="linkUrl"/>
+        <result property="sort" column="sort"/>
+        <result property="enabled" column="enabled"/>
+        <result property="createTime" column="createTime"/>
+    </resultMap>
+
+    <!-- 新增 -->
+    <insert id="toadd" parameterType="com.example.spring_boot_mode.model.entity.Carousel">
+        INSERT INTO carousel (id, title, pictureLogic, picturePath, linkUrl, sort, enabled, createTime)
+        VALUES (#{id}, #{title}, #{pictureLogic}, #{picturePath}, #{linkUrl}, #{sort}, #{enabled}, #{createTime})
+    </insert>
+
+    <!-- 修改 -->
+    <update id="toedit" parameterType="com.example.spring_boot_mode.model.entity.Carousel">
+        UPDATE carousel
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="pictureLogic != null">pictureLogic = #{pictureLogic},</if>
+            <if test="picturePath != null">picturePath = #{picturePath},</if>
+            <if test="linkUrl != null">linkUrl = #{linkUrl},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="todelete" parameterType="java.lang.String">
+        DELETE FROM carousel WHERE id = #{id}
+    </delete>
+
+    <!-- 查询全部（按排序升序） -->
+    <select id="selectAll" resultMap="CarouselMap">
+        SELECT id, title, pictureLogic, picturePath, linkUrl, sort, enabled, createTime
+        FROM carousel
+        ORDER BY sort ASC
+    </select>
+
+    <!-- 查询启用的 -->
+    <select id="selectEnabled" resultMap="CarouselMap">
+        SELECT id, title, pictureLogic, picturePath, linkUrl, sort, enabled, createTime
+        FROM carousel
+        WHERE enabled = 1
+        ORDER BY sort ASC
+    </select>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" parameterType="java.lang.String" resultMap="CarouselMap">
+        SELECT id, title, pictureLogic, picturePath, linkUrl, sort, enabled, createTime
+        FROM carousel
+        WHERE id = #{id}
+    </select>
+
+</mapper>

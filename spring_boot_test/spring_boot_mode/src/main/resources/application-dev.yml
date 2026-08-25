@@ -18,14 +18,14 @@ spring:
 #    password: l1998C12r05
     mode:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
+      jdbc-url: jdbc:mysql://192.168.93.128:3306/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
       username: root
-      password: l1998C12r05
+      password: '@l1998C12r05'
     flowable:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
+      jdbc-url: jdbc:mysql://192.168.93.128:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
       username: root
-      password: l1998C12r05
+      password: '@l1998C12r05'
 
   servlet:
     multipart:
@@ -51,26 +51,10 @@ mybatis-plus:
 #    host: 127.0.0.1
 #    password: lcr12345
 
-#flowable
-#关闭定时任务
-flowable:
-  #关闭定时任务
-  async-executor-activate: false
-# 将 databaseSchemaUpdate 设置为true， 当Flowable 发现库与数据库表结构不一致时，会自动将数据库表结构升级值新版本
-  database-schema-update: true
-  check-process-definitions: false
-  db-history-used: true
-  history-level: full
-  datasource:
-    enable: false
-  common:
-    app:
-      idm-url: http://localhost:8099/flowable-idm
-      idm-admin:
-        user: admin
-        password: admin
+# 注意：Flowable 配置已迁移至 FlowableConfig.java 手动管理
+# ProcessEngineAutoConfiguration 已排除，不会在 test_all 数据库中建表
 
-#设置token超时时间(秒)
+# 设置token超时时间(秒)
 token:
   expiration-s: 3600
 
@@ -90,3 +74,9 @@ picture:
   game:
     path: D:\picture\game
     mappingPath: http://localhost:${server.port}/localPicture/game/
+  carousel:
+    path: D:\picture\carousel
+    mappingPath: http://localhost:${server.port}/localPicture/carousel/
+  user:
+    path: D:\picture\user
+    mappingPath: http://localhost:${server.port}/localPicture/user/
