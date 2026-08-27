@@ -158,6 +158,30 @@ public class DatabaseInitializer implements ApplicationRunner {
             // 为 feedback 表添加 images 列（如果不存在）
             addColumnIfNotExists("feedback", "images", "TEXT COMMENT '附件图片路径列表(JSON数组字符串)' AFTER update_time");
 
+            // 4. 创建 reminder 表（如果不存在）
+            String createReminderSql = "CREATE TABLE IF NOT EXISTS reminder (" +
+                    "id varchar(64) NOT NULL COMMENT '主键ID'," +
+                    "target_type varchar(20) NOT NULL COMMENT '目标类型：animation/comic/novel/game'," +
+                    "target_id varchar(64) NOT NULL COMMENT '目标ID'," +
+                    "target_name varchar(255) COMMENT '目标名称'," +
+                    "user_id varchar(64) NOT NULL COMMENT '用户ID'," +
+                    "remind_time datetime NOT NULL COMMENT '提醒时间'," +
+                    "remind_msg varchar(500) COMMENT '自定义提醒消息'," +
+                    "status varchar(32) NOT NULL DEFAULT 'pending' COMMENT '状态：pending-待触发, triggered-已触发, cancelled-已取消'," +
+                    "trigger_time datetime COMMENT '实际触发时间'," +
+                    "is_open tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否开启：0-关闭, 1-开启'," +
+                    "create_time datetime NOT NULL COMMENT '创建时间'," +
+                    "update_time datetime NOT NULL COMMENT '更新时间'," +
+                    "PRIMARY KEY (id)," +
+                    "KEY idx_user_id (user_id)," +
+                    "KEY idx_target (target_type, target_id)," +
+                    "KEY idx_status (status)," +
+                    "KEY idx_remind_time (remind_time)," +
+                    "KEY idx_is_open (is_open)" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户提醒表（独立于系统通知）'";
+            jdbcTemplate.execute(createReminderSql);
+            log.info("=== Reminder table initialized successfully ===");
+
         } catch (Exception e) {
             log.error("=== Database initialization failed: {} ===", e.getMessage());
         }

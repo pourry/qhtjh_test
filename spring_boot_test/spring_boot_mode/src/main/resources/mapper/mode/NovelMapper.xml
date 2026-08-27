@@ -93,6 +93,7 @@
                                                                            or alias like concat('%',#{animation.name},'%')
                                                                            or hasendLabel like concat('%',#{animation.name},'%')
                                                                            )</if>
+           <if test="animation.hasend != null and animation.hasend !=''">and hasend = #{animation.hasend}</if>
         </where>
         order by createTime desc
         limit #{passOver},#{pageSize}
@@ -105,6 +106,7 @@
                 or alias like concat('%',#{name},'%')
                 or hasend like concat('%',#{name},'%')
                 )</if>
+            <if test="hasend != null and hasend !=''">and hasend = #{hasend}</if>
         </where>
     </select>
     <select id="getone" parameterType="string" resultMap="NovelMap">

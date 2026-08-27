@@ -37,6 +37,12 @@ public class Animation {
     private Boolean share;
     /** 分享时间 */
     private String shareTime;
+    /** 是否开启消息提醒（前端传来的临时字段，不保存到animation表） */
+    private Boolean remindopen;
+    /** 提醒时间（前端传来的临时字段） */
+    private String remindtime;
+    /** 提醒消息（前端传来的临时字段） */
+    private String remindmsg;
 
     public Object getObject() {
         return object;
@@ -148,6 +154,41 @@ public class Animation {
 
     public void setShareTime(String shareTime) {
         this.shareTime = shareTime;
+    }
+
+    public Boolean getRemindopen() {
+        return remindopen;
+    }
+
+    public void setRemindopen(Boolean remindopen) {
+        this.remindopen = remindopen;
+    }
+
+    /**
+     * 处理FormData传递的字符串类型转换
+     */
+    public void setRemindopen(String remindopen) {
+        if (remindopen != null && ("true".equalsIgnoreCase(remindopen) || "1".equals(remindopen))) {
+            this.remindopen = Boolean.TRUE;
+        } else {
+            this.remindopen = Boolean.FALSE;
+        }
+    }
+
+    public String getRemindtime() {
+        return remindtime;
+    }
+
+    public void setRemindtime(String remindtime) {
+        this.remindtime = remindtime;
+    }
+
+    public String getRemindmsg() {
+        return remindmsg;
+    }
+
+    public void setRemindmsg(String remindmsg) {
+        this.remindmsg = remindmsg;
     }
 
     @Override
