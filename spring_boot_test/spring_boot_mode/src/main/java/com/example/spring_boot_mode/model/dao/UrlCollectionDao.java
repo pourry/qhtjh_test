@@ -11,6 +11,8 @@ import java.util.Map;
 public interface UrlCollectionDao {
     List<UrlCollection> selectbytypeids(List<String> typeids);
 
+    List<UrlCollection> selectbytypeidsanduserid(@Param("typeids") List<String> typeids, @Param("userid") String userid);
+
     int toadd(UrlCollection urlCollection);
 
     int toedit(UrlCollection urlCollection);

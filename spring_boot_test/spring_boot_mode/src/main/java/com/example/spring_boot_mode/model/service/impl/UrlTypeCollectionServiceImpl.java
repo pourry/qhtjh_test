@@ -35,7 +35,8 @@ public class UrlTypeCollectionServiceImpl implements UrlTypeCollectionService {
             typeids.add(item.getId());
         });
         if (!typeids.isEmpty()) {
-            List<UrlCollection> urlCollectionList = urlCollectionDao.selectbytypeids(typeids);
+            // 使用按类型ID和用户ID过滤的查询方法
+            List<UrlCollection> urlCollectionList = urlCollectionDao.selectbytypeidsanduserid(typeids, userid);
             urlTypeCollectionList.forEach(item ->{
                 List<UrlCollection>  urlCollections = new ArrayList<>();
                 urlCollectionList.forEach(collect ->{

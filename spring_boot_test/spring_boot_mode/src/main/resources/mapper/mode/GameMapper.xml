@@ -124,4 +124,11 @@
         limit 10
     </select>
 
+
+    <select id="getGameAll" resultMap="GameMap">
+        <include refid="selectGame"/>
+        where share = 1
+        order by shareTime desc
+    </select>
+
 </mapper>

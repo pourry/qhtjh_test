@@ -126,4 +126,11 @@
         limit 10
     </select>
 
+
+    <select id="getAnimationAll" resultMap="AnimationMap">
+        <include refid="selectAnimation"/>
+        where share = 1
+        order by shareTime desc
+    </select>
+
 </mapper>

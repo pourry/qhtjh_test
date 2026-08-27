@@ -21,6 +21,9 @@ public interface CarouselService {
     /** 查询全部走马灯 */
     ResponseObjectEntity querylist();
 
+    /** 分页查询走马灯 */
+    ResponseObjectEntity queryPage(int page, int size);
+
     /** 查询启用的走马灯（供前端首页调用） */
     ResponseObjectEntity queryenabled();
 

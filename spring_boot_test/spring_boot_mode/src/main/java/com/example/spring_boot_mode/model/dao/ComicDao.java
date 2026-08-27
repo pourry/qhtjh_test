@@ -21,4 +21,6 @@ public interface ComicDao {
     int gettotal(Comic comic);
 
     List<Comic> getComicShow();
+
+    List<Comic> getComicAll();
 }

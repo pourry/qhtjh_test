@@ -2,10 +2,19 @@ package com.example.spring_boot_mode.model.entity.Vo;
 
 import com.example.spring_boot_mode.model.entity.Animation;
 
+/**
+ * 小说视图对象（VO）
+ * 继承 Animation，增加分页查询参数
+ * 用于小说列表的分页查询
+ */
 public class NovelVo extends Animation {
+    /** 当前页码，从1开始 */
     private int pageNumber = 1;
+    /** 每页显示条数 */
     private int pageSize = 10;
+    /** 总记录数 */
     private int total;
+    /** 偏移量（计算值：(pageNumber-1)*pageSize） */
     private int passOver;
 
     public int getPageNumber() {

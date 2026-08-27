@@ -2,21 +2,40 @@ package com.example.spring_boot_mode.model.entity;
 
 import java.util.List;
 
+/**
+ * 动画实体类
+ * 对应数据库 animation 表
+ * 用于存储动画收藏信息
+ */
 public class Animation {
 
+    /** 主键ID */
     private String id;
+    /** 动画名称 */
     private String name;
+    /** 动画地址（播放链接或资源地址） */
     private String address;
+    /** 备注说明 */
     private String notes;
+    /** 别名/其他名称 */
     private String alias;
+    /** 是否完结：yes-已完结、no-连载中 */
     private String hasend;
+    /** 封面图URL */
     private String pictureURL;
+    /** 创建人ID（关联用户） */
     private String sscollector;
+    /** 动画图片列表（关联查询） */
     private List<AnimationPictures> pictures;
+    /** 创建时间 */
     private String createTime;
+    /** 额外对象数据 */
     private Object object;
+    /** 完结状态标签（显示用） */
     private String hasendLabel;
+    /** 是否分享：true-分享到首页，false-仅自己可见 */
     private Boolean share;
+    /** 分享时间 */
     private String shareTime;
 
     public Object getObject() {

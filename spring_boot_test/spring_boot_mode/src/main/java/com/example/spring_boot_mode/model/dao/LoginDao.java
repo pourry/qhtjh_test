@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.spring_boot_mode.model.entity.SysUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface LoginDao extends BaseMapper<SysUser> {
@@ -25,4 +28,7 @@ public interface LoginDao extends BaseMapper<SysUser> {
                        @Param("oldPassword") String oldPassword,
                        @Param("newPassword") String newPassword,
                        @Param("updateTime") String updateTime);
+
+    /** 查询所有用户（用于发布通知时选择接收者） */
+    List<Map<String, Object>> selectAllUsersForNotification();
 }

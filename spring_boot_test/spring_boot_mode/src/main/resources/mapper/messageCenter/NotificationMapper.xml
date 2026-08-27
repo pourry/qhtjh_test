@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring_boot_mode.model.dao.messageCenter.NotificationDao">
+    
+    <resultMap id="NotificationMap" type="com.example.spring_boot_mode.model.entity.messageCenter.Notification">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="type" property="type"/>
+        <result column="is_read" property="isRead"/>
+        <result column="receiver_id" property="receiverId"/>
+        <result column="batch_id" property="batchId"/>
+        <result column="publisher_id" property="publisherId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+    
+    <!-- 新增通知 -->
+    <insert id="insert" parameterType="com.example.spring_boot_mode.model.entity.messageCenter.Notification" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO notification (title, description, type, is_read, receiver_id, batch_id, publisher_id, create_time)
+        VALUES (#{title}, #{description}, #{type}, #{isRead}, #{receiverId}, #{batchId}, #{publisherId}, #{createTime})
+    </insert>
+    
+    <!-- 根据ID查询 -->
+    <select id="selectById" resultMap="NotificationMap">
+        SELECT * FROM notification WHERE id = #{id}
+    </select>
+    
+    <!-- 根据接收者ID查询 -->
+    <select id="selectByReceiverId" resultMap="NotificationMap">
+        SELECT * FROM notification 
+        WHERE receiver_id = #{receiverId}
+        ORDER BY create_time DESC
+    </select>
+    
+    <!-- 分页查询用户的通知列表 -->
+    <select id="selectByReceiverIdPaged" resultMap="NotificationMap">
+        SELECT * FROM notification 
+        WHERE receiver_id = #{receiverId}
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
+    
+    <!-- 统计用户通知总数 -->
+    <select id="countByReceiverId" resultType="int">
+        SELECT COUNT(*) FROM notification WHERE receiver_id = #{receiverId}
+    </select>
+    
+    <!-- 统计未读数量 -->
+    <select id="countUnreadByReceiverId" resultType="int">
+        SELECT COUNT(*) FROM notification 
+        WHERE receiver_id = #{receiverId} AND is_read = 0
+    </select>
+    
+    <!-- 标记单条为已读 -->
+    <update id="markAsRead">
+        UPDATE notification 
+        SET is_read = 1 
+        WHERE id = #{id} AND receiver_id = #{receiverId}
+    </update>
+    
+    <!-- 根据ID标记为已读（不验证接收者） -->
+    <update id="markAsReadById">
+        UPDATE notification 
+        SET is_read = 1 
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 标记全部为已读 -->
+    <update id="markAllAsRead">
+        UPDATE notification 
+        SET is_read = 1 
+        WHERE receiver_id = #{receiverId} AND is_read = 0
+    </update>
+    
+    <!-- 删除通知 -->
+    <delete id="deleteByIdAndReceiver">
+        DELETE FROM notification 
+        WHERE id = #{id} AND receiver_id = #{receiverId}
+    </delete>
+    
+    <!-- 查询发布者发布的通知列表 -->
+    <select id="selectByPublisherId" resultMap="NotificationMap">
+        SELECT * FROM notification WHERE publisher_id = #{publisherId} ORDER BY create_time DESC
+    </select>
+    
+    <!-- 根据ID删除通知（发布者删除自己发布的通知） -->
+    <delete id="deleteByIdAndPublisher">
+        DELETE FROM notification WHERE id = #{id} AND publisher_id = #{publisherId}
+    </delete>
+    
+    <!-- 分页查询发布者发布的通知列表 -->
+    <select id="selectByPublisherIdPaged" resultMap="NotificationMap">
+        SELECT * FROM notification WHERE publisher_id = #{publisherId} ORDER BY create_time DESC LIMIT #{offset}, #{size}
+    </select>
+    
+    <!-- 统计发布者发布的通知总数 -->
+    <select id="countByPublisherId" resultType="int">
+        SELECT COUNT(*) FROM notification WHERE publisher_id = #{publisherId}
+    </select>
+
+    <!-- 按批次分页查询发布者发布的通知列表 -->
+    <select id="selectPublishedBatchesPaged" resultType="map">
+        SELECT 
+            IFNULL(n.batch_id, CONCAT('single_', n.id)) as batch_id,
+            n.id,
+            n.title,
+            n.description,
+            n.type,
+            n.publisher_id as publisher_id,
+            n.create_time as create_time,
+            1 as receiver_count,
+            CASE WHEN n.is_read = 1 THEN 1 ELSE 0 END as read_count
+        FROM notification n
+        WHERE n.publisher_id = #{publisherId}
+          AND n.batch_id IS NULL
+        
+        UNION ALL
+        
+        SELECT 
+            n.batch_id as batch_id,
+            MIN(n.id) as id,
+            n.title,
+            n.description,
+            n.type,
+            n.publisher_id as publisher_id,
+            MIN(n.create_time) as create_time,
+            COUNT(n.id) as receiver_count,
+            SUM(CASE WHEN n.is_read = 1 THEN 1 ELSE 0 END) as read_count
+        FROM notification n
+        WHERE n.publisher_id = #{publisherId}
+          AND n.batch_id IS NOT NULL
+        GROUP BY n.batch_id, n.title, n.description, n.type, n.publisher_id
+        
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 统计发布者发布的批次总数 -->
+    <select id="countPublishedBatches" resultType="long">
+        SELECT SUM(cnt) FROM (
+            SELECT COUNT(*) as cnt FROM notification WHERE publisher_id = #{publisherId} AND batch_id IS NULL
+            UNION ALL
+            SELECT COUNT(DISTINCT batch_id) as cnt FROM notification WHERE publisher_id = #{publisherId} AND batch_id IS NOT NULL
+        ) as sub
+    </select>
+
+    <!-- 根据批次ID查询接收者列表（关联用户表获取用户名） -->
+    <select id="selectBatchReceivers" resultType="map">
+        SELECT 
+            n.id,
+            n.receiver_id as receiver_id,
+            n.is_read as is_read,
+            n.create_time as create_time,
+            IFNULL(u.username, n.receiver_id) as receiver_name
+        FROM notification n
+        LEFT JOIN sys_user u ON n.receiver_id COLLATE utf8mb4_general_ci = u.id
+        WHERE n.batch_id = #{batchId}
+        ORDER BY n.create_time DESC
+    </select>
+
+    <!-- 根据批次ID分页查询接收者列表（关联用户表获取用户名） -->
+    <select id="selectBatchReceiversPaged" resultType="map">
+        SELECT 
+            n.id,
+            n.receiver_id as receiver_id,
+            n.is_read as is_read,
+            n.create_time as create_time,
+            IFNULL(u.username, n.receiver_id) as receiver_name,
+            u.email as receiver_email,
+            u.phone as receiver_phone
+        FROM notification n
+        LEFT JOIN sys_user u ON n.receiver_id COLLATE utf8mb4_general_ci = u.id
+        WHERE n.batch_id = #{batchId}
+        ORDER BY n.create_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 统计批次接收者总数 -->
+    <select id="countBatchReceivers" resultType="long">
+        SELECT COUNT(*) FROM notification WHERE batch_id = #{batchId}
+    </select>
+
+    <!-- 统计批次已读通知数 -->
+    <select id="countBatchReadReceivers" resultType="long">
+        SELECT COUNT(*) FROM notification WHERE batch_id = #{batchId} AND is_read = 1
+    </select>
+
+    <!-- 根据ID查询单条通知（batch_id为空时使用，关联用户表） -->
+    <select id="selectByIdForBatch" resultType="map">
+        SELECT 
+            n.id,
+            n.receiver_id as receiver_id,
+            n.is_read as is_read,
+            n.create_time as create_time,
+            IFNULL(u.username, n.receiver_id) as receiver_name,
+            u.email as receiver_email,
+            u.phone as receiver_phone
+        FROM notification n
+        LEFT JOIN sys_user u ON n.receiver_id COLLATE utf8mb4_general_ci = u.id
+        WHERE n.id = #{id}
+        ORDER BY n.create_time DESC
+    </select>
+
+    <!-- 根据ID分页查询单条通知（用于batch_id为NULL的旧数据，兼容分页） -->
+    <select id="selectByIdForBatchPaged" resultType="map">
+        SELECT 
+            n.id,
+            n.receiver_id as receiver_id,
+            n.is_read as is_read,
+            n.create_time as create_time,
+            IFNULL(u.username, n.receiver_id) as receiver_name,
+            u.email as receiver_email,
+            u.phone as receiver_phone
+        FROM notification n
+        LEFT JOIN sys_user u ON n.receiver_id COLLATE utf8mb4_general_ci = u.id
+        WHERE n.id = #{id}
+        LIMIT 0, 1
+    </select>
+
+    <!-- 根据批次ID删除所有通知 -->
+    <delete id="deleteBatchById">
+        DELETE FROM notification WHERE batch_id = #{batchId} AND publisher_id = #{publisherId}
+    </delete>
+
+    <!-- 根据ID删除单条通知（用于删除无batch_id的旧数据） -->
+    <delete id="deleteByIdAndPublisherSimple">
+        DELETE FROM notification WHERE id = #{id} AND publisher_id = #{publisherId}
+    </delete>
+
+    <!-- 根据批次ID更新通知内容 -->
+    <update id="updateBatchContent">
+        UPDATE notification
+        SET title = #{title},
+            description = #{description},
+            type = #{type}
+        WHERE batch_id = #{batchId} AND publisher_id = #{publisherId}
+    </update>
+
+    <!-- 根据ID更新单条通知内容（用于旧数据） -->
+    <update id="updateSingleContent">
+        UPDATE notification
+        SET title = #{title},
+            description = #{description},
+            type = #{type}
+        WHERE id = #{id} AND publisher_id = #{publisherId}
+    </update>
+</mapper>

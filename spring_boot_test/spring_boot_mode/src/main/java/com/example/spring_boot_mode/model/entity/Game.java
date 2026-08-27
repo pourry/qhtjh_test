@@ -2,21 +2,40 @@ package com.example.spring_boot_mode.model.entity;
 
 import java.util.List;
 
+/**
+ * 游戏实体类
+ * 对应数据库 game 表
+ * 用于存储游戏收藏信息
+ */
 public class Game {
 
+    /** 主键ID */
     private String id;
+    /** 游戏名称 */
     private String name;
+    /** 游戏地址（下载链接或资源地址） */
     private String address;
+    /** 备注说明 */
     private String notes;
+    /** 别名/其他名称 */
     private String alias;
+    /** 是否完结：yes-已完结、no-连载中 */
     private String hasend;
+    /** 封面图URL */
     private String pictureURL;
+    /** 创建人ID（关联用户） */
     private String sscollector;
+    /** 游戏图片列表（关联查询） */
     private List<GamePictures> pictures;
+    /** 创建时间 */
     private String createTime;
+    /** 额外对象数据 */
     private Object object;
+    /** 完结状态标签（显示用） */
     private String hasendLabel;
+    /** 是否分享：true-分享到首页，false-仅自己可见 */
     private Boolean share;
+    /** 分享时间 */
     private String shareTime;
 
     public String getHasendLabel() {

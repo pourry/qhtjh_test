@@ -9,15 +9,17 @@
         <result property="pictureLogic" column="pictureLogic"/>
         <result property="picturePath" column="picturePath"/>
         <result property="linkUrl" column="linkUrl"/>
+        <result property="linkTarget" column="linkTarget"/>
         <result property="sort" column="sort"/>
         <result property="enabled" column="enabled"/>
+        <result property="objectFit" column="objectFit"/>
         <result property="createTime" column="createTime"/>
     </resultMap>
 
     <!-- 新增 -->
     <insert id="toadd" parameterType="com.example.spring_boot_mode.model.entity.Carousel">
-        INSERT INTO carousel (id, title, pictureLogic, picturePath, linkUrl, sort, enabled, createTime)
-        VALUES (#{id}, #{title}, #{pictureLogic}, #{picturePath}, #{linkUrl}, #{sort}, #{enabled}, #{createTime})
+        INSERT INTO carousel (id, title, pictureLogic, picturePath, linkUrl, linkTarget, sort, enabled, objectFit, createTime)
+        VALUES (#{id}, #{title}, #{pictureLogic}, #{picturePath}, #{linkUrl}, #{linkTarget}, #{sort}, #{enabled}, #{objectFit}, #{createTime})
     </insert>
 
     <!-- 修改 -->
@@ -28,8 +30,10 @@
             <if test="pictureLogic != null">pictureLogic = #{pictureLogic},</if>
             <if test="picturePath != null">picturePath = #{picturePath},</if>
             <if test="linkUrl != null">linkUrl = #{linkUrl},</if>
+            <if test="linkTarget != null">linkTarget = #{linkTarget},</if>
             <if test="sort != null">sort = #{sort},</if>
             <if test="enabled != null">enabled = #{enabled},</if>
+            objectFit = #{objectFit},
         </set>
         WHERE id = #{id}
     </update>
@@ -41,14 +45,14 @@
 
     <!-- 查询全部（按排序升序） -->
     <select id="selectAll" resultMap="CarouselMap">
-        SELECT id, title, pictureLogic, picturePath, linkUrl, sort, enabled, createTime
+        SELECT id, title, pictureLogic, picturePath, linkUrl, linkTarget, sort, enabled, objectFit, createTime
         FROM carousel
         ORDER BY sort ASC
     </select>
 
     <!-- 查询启用的 -->
     <select id="selectEnabled" resultMap="CarouselMap">
-        SELECT id, title, pictureLogic, picturePath, linkUrl, sort, enabled, createTime
+        SELECT id, title, pictureLogic, picturePath, linkUrl, linkTarget, sort, enabled, objectFit, createTime
         FROM carousel
         WHERE enabled = 1
         ORDER BY sort ASC
@@ -56,9 +60,22 @@
 
     <!-- 根据ID查询 -->
     <select id="selectById" parameterType="java.lang.String" resultMap="CarouselMap">
-        SELECT id, title, pictureLogic, picturePath, linkUrl, sort, enabled, createTime
+        SELECT id, title, pictureLogic, picturePath, linkUrl, linkTarget, sort, enabled, objectFit, createTime
         FROM carousel
         WHERE id = #{id}
+    </select>
+
+    <!-- 分页查询全部走马灯（按排序升序） -->
+    <select id="selectPage" resultMap="CarouselMap">
+        SELECT id, title, pictureLogic, picturePath, linkUrl, linkTarget, sort, enabled, objectFit, createTime
+        FROM carousel
+        ORDER BY sort ASC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 查询走马灯总数 -->
+    <select id="selectTotal" resultType="int">
+        SELECT COUNT(*) FROM carousel
     </select>
 
 </mapper>

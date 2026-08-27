@@ -87,18 +87,55 @@ public class CarouselServiceImpl implements CarouselService {
 
         // 如果传了新图片，替换上传
         if (file != null && !file.isEmpty()) {
+            System.out.println("[Carousel] ========== 编辑走马灯，需要替换图片 ==========");
+            System.out.println("[Carousel] 旧图片: picturePath=" + existing.getPicturePath() + ", pictureLogic=" + existing.getPictureLogic());
+            
             String originalFilename = file.getOriginalFilename();
             String ext = originalFilename.substring(originalFilename.lastIndexOf("."));
             carousel.setPictureLogic(existing.getId() + ext);
             carousel.setPicturePath(path);
             PictureSave ps = this.pictureSave.get(localorcloud);
+            
+            // 构建旧图片的完整路径
+            String oldFilePath = existing.getPicturePath() + File.separator + existing.getPictureLogic();
+            System.out.println("[Carousel] 旧图片完整路径: " + oldFilePath);
+            
             // 删除旧图片
-            ps.deletefiles(existing.getPicturePath() + File.separator + existing.getPictureLogic());
+            File oldFile = new File(oldFilePath);
+            System.out.println("[Carousel] 旧文件存在: " + oldFile.exists() + ", isFile: " + oldFile.isFile());
+            
+            if (oldFile.exists() && oldFile.isFile()) {
+                // 方式1: 使用 PictureSave 接口
+                boolean deleted = ps.deletefiles(oldFilePath);
+                System.out.println("[Carousel] PictureSave删除结果: " + (deleted ? "成功" : "失败"));
+                
+                // 方式2: 如果失败，使用 NIO 方式
+                if (oldFile.exists()) {
+                    System.out.println("[Carousel] PictureSave删除后文件仍存在，尝试NIO方式...");
+                    try {
+                        java.nio.file.Files.deleteIfExists(oldFile.toPath());
+                        System.out.println("[Carousel] NIO方式删除完成");
+                    } catch (Exception e) {
+                        System.out.println("[Carousel] NIO删除失败: " + e.getMessage());
+                    }
+                }
+                
+                // 最终验证
+                if (!oldFile.exists()) {
+                    System.out.println("[Carousel] ✓ 旧图片已成功删除");
+                } else {
+                    System.out.println("[Carousel] ✗ 旧图片删除失败，请检查权限");
+                }
+            } else {
+                System.out.println("[Carousel] 旧文件不存在，跳过删除");
+            }
+            
             // 保存新图片
             boolean saved = ps.savefiles(file, path, existing.getId());
             if (!saved) {
                 return ResponseUtil.error("图片保存失败");
             }
+            System.out.println("[Carousel] 新图片保存成功");
         } else {
             // 保留旧图片
             carousel.setPictureLogic(existing.getPictureLogic());
@@ -139,6 +176,32 @@ public class CarouselServiceImpl implements CarouselService {
             c.setPictureUrl(mappingPath + c.getPictureLogic());
         }
         return ResponseUtil.success(list);
+    }
+
+    @Override
+    public ResponseObjectEntity queryPage(int page, int size) {
+        // 计算偏移量
+        int offset = (page - 1) * size;
+        
+        // 查询总数
+        int total = carouselDao.selectTotal();
+        
+        // 分页查询数据
+        List<Carousel> list = carouselDao.selectPage(offset, size);
+        
+        // 为每条记录拼装 pictureUrl
+        for (Carousel c : list) {
+            c.setPictureUrl(mappingPath + c.getPictureLogic());
+        }
+        
+        // 构建分页返回结果
+        java.util.Map<String, Object> result = new java.util.HashMap<>();
+        result.put("list", list);
+        result.put("total", total);
+        result.put("page", page);
+        result.put("size", size);
+        
+        return ResponseUtil.success(result);
     }
 
     @Override

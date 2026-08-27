@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring_boot_mode.model.dao.messageCenter.ChatMessageDao">
+
+    <resultMap id="ChatMessageMap" type="com.example.spring_boot_mode.model.entity.messageCenter.ChatMessage">
+        <id column="id" property="id"/>
+        <result column="sender_id" property="senderId"/>
+        <result column="sender_name" property="senderName"/>
+        <result column="content" property="content"/>
+        <result column="type" property="type"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 新增聊天消息 -->
+    <insert id="insert" parameterType="com.example.spring_boot_mode.model.entity.messageCenter.ChatMessage" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO chat_message (sender_id, sender_name, content, type, create_time)
+        VALUES (#{senderId}, #{senderName}, #{content}, #{type}, #{createTime})
+    </insert>
+
+    <!-- 查询最新消息（按 ID 倒序） -->
+    <select id="selectLatestMessages" resultMap="ChatMessageMap">
+        SELECT * FROM chat_message
+        ORDER BY id DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 查询最新消息（按 ID 升序直接返回，避免内存再排） -->
+    <select id="selectLatestMessagesAsc" resultMap="ChatMessageMap">
+        SELECT * FROM chat_message
+        ORDER BY id ASC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 分页查询聊天消息（基于ID向前翻页，用于加载更多历史消息） -->
+    <select id="selectPageMessages" resultMap="ChatMessageMap">
+        SELECT * FROM chat_message
+        <where>
+            <if test="lastId != null">
+                id <![CDATA[<]]> #{lastId}
+            </if>
+        </where>
+        ORDER BY id DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 按内容模糊搜索（限制最大条数避免大表全扫） -->
+    <select id="searchByContent" resultMap="ChatMessageMap">
+        SELECT * FROM chat_message
+        WHERE content LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY id DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 按发送者查询最近的消息 -->
+    <select id="selectBySender" resultMap="ChatMessageMap">
+        SELECT * FROM chat_message
+        WHERE sender_id = #{senderId}
+        ORDER BY id DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 查询消息总数 -->
+    <select id="selectTotalCount" resultType="long">
+        SELECT COUNT(*) FROM chat_message
+    </select>
+
+    <!-- 根据ID查询消息 -->
+    <select id="selectById" resultMap="ChatMessageMap">
+        SELECT * FROM chat_message WHERE id = #{id}
+    </select>
+
+    <!-- 删除消息 -->
+    <delete id="deleteById">
+        DELETE FROM chat_message WHERE id = #{id}
+    </delete>
+
+    <!-- 物理清理：删除指定时间之前的消息（定时任务调用） -->
+    <delete id="deleteBefore">
+        DELETE FROM chat_message WHERE create_time <![CDATA[<]]> #{cutoffTime}
+    </delete>
+</mapper>

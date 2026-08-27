@@ -23,7 +23,7 @@ public class ModeDataSouceConfig {
 
 
     // mapper.xml所在地址
-    private static final String MAPPER_LOCATION = "classpath*:mapper/mode/*.xml";
+    private static final String MAPPER_LOCATION = "classpath*:mapper/**/*.xml";
 
     /**
      * 主数据源，Primary注解必须增加，它表示该数据源为默认数据源

@@ -104,6 +104,31 @@ public class UserInfoController {
         return ResponseUtil.success("密码修改成功");
     }
 
+    /** 保存用户主题 */
+    @PostMapping("/saveTheme")
+    public ResponseObjectEntity saveTheme(@RequestParam String theme, HttpServletRequest request) {
+        if (Objects.isNull(TokenUtill.getSysUser(request))) {
+            return ResponseUtil.tokenExpire("token失效，请重新登录");
+        }
+        String userId = TokenUtill.getSysUser(request).getId();
+
+        // 验证主题值是否有效
+        if (theme == null || theme.trim().isEmpty()) {
+            return ResponseUtil.error("主题值不能为空");
+        }
+
+        SysUser updateUser = new SysUser();
+        updateUser.setId(userId);
+        updateUser.setTheme(theme);
+        updateUser.setUpdateTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss", new java.util.Date()));
+
+        int result = loginDao.updateInfo(updateUser);
+        if (result <= 0) {
+            return ResponseUtil.error("主题保存失败");
+        }
+        return ResponseUtil.success("主题保存成功");
+    }
+
     /** 上传头像 */
     @PostMapping("/uploadAvatar")
     public ResponseObjectEntity uploadAvatar(@RequestParam("file") MultipartFile file,
@@ -117,6 +142,10 @@ public class UserInfoController {
 
         String userId = TokenUtill.getSysUser(request).getId();
 
+        // 先查询用户当前的头像信息，用于删除旧头像
+        SysUser existingUser = loginDao.selectById(userId);
+        String oldAvatar = existingUser != null ? existingUser.getAvatar() : null;
+
         // 确保目录存在
         File dir = new File(userAvatarPath);
         if (!dir.exists()) {
@@ -129,9 +158,43 @@ public class UserInfoController {
         String fileName = userId + ext;
 
         try {
-            // 保存文件
+            // 如果旧头像存在且与新文件名不同，先删除旧头像文件
+            if (oldAvatar != null && !oldAvatar.isEmpty()) {
+                // 从旧URL中提取文件名
+                String oldFileName = oldAvatar;
+                int lastSlash = oldAvatar.lastIndexOf('/');
+                int lastBackslash = oldAvatar.lastIndexOf('\\');
+                int sepIndex = Math.max(lastSlash, lastBackslash);
+                if (sepIndex >= 0) {
+                    oldFileName = oldAvatar.substring(sepIndex + 1);
+                }
+                
+                // 如果旧文件名与新文件名不同，则删除旧文件
+                if (!oldFileName.equals(fileName)) {
+                    File oldFile = new File(userAvatarPath, oldFileName);
+                    System.out.println("[Avatar] 旧头像文件: " + oldFile.getAbsolutePath() + ", 存在: " + oldFile.exists());
+                    if (oldFile.exists() && oldFile.isFile()) {
+                        boolean deleted = oldFile.delete();
+                        System.out.println("[Avatar] 旧头像删除结果: " + (deleted ? "成功" : "失败"));
+                        if (!deleted) {
+                            // 尝试 NIO 方式
+                            try {
+                                java.nio.file.Files.deleteIfExists(oldFile.toPath());
+                                System.out.println("[Avatar] NIO方式删除完成");
+                            } catch (Exception e) {
+                                System.out.println("[Avatar] NIO删除失败: " + e.getMessage());
+                            }
+                        }
+                    }
+                } else {
+                    System.out.println("[Avatar] 新旧文件名相同，将被覆盖");
+                }
+            }
+
+            // 保存新文件
             File destFile = new File(userAvatarPath, fileName);
             file.transferTo(destFile);
+            System.out.println("[Avatar] 新头像保存成功: " + destFile.getAbsolutePath());
 
             // 更新数据库
             SysUser updateUser = new SysUser();
@@ -142,6 +205,8 @@ public class UserInfoController {
 
             return ResponseUtil.success(userAvatarMappingPath + fileName);
         } catch (Exception e) {
+            System.out.println("[Avatar] 头像上传失败: " + e.getMessage());
+            e.printStackTrace();
             return ResponseUtil.error("头像上传失败：" + e.getMessage());
         }
     }

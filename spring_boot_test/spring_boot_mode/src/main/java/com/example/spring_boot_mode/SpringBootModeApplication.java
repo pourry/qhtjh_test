@@ -4,6 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @MapperScan("com.example.spring_boot_mode.model.dao")
+@EnableScheduling
 @SpringBootApplication(exclude = {
         SecurityAutoConfiguration.class,
         // 排除 Flowable 自动配置，使用自定义的 FlowableConfig

@@ -33,6 +33,17 @@ public class CarouselController {
         return carouselService.querylist();
     }
 
+    /** 分页查询走马灯（管理页使用） */
+    @GetMapping("/queryPage")
+    public ResponseObjectEntity queryPage(@RequestParam(defaultValue = "1") int page,
+                                          @RequestParam(defaultValue = "10") int size,
+                                          HttpServletRequest request) {
+        if (Objects.isNull(TokenUtill.getSysUser(request))) {
+            return ResponseUtil.tokenExpire("token失效，请重新登录");
+        }
+        return carouselService.queryPage(page, size);
+    }
+
     /** 查询启用的走马灯（首页展示，无需登录） */
     @GetMapping("/public/queryenabled")
     public ResponseObjectEntity queryenabled() {
@@ -72,13 +83,19 @@ public class CarouselController {
 
     /** 启用/禁用切换 */
     @PostMapping("/toggleEnabled")
-    public ResponseObjectEntity toggleEnabled(@RequestBody Map<String, String> params,
+    public ResponseObjectEntity toggleEnabled(@RequestBody Map<String, Object> params,
                                               HttpServletRequest request) {
         if (Objects.isNull(TokenUtill.getSysUser(request))) {
             return ResponseUtil.tokenExpire("token失效，请重新登录");
         }
-        String id = params.get("id");
-        Boolean enabled = Boolean.parseBoolean(params.get("enabled"));
+        String id = (String) params.get("id");
+        Object enabledObj = params.get("enabled");
+        Boolean enabled;
+        if (enabledObj instanceof Boolean) {
+            enabled = (Boolean) enabledObj;
+        } else {
+            enabled = Boolean.parseBoolean(String.valueOf(enabledObj));
+        }
         return carouselService.toggleEnabled(id, enabled);
     }
 }

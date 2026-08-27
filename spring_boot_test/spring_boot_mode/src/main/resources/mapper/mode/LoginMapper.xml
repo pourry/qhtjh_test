@@ -16,8 +16,11 @@
         <result property="birthday" column="birthday"/>
         <result property="gender" column="gender"/>
         <result property="avatar" column="avatar"/>
+        <result property="theme" column="theme"/>
+        <result property="captchaEnabled" column="captchaEnabled"/>
         <result property="createTime" column="createTime"/>
         <result property="updateTime" column="updateTime"/>
+        <result property="onlineStatus" column="onlineStatus"/>
     </resultMap>
     <sql id="selectLogin">
         select id,
@@ -29,8 +32,11 @@
                birthday,
                gender,
                avatar,
+               theme,
+               captchaEnabled,
                createTime,
-               updateTime
+               updateTime,
+               onlineStatus
                from  sys_user
     </sql>
 
@@ -77,7 +83,10 @@
             <if test="birthday != null">birthday = #{birthday},</if>
             <if test="gender != null">gender = #{gender},</if>
             <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="theme != null">theme = #{theme},</if>
+            <if test="captchaEnabled != null">captchaEnabled = #{captchaEnabled},</if>
             <if test="updateTime != null">updateTime = #{updateTime},</if>
+            <if test="onlineStatus != null">onlineStatus = #{onlineStatus},</if>
         </set>
         WHERE id = #{id}
     </update>
@@ -87,5 +96,14 @@
         UPDATE sys_user SET password = #{newPassword}, updateTime = #{updateTime}
         WHERE id = #{id} AND password = #{oldPassword}
     </update>
+
+    <!-- 查询所有用户（用于发布通知时选择接收者） -->
+    <select id="selectAllUsersForNotification" resultType="map">
+        SELECT id as id,
+               username as username,
+               nickName as nickname,
+               avatar as avatar
+        FROM sys_user
+    </select>
 
 </mapper>

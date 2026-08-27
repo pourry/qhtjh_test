@@ -126,4 +126,11 @@
         limit 10
     </select>
 
+
+    <select id="getNovelAll" resultMap="NovelMap">
+        <include refid="selectNovel"/>
+        where share = 1
+        order by shareTime desc
+    </select>
+
 </mapper>

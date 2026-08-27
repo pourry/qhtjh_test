@@ -21,4 +21,6 @@ public interface NovelDao {
     int gettotal(Novel novel);
 
     List<Novel> getNovelShow();
+
+    List<Novel> getNovelAll();
 }

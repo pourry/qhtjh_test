@@ -52,6 +52,40 @@ public class ACGServiceImpl implements ACGService {
         return ResponseUtil.success(result);
     }
 
+    @Override
+    public ResponseObjectEntity getListByCategory(String category) {
+        Map<String, Object> result = new HashMap<>();
+        switch (category) {
+            case "animation":
+                List<Animation> animationList = animationDao.getAnimationAll();
+                animationList = fillAnimationPictures(animationList);
+                result.put("list", animationList);
+                result.put("category", "animation");
+                break;
+            case "comic":
+                List<Comic> comicList = comicDao.getComicAll();
+                comicList = fillComicPictures(comicList);
+                result.put("list", comicList);
+                result.put("category", "comic");
+                break;
+            case "novel":
+                List<Novel> novelList = novelDao.getNovelAll();
+                novelList = fillNovelPictures(novelList);
+                result.put("list", novelList);
+                result.put("category", "novel");
+                break;
+            case "game":
+                List<Game> gameList = gameDao.getGameAll();
+                gameList = fillGamePictures(gameList);
+                result.put("list", gameList);
+                result.put("category", "game");
+                break;
+            default:
+                return ResponseUtil.error("未知的分类：" + category);
+        }
+        return ResponseUtil.success(result);
+    }
+
     /**
      * 加载所有ACG数据（动画、漫画、小说、游戏）
      * @param withIndex 是否添加排行索引

@@ -2,6 +2,7 @@ package com.example.spring_boot_mode.model.dao;
 
 import com.example.spring_boot_mode.model.entity.Carousel;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -28,4 +29,10 @@ public interface CarouselDao {
 
     /** 根据ID查询 */
     Carousel selectById(String id);
+
+    /** 分页查询全部走马灯 */
+    List<Carousel> selectPage(@Param("offset") int offset, @Param("size") int size);
+
+    /** 查询走马灯总数 */
+    int selectTotal();
 }

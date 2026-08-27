@@ -49,9 +49,11 @@ public class TokenUtill {
                 .compact();
     }
 
-
     //获取Token中的主体
     public static Claims getClaimsFromToken(String token) {
+        if (token == null || token.isEmpty()) {
+            return null;
+        }
         Claims claims = null;
         try {
             claims = Jwts.parser()
@@ -59,13 +61,17 @@ public class TokenUtill {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            log.error("JWT格式验证失败:{}", token);
+            log.warn("JWT格式验证失败: {}", e.getMessage());
         }
         return claims;
     }
+    
     //获取用户信息
     public static SysUser getSysUser(HttpServletRequest request) {
-        String token =  request.getHeader("Authorization");
+        String token = request.getHeader("Authorization");
+        if (token == null || token.isEmpty()) {
+            return null;
+        }
         SysUser sysUser = null;
         try {
            Claims claims = Jwts.parser()
@@ -75,13 +81,39 @@ public class TokenUtill {
             if (!Objects.isNull(claims)) {
                 sysUser = new SysUser();
                 sysUser.setId(claims.get("CLAIM_KEY_USER_ID").toString());
-            }else {
-                throw new Exception("token未解析到用户信息");
             }
         } catch (Exception e) {
-            log.error("JWT格式验证失败:{}", token);
+            log.warn("JWT格式验证失败: {}", e.getMessage());
         }
         return sysUser;
+    }
+
+    /**
+     * 从Token字符串解析用户信息
+     * 用于WebSocket连接时验证Token
+     *
+     * @param token JWT Token字符串
+     * @return 用户信息，如果Token无效返回null
+     */
+    public static SysUser getSysUserFromToken(String token) {
+        if (token == null || token.isEmpty()) {
+            return null;
+        }
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SM2Util.getPrivateKey())
+                    .parseClaimsJws(token)
+                    .getBody();
+            if (!Objects.isNull(claims)) {
+                SysUser sysUser = new SysUser();
+                sysUser.setId(claims.get("CLAIM_KEY_USER_ID").toString());
+                sysUser.setUsername(claims.get("CLAIM_KEY_USERNAME").toString());
+                return sysUser;
+            }
+        } catch (Exception e) {
+            log.warn("JWT格式验证失败: {}", e.getMessage());
+        }
+        return null;
     }
 
     /**
@@ -117,39 +149,6 @@ public class TokenUtill {
         return expiredDate.before(new Date());
     }
 
-
-    /**
-     * 当原来的token没过期时是可以刷新的
-     *
-     * @param oldToken 带tokenHead的token
-     */
-//    public String refreshToken(String oldToken) {
-//        if (StrUtil.isEmpty(oldToken)) {
-//            return null;
-//        }
-//        String token = oldToken.substring(tokenHead.length());
-//        if (StrUtil.isEmpty(token)) {
-//            return null;
-//        }
-//        //token校验不通过
-//        Claims claims = getClaimsFromToken(token);
-//        if (claims == null) {
-//            return null;
-//        }
-//        //如果token已经过期，不支持刷新
-//        if (isTokenExpired(token)) {
-//            return null;
-//        }
-//        //如果token在30分钟之内刚刷新过，返回原token
-//        if (tokenRefreshJustBefore(token, 30 * 60)) {
-//            return token;
-//        } else {
-//            claims.put("CLAIM_KEY_CREATED", new Date());
-//            return generateToken(claims);
-//        }
-//    }
-
-
     /**
      * 判断token在指定时间内是否刚刚刷新过
      *
@@ -172,10 +171,6 @@ public class TokenUtill {
      */
     private String getToken(HttpServletRequest request) {
         String token = request.getHeader("tokenHeader");
-//        if (StringUtils.isNotEmpty(token)) {
-//            token = token.substring(tokenHead.length());
-//        }
         return token;
     }
-
 }

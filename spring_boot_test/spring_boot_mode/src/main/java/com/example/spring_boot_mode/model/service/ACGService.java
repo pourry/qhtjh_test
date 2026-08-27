@@ -6,4 +6,6 @@ public interface ACGService {
     ResponseObjectEntity getshowAce();
 
     ResponseObjectEntity gethotAce();
+
+    ResponseObjectEntity getListByCategory(String category);
 }

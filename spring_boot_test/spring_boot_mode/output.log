@@ -1,0 +1,161 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.example:spring_boot_mode >--------------------
+[INFO] Building spring_boot_mode 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot-maven-plugin:2.5.7:run (default-cli) > test-compile @ spring_boot_mode >>>
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:resources (default-resources) @ spring_boot_mode ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 2 resources
+[INFO] Copying 33 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ spring_boot_mode ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:testResources (default-testResources) @ spring_boot_mode ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ spring_boot_mode ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< spring-boot-maven-plugin:2.5.7:run (default-cli) < test-compile @ spring_boot_mode <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot-maven-plugin:2.5.7:run (default-cli) @ spring_boot_mode ---
+[INFO] Attaching agents: []
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/D:/development/maven/repository/ch/qos/logback/logback-classic/1.2.7/logback-classic-1.2.7.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/D:/development/maven/repository/org/slf4j/slf4j-log4j12/1.7.32/slf4j-log4j12-1.7.32.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.5.7)
+
+2026-08-26 17:49:22,605 [INFO ] [background-preinit] org.hibernate.validator.internal.util.Version [Version.java : 21] HV000001: Hibernate Validator 6.2.0.Final
+2026-08-26 17:49:22,615 [INFO ] [main] com.example.spring_boot_mode.SpringBootModeApplication [StartupInfoLogger.java : 55] Starting SpringBootModeApplication using Java 1.8.0_461 on Acer with PID 68992 (D:\development\my_project\qhtjh_test\spring_boot_test\spring_boot_mode\target\classes started by 15913 in D:\development\my_project\qhtjh_test\spring_boot_test\spring_boot_mode)
+2026-08-26 17:49:22,615 [INFO ] [main] com.example.spring_boot_mode.SpringBootModeApplication [SpringApplication.java : 674] The following profiles are active: dev
+2026-08-26 17:49:23,347 [INFO ] [main] o.s.data.repository.config.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java : 262] Multiple Spring Data modules found, entering strict repository configuration mode!
+2026-08-26 17:49:23,375 [INFO ] [main] o.s.data.repository.config.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java : 132] Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-08-26 17:49:23,417 [INFO ] [main] o.s.data.repository.config.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java : 201] Finished Spring Data repository scanning in 29 ms. Found 0 Redis repository interfaces.
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'animationDao' and 'com.example.spring_boot_mode.model.dao.AnimationDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'animationPicturesDao' and 'com.example.spring_boot_mode.model.dao.AnimationPicturesDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'carouselDao' and 'com.example.spring_boot_mode.model.dao.CarouselDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'comicDao' and 'com.example.spring_boot_mode.model.dao.ComicDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'comicPicturesDao' and 'com.example.spring_boot_mode.model.dao.ComicPicturesDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'databaseBackupDao' and 'com.example.spring_boot_mode.model.dao.DatabaseBackupDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'footerLinkDao' and 'com.example.spring_boot_mode.model.dao.FooterLinkDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'footerSectionDao' and 'com.example.spring_boot_mode.model.dao.FooterSectionDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'gameDao' and 'com.example.spring_boot_mode.model.dao.GameDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'gamePicturesDao' and 'com.example.spring_boot_mode.model.dao.GamePicturesDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'loginDao' and 'com.example.spring_boot_mode.model.dao.LoginDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'novelDao' and 'com.example.spring_boot_mode.model.dao.NovelDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'novelPicturesDao' and 'com.example.spring_boot_mode.model.dao.NovelPicturesDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'urlCollectionDao' and 'com.example.spring_boot_mode.model.dao.UrlCollectionDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'urlTypeCollectionDao' and 'com.example.spring_boot_mode.model.dao.UrlTypeCollectionDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'chatMessageDao' and 'com.example.spring_boot_mode.model.dao.messageCenter.ChatMessageDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'feedbackDao' and 'com.example.spring_boot_mode.model.dao.messageCenter.FeedbackDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'notificationDao' and 'com.example.spring_boot_mode.model.dao.messageCenter.NotificationDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] Skipping MapperFactoryBean with name 'onlineUserDao' and 'com.example.spring_boot_mode.model.dao.messageCenter.OnlineUserDao' mapperInterface. Bean already defined with the same name!
+2026-08-26 17:49:23,521 [WARN ] [main] org.mybatis.spring.mapper.ClassPathMapperScanner [Logger.java : 44] No MyBatis mapper was found in '[com.example.spring_boot_mode.model.dao]' package. Please check your configuration.
+2026-08-26 17:49:23,776 [INFO ] [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [PostProcessorRegistrationDelegate.java : 376] Bean 'org.apache.rocketmq.spring.autoconfigure.MessageConverterConfiguration' of type [org.apache.rocketmq.spring.autoconfigure.MessageConverterConfiguration$$EnhancerBySpringCGLIB$$9d4cf18f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-08-26 17:49:23,815 [INFO ] [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [PostProcessorRegistrationDelegate.java : 376] Bean 'createRocketMQMessageConverter' of type [org.apache.rocketmq.spring.support.RocketMQMessageConverter] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-08-26 17:49:23,818 [INFO ] [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [PostProcessorRegistrationDelegate.java : 376] Bean 'rocketmq-org.apache.rocketmq.spring.autoconfigure.RocketMQProperties' of type [org.apache.rocketmq.spring.autoconfigure.RocketMQProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-08-26 17:49:23,821 [INFO ] [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [PostProcessorRegistrationDelegate.java : 376] Bean 'org.apache.rocketmq.spring.autoconfigure.ListenerContainerConfiguration' of type [org.apache.rocketmq.spring.autoconfigure.ListenerContainerConfiguration$$EnhancerBySpringCGLIB$$f486e82b] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-08-26 17:49:24,427 [INFO ] [main] org.springframework.boot.web.embedded.tomcat.TomcatWebServer [TomcatWebServer.java : 108] Tomcat initialized with port(s): 8001 (http)
+2026-08-26 17:49:24,434 [INFO ] [main] org.apache.coyote.http11.Http11NioProtocol [DirectJDKLog.java : 173] Initializing ProtocolHandler ["http-nio-8001"]
+2026-08-26 17:49:24,436 [INFO ] [main] org.apache.catalina.core.StandardService [DirectJDKLog.java : 173] Starting service [Tomcat]
+2026-08-26 17:49:24,436 [INFO ] [main] org.apache.catalina.core.StandardEngine [DirectJDKLog.java : 173] Starting Servlet engine: [Apache Tomcat/9.0.55]
+2026-08-26 17:49:24,587 [INFO ] [main] o.a.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [DirectJDKLog.java : 173] Initializing Spring embedded WebApplicationContext
+2026-08-26 17:49:24,588 [INFO ] [main] o.s.b.web.servlet.context.ServletWebServerApplicationContext [ServletWebServerApplicationContext.java : 290] Root WebApplicationContext: initialization completed in 1941 ms
+2026-08-26 17:49:24,642 [INFO ] [main] c.e.s.config.encrypt.getproperties.GetPropertiesContext [GetPropertiesContext.java : 21] è¯»å–é…ç½®æ–‡ä»¶é…ç½®----------------success-----------------
+2026-08-26 17:49:24,999 [INFO ] [main] org.flowable.spring.SpringProcessEngineConfiguration [AbstractEngineConfiguration.java : 1073] Found 2 Engine Configurators in total:
+2026-08-26 17:49:25,030 [INFO ] [main] org.flowable.spring.SpringProcessEngineConfiguration [AbstractEngineConfiguration.java : 1075] class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2026-08-26 17:49:25,030 [INFO ] [main] org.flowable.spring.SpringProcessEngineConfiguration [AbstractEngineConfiguration.java : 1075] class org.flowable.idm.engine.configurator.IdmEngineConfigurator (priority:150000)
+2026-08-26 17:49:25,030 [INFO ] [main] org.flowable.spring.SpringProcessEngineConfiguration [AbstractEngineConfiguration.java : 1101] Executing beforeInit() of class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2026-08-26 17:49:25,035 [INFO ] [main] org.flowable.spring.SpringProcessEngineConfiguration [AbstractEngineConfiguration.java : 1101] Executing beforeInit() of class org.flowable.idm.engine.configurator.IdmEngineConfigurator (priority:150000)
+2026-08-26 17:49:25,065 [INFO ] [main] com.zaxxer.hikari.HikariDataSource [HikariDataSource.java : 110] HikariPool-1 - Starting...
+2026-08-26 17:49:25,727 [INFO ] [main] com.zaxxer.hikari.HikariDataSource [HikariDataSource.java : 123] HikariPool-1 - Start completed.
+2026-08-26 17:49:26,200 [INFO ] [main] o.flowable.common.engine.impl.async.DefaultAsyncTaskExecutor [DefaultAsyncTaskExecutor.java : 154] Creating thread pool queue of size 2048
+2026-08-26 17:49:26,202 [INFO ] [main] o.flowable.common.engine.impl.async.DefaultAsyncTaskExecutor [DefaultAsyncTaskExecutor.java : 159] Creating thread factory with naming pattern flowable-async-job-executor-thread-%d
+2026-08-26 17:49:26,204 [INFO ] [main] o.flowable.common.engine.impl.async.DefaultAsyncTaskExecutor [DefaultAsyncTaskExecutor.java : 164] Creating executor service with corePoolSize 8, maxPoolSize 8 and keepAliveTime 5000
+2026-08-26 17:49:26,206 [INFO ] [main] org.flowable.spring.SpringProcessEngineConfiguration [AbstractEngineConfiguration.java : 1108] Executing configure() of class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2026-08-26 17:49:26,690 [INFO ] [main] liquibase.lockservice [JavaLogger.java : 23] Successfully acquired change log lock
+2026-08-26 17:49:29,940 [INFO ] [main] liquibase.changelog [JavaLogger.java : 23] Reading from flowable.FLW_EV_DATABASECHANGELOG
+2026-08-26 17:49:29,987 [INFO ] [main] liquibase.lockservice [JavaLogger.java : 23] Successfully released change log lock
+2026-08-26 17:49:29,997 [INFO ] [main] org.flowable.eventregistry.impl.EventRegistryEngineImpl [EventRegistryEngineImpl.java : 53] EventRegistryEngine default created
+2026-08-26 17:49:29,997 [INFO ] [main] org.flowable.spring.SpringProcessEngineConfiguration [AbstractEngineConfiguration.java : 1108] Executing configure() of class org.flowable.idm.engine.configurator.IdmEngineConfigurator (priority:150000)
+2026-08-26 17:49:30,024 [INFO ] [main] org.flowable.idm.engine.impl.IdmEngineImpl [IdmEngineImpl.java : 52] IdmEngine default created
+2026-08-26 17:49:30,154 [INFO ] [main] org.flowable.engine.impl.ProcessEngineImpl [ProcessEngineImpl.java : 89] ProcessEngine default created
+2026-08-26 17:49:30,179 [INFO ] [main] org.flowable.engine.impl.cmd.ValidateV5EntitiesCmd [ValidateV5EntitiesCmd.java : 43] Total of v5 deployments found: 0
+ÏîÄ¿Æô¶¯Ö´ÐÐµÄ´úÂë-----PostConstruct
+¾²Ì¬Óï¾ä¿éÖ´ÐÐÁË
+Logging initialized using 'class org.apache.ibatis.logging.stdout.StdOutImpl' adapter.
+2026-08-26 17:49:31,651 [WARN ] [main] o.a.rocketmq.spring.autoconfigure.RocketMQAutoConfiguration [RocketMQAutoConfiguration.java : 85] The necessary spring property 'rocketmq.name-server' is not defined, all rockertmq beans creation are skipped!
+2026-08-26 17:49:31,668 [INFO ] [main] o.f.spring.boot.eventregistry.EventRegistryAutoConfiguration [AbstractEngineAutoConfiguration.java : 104] No deployment resources were found for autodeployment
+2026-08-26 17:49:31,779 [INFO ] [main] com.zaxxer.hikari.HikariDataSource [HikariDataSource.java : 110] HikariPool-2 - Starting...
+2026-08-26 17:49:31,818 [INFO ] [main] com.zaxxer.hikari.HikariDataSource [HikariDataSource.java : 123] HikariPool-2 - Start completed.
+2026-08-26 17:49:31,867 [INFO ] [main] org.apache.coyote.http11.Http11NioProtocol [DirectJDKLog.java : 173] Starting ProtocolHandler ["http-nio-8001"]
+2026-08-26 17:49:31,870 [WARN ] [main] o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext [AbstractApplicationContext.java : 591] Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'; nested exception is org.springframework.boot.web.server.PortInUseException: Port 8001 is already in use
+2026-08-26 17:49:31,913 [INFO ] [main] com.zaxxer.hikari.HikariDataSource [HikariDataSource.java : 350] HikariPool-1 - Shutdown initiated...
+2026-08-26 17:49:31,945 [INFO ] [main] com.zaxxer.hikari.HikariDataSource [HikariDataSource.java : 352] HikariPool-1 - Shutdown completed.
+2026-08-26 17:49:31,947 [INFO ] [main] com.zaxxer.hikari.HikariDataSource [HikariDataSource.java : 350] HikariPool-2 - Shutdown initiated...
+2026-08-26 17:49:31,975 [INFO ] [main] com.zaxxer.hikari.HikariDataSource [HikariDataSource.java : 352] HikariPool-2 - Shutdown completed.
+2026-08-26 17:49:31,977 [INFO ] [main] org.apache.coyote.http11.Http11NioProtocol [DirectJDKLog.java : 173] Pausing ProtocolHandler ["http-nio-8001"]
+2026-08-26 17:49:31,977 [INFO ] [main] org.apache.catalina.core.StandardService [DirectJDKLog.java : 173] Stopping service [Tomcat]
+2026-08-26 17:49:31,981 [INFO ] [main] org.apache.coyote.http11.Http11NioProtocol [DirectJDKLog.java : 173] Stopping ProtocolHandler ["http-nio-8001"]
+2026-08-26 17:49:31,981 [INFO ] [main] org.apache.coyote.http11.Http11NioProtocol [DirectJDKLog.java : 173] Destroying ProtocolHandler ["http-nio-8001"]
+2026-08-26 17:49:31,988 [INFO ] [main] o.s.b.a.logging.ConditionEvaluationReportLoggingListener [ConditionEvaluationReportLoggingListener.java : 136] 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2026-08-26 17:49:32,000 [ERROR] [main] o.s.boot.diagnostics.LoggingFailureAnalysisReporter [LoggingFailureAnalysisReporter.java : 40] 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8001 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8001 or configure this application to listen on another port.
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  15.288 s
+[INFO] Finished at: 2026-08-26T17:49:32+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:2.5.7:run (default-cli) on project spring_boot_mode: Application finished with exit code: 1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                2026-08-26 17:49:16,269 [WARN ] [http-nio-8001-exec-2] com.example.spring_boot_mode.utils.TokenUtill [TokenUtill.java : 86] JWTæ ¼å¼éªŒè¯å¤±è´¥: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:03 min
+[INFO] Finished at: 2026-08-26T17:49:57+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:2.5.7:run (default-cli) on project spring_boot_mode: Application finished with exit code: -1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

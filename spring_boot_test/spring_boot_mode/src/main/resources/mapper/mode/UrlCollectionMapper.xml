@@ -44,6 +44,15 @@
         </foreach>
         order by sort asc
     </select>
+    <select id="selectbytypeidsanduserid" resultMap="UrlCollectionMap">
+        <include refid="selectUrlCollection"/>
+        where ssurltypeid in
+        <foreach collection="typeids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        and sscollector = #{userid}
+        order by sort asc
+    </select>
     <insert id="toadd" >
         insert into url_collection
         (

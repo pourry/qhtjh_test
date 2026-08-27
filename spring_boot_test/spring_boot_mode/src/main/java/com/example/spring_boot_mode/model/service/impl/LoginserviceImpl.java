@@ -56,6 +56,8 @@ public class LoginserviceImpl implements Loginservice {
 
         remap.put("nickName", tologin.getNickName());
         remap.put("token", TokenUtill.generateToken(tologin));
+        remap.put("username", tologin.getUsername());
+        remap.put("captchaEnabled", tologin.getCaptchaEnabled());
         return remap;
     }
 

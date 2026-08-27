@@ -21,4 +21,6 @@ public interface GameDao {
     int gettotal(Game game);
 
     List<Game> getGameShow();
+
+    List<Game> getGameAll();
 }

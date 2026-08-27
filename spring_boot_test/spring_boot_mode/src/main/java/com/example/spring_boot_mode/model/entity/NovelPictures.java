@@ -1,12 +1,24 @@
 package com.example.spring_boot_mode.model.entity;
 
+/**
+ * 小说图片实体类
+ * 对应数据库 novel_pictures 表
+ * 用于存储小说的封面/插图信息
+ */
 public class NovelPictures {
+    /** 主键ID */
     private String id;
+    /** 所属小说ID */
     private String ssnovelid;
+    /** 图片完整URL（映射后的访问地址） */
     private String pictureUrl;
+    /** 图片名称 */
     private String pictureName;
+    /** 图片逻辑文件名（含后缀，如 uuid.png） */
     private String pictureLogic;
+    /** 图片存储路径（如 D:\picture\novel） */
     private String picturePath;
+    /** 创建时间 */
     private String createTime;
 
     public String getCreateTime() {

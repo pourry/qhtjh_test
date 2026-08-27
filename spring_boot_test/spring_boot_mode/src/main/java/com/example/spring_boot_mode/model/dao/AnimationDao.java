@@ -21,4 +21,6 @@ public interface AnimationDao {
     int gettotal(Animation animation);
 
     List<Animation> getAnimationShow();
+
+    List<Animation> getAnimationAll();
 }

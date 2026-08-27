@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring_boot_mode.model.dao.messageCenter.OnlineUserDao">
+    
+    <!-- 查询所有在线用户 -->
+    <select id="selectOnlineUsers" resultType="map">
+        SELECT id as id, 
+               nickName as nickname, 
+               username as username,
+               avatar as avatar
+        FROM sys_user 
+        WHERE onlineStatus = 1
+    </select>
+    
+    <!-- 查询指定用户的在线状态 -->
+    <select id="selectOnlineUserById" resultType="map">
+        SELECT id as id, 
+               nickName as nickname, 
+               username as username,
+               avatar as avatar
+        FROM sys_user 
+        WHERE id = #{userId} AND onlineStatus = 1
+    </select>
+</mapper>

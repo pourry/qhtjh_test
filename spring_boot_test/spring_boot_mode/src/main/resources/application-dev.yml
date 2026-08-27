@@ -46,9 +46,9 @@ mybatis-plus:
   mapper-locations: classpath:mapper/**/*Mapper.xml, classpath:/META-INF/modeler-mybatis-mappings/*.xml
 
 #reids链接
-#  redis:
-#    port: 6379
-#    host: 127.0.0.1
+  redis:
+    port: 6379
+    host: 127.0.0.1
 #    password: lcr12345
 
 # 注意：Flowable 配置已迁移至 FlowableConfig.java 手动管理
@@ -62,6 +62,9 @@ picture:
   localorcloud: localPictureSave
   localoriginPath: file:D:/picture/
   mappinglocaloriginPath: /localPicture/**
+  feedback:
+    path: D:/picture/feedback
+    mappingPath: http://localhost:${server.port}/localPicture/feedback/
   animation:
     path: D:\picture\animation
     mappingPath: http://localhost:${server.port}/localPicture/animation/  #映射地址
@@ -80,3 +83,18 @@ picture:
   user:
     path: D:\picture\user
     mappingPath: http://localhost:${server.port}/localPicture/user/
+
+# ==================== 聊天室配置 ====================
+chat:
+  # 单条消息最大长度（前端 UI 也应同步）
+  message:
+    max-length: 500
+  # 发送频率限制（每用户）
+  rate-limit:
+    per-second: 5     # 每秒最多 5 条
+    per-minute: 30    # 每分钟最多 30 条
+  # 定时清理（防止表无限增长）
+  cleanup:
+    enabled: true
+    retention-days: 30  # 只保留 30 天
+

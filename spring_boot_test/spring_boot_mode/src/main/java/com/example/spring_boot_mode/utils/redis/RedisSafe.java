@@ -70,5 +70,15 @@ public class RedisSafe {
 
     }
 
+    // 存储简单键值对（带过期时间，单位秒）
+    public void set(String key, Object value, long timeout) {
+        redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+    }
+
+    // 获取简单键值对
+    public Object get(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+
 
 }

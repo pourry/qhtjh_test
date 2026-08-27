@@ -125,4 +125,11 @@
         limit 10
     </select>
 
+
+    <select id="getComicAll" resultMap="ComicMap">
+        <include refid="selectComic"/>
+        where share = 1
+        order by shareTime desc
+    </select>
+
 </mapper>

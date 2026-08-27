@@ -1,16 +1,32 @@
 package com.example.spring_boot_mode.model.entity;
 
+/**
+ * 网址收藏实体类
+ * 对应数据库 url_collection 表
+ * 用于存储用户收藏的网址信息
+ */
 public class UrlCollection {
+    /** 主键ID */
     private String id;
+    /** 网址名称 */
     private String urlname;
+    /** 网址地址 */
     private String url;
+    /** 网站Logo路径 */
     private String urllogopath;
-    private String ssurltypeid ;
+    /** 所属分类ID */
+    private String ssurltypeid;
+    /** 备注说明 */
     private String notes;
+    /** 创建人ID（关联用户） */
     private String sscollector;
+    /** 创建时间 */
     private String createTime;
+    /** 排序序号，数值越小越靠前 */
     private int sort;
+    /** 是否分享：true-分享到首页展示，false-仅自己可见 */
     private Boolean share = false;
+    /** 分享时间 */
     private String shareTime;
 
     public String getId() {

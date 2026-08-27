@@ -26,10 +26,32 @@ public class SysUser {
     private String gender;
     /** 头像路径 */
     private String avatar;
+    /** 用户主题 */
+    private String theme;
+    /** 登录验证码开关：true-启用验证码，false-不启用 */
+    private Boolean captchaEnabled = false;
     /** 创建时间 */
     private String createTime;
     /** 更新时间 */
     private String updateTime;
+    /** 在线状态：true-在线，false-离线 */
+    private Boolean onlineStatus = false;
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
+    public Boolean getCaptchaEnabled() {
+        return captchaEnabled;
+    }
+
+    public void setCaptchaEnabled(Boolean captchaEnabled) {
+        this.captchaEnabled = captchaEnabled;
+    }
 
     public String getId() {
         return id;
@@ -117,5 +139,13 @@ public class SysUser {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Boolean getOnlineStatus() {
+        return onlineStatus;
+    }
+
+    public void setOnlineStatus(Boolean onlineStatus) {
+        this.onlineStatus = onlineStatus;
     }
 }
