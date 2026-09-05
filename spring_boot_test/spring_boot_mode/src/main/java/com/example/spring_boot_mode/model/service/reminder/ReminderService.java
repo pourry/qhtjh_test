@@ -54,4 +54,21 @@ public interface ReminderService {
      * 获取指定类型和ID的所有开启提醒
      */
     Reminder getActiveReminder(String targetType, String targetId, String userId);
+
+    List<Reminder> getAllReminders();
+
+    /**
+     * 获取某用户已触发但未读的提醒数量
+     */
+    int getUnreadCount(String userId);
+
+    /**
+     * 标记单条提醒为已读
+     */
+    void markAsRead(String id);
+
+    /**
+     * 标记某用户所有已触发提醒为已读
+     */
+    void markAllAsRead(String userId);
 }

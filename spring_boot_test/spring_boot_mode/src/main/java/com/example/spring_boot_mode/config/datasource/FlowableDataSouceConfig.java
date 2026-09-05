@@ -57,6 +57,13 @@ public class FlowableDataSouceConfig {
         final SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(FlowableDataSouceConfig.MAPPER_LOCATION));
+
+        // 显式设置 MyBatis Configuration
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        configuration.setMapUnderscoreToCamelCase(true);
+        configuration.setLogImpl(org.apache.ibatis.logging.slf4j.Slf4jImpl.class);
+        sessionFactoryBean.setConfiguration(configuration);
+
         return sessionFactoryBean.getObject();
     }
 }

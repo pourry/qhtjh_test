@@ -21,6 +21,7 @@
         <result property="createTime" column="createTime"/>
         <result property="updateTime" column="updateTime"/>
         <result property="onlineStatus" column="onlineStatus"/>
+        <result property="roleId" column="roleId"/>
     </resultMap>
     <sql id="selectLogin">
         select id,
@@ -36,7 +37,8 @@
                captchaEnabled,
                createTime,
                updateTime,
-               onlineStatus
+               onlineStatus,
+               roleId
                from  sys_user
     </sql>
 
@@ -87,6 +89,7 @@
             <if test="captchaEnabled != null">captchaEnabled = #{captchaEnabled},</if>
             <if test="updateTime != null">updateTime = #{updateTime},</if>
             <if test="onlineStatus != null">onlineStatus = #{onlineStatus},</if>
+            <if test="roleId != null">roleId = #{roleId},</if>
         </set>
         WHERE id = #{id}
     </update>

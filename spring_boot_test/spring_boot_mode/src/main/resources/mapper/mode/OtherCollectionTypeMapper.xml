@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.spring_boot_mode.model.dao.OtherCollectionTypeDao">
+
+    <resultMap id="OtherCollectionTypeMap" type="com.example.spring_boot_mode.model.entity.OtherCollectionType">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="typeValue" column="type_value"/>
+        <result property="label" column="label"/>
+        <result property="icon" column="icon"/>
+        <result property="color" column="color"/>
+        <result property="sort" column="sort"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectOct">
+        select id, user_id, type_value, label, icon, color, sort, create_time
+        from other_collection_type
+    </sql>
+
+    <select id="selectByUserId" resultMap="OtherCollectionTypeMap">
+        <include refid="selectOct"/>
+        where user_id = #{userId}
+        order by sort asc, id asc
+    </select>
+
+    <select id="selectById" resultMap="OtherCollectionTypeMap">
+        <include refid="selectOct"/>
+        where id = #{id}
+    </select>
+
+    <select id="countByUserId" resultType="int">
+        select count(id) from other_collection_type where user_id = #{userId}
+    </select>
+
+    <insert id="toadd">
+        insert into other_collection_type
+        (id, user_id, type_value, label, icon, color, sort, create_time)
+        values
+        (#{id}, #{userId}, #{typeValue}, #{label}, #{icon}, #{color}, #{sort}, #{createTime})
+    </insert>
+
+    <update id="toedit">
+        update other_collection_type
+        <set>
+            <if test="label != null and label != ''">label = #{label},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="color != null">color = #{color},</if>
+            <if test="sort != null">sort = #{sort},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="todelete">
+        delete from other_collection_type where id = #{id}
+    </delete>
+
+</mapper>

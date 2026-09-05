@@ -2,7 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.spring_boot_mode.model.dao.messageCenter.FeedbackDao">
-    
+
+    <sql id="feedbackCols">id, type, title, description, contact, images, status, user_id, user_name, reply, handler_id, create_time, update_time</sql>
+
     <resultMap id="FeedbackMap" type="com.example.spring_boot_mode.model.entity.messageCenter.Feedback">
         <id column="id" property="id"/>
         <result column="type" property="type"/>
@@ -27,19 +29,19 @@
     
     <!-- 根据ID查询 -->
     <select id="selectById" resultMap="FeedbackMap">
-        SELECT * FROM feedback WHERE id = #{id}
+        SELECT <include refid="feedbackCols"/> FROM feedback WHERE id = #{id}
     </select>
     
     <!-- 根据用户ID查询 -->
     <select id="selectByUserId" resultMap="FeedbackMap">
-        SELECT * FROM feedback
+        SELECT <include refid="feedbackCols"/> FROM feedback
         WHERE user_id = #{userId}
         ORDER BY create_time DESC
     </select>
 
     <!-- 分页查询用户反馈 -->
     <select id="selectByUserIdPaged" resultMap="FeedbackMap">
-        SELECT * FROM feedback
+        SELECT <include refid="feedbackCols"/> FROM feedback
         WHERE user_id = #{userId}
         ORDER BY create_time DESC, id DESC
         LIMIT #{limit} OFFSET #{offset}
@@ -52,7 +54,7 @@
 
     <!-- 最近 N 条反馈（用于 Top 浮层预览） -->
     <select id="selectRecentByUserId" resultMap="FeedbackMap">
-        SELECT * FROM feedback
+        SELECT <include refid="feedbackCols"/> FROM feedback
         WHERE user_id = #{userId}
         ORDER BY create_time DESC, id DESC
         LIMIT #{limit}
@@ -60,7 +62,7 @@
 
     <!-- 查询所有反馈带筛选 -->
     <select id="selectAllWithFilter" resultMap="FeedbackMap">
-        SELECT * FROM feedback
+        SELECT <include refid="feedbackCols"/> FROM feedback
         <where>
             <if test="params.status != null and params.status != ''">
                 AND status = #{params.status}
@@ -78,7 +80,7 @@
 
     <!-- 分页查询所有反馈（管理员） -->
     <select id="selectAllWithFilterPaged" resultMap="FeedbackMap">
-        SELECT * FROM feedback
+        SELECT <include refid="feedbackCols"/> FROM feedback
         <where>
             <if test="params.status != null and params.status != ''">
                 AND status = #{params.status}
@@ -114,7 +116,7 @@
     
     <!-- 根据ID查询详情 -->
     <select id="selectDetailById" resultMap="FeedbackMap">
-        SELECT * FROM feedback WHERE id = #{id}
+        SELECT <include refid="feedbackCols"/> FROM feedback WHERE id = #{id}
     </select>
     
     <!-- 更新状态 -->
@@ -143,7 +145,7 @@
     
     <!-- 根据ID和用户ID查询 -->
     <select id="selectByIdAndUser" resultMap="FeedbackMap">
-        SELECT * FROM feedback WHERE id = #{id} AND user_id = #{userId}
+        SELECT <include refid="feedbackCols"/> FROM feedback WHERE id = #{id} AND user_id = #{userId}
     </select>
     
     <!-- 更新反馈内容 -->

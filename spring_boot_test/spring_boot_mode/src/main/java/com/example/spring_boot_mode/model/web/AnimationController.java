@@ -99,20 +99,25 @@ public class AnimationController {
             Reminder reminder = reminderService.getActiveReminder(
                     Reminder.TYPE_ANIMATION, id, userId);
 
-            // 构建返回数据，包含提醒信息
-            Map<String, Object> resultMap = new HashMap<>();
-            resultMap.put("animation", animation);
+            // 构建返回数据，包含提醒信息（直接塞进 Animation 对象）
             if (reminder != null) {
-                resultMap.put("remindopen", true);
-                resultMap.put("remindtime", reminder.getRemindTime() != null ?
+                animation.setRemindopen(true);
+                animation.setRemindtime(reminder.getRemindTime() != null ?
                         reminder.getRemindTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : null);
-                resultMap.put("remindmsg", reminder.getRemindMsg());
+                animation.setRemindmsg(reminder.getRemindMsg());
+                animation.setRepeatType(reminder.getRepeatType());
+                animation.setRepeatInterval(reminder.getRepeatInterval());
+                animation.setRepeatEndTime(reminder.getRepeatEndTime() != null ?
+                        reminder.getRepeatEndTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : null);
             } else {
-                resultMap.put("remindopen", false);
-                resultMap.put("remindtime", null);
-                resultMap.put("remindmsg", null);
+                animation.setRemindopen(false);
+                animation.setRemindtime(null);
+                animation.setRemindmsg(null);
+                animation.setRepeatType("none");
+                animation.setRepeatInterval(null);
+                animation.setRepeatEndTime(null);
             }
-            return ResponseUtil.success(resultMap);
+            return ResponseUtil.success(animation);
         }
         return responseObjectEntity;
     }

@@ -1,5 +1,7 @@
 package com.example.spring_boot_mode.config.datasource;
 
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -15,6 +17,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @MapperScan(basePackages = "com.example.spring_boot_mode.model.dao",
@@ -57,6 +60,23 @@ public class ModeDataSouceConfig {
         final SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(ModeDataSouceConfig.MAPPER_LOCATION));
+
+        // 显式设置 MyBatis Configuration（双数据源模式下 application.yml 里的 mybatis-plus.configuration 不会自动生效）
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        configuration.setMapUnderscoreToCamelCase(true);
+        configuration.setLogImpl(org.apache.ibatis.logging.slf4j.Slf4jImpl.class);
+        // 允许驼峰命名
+        Properties props = new Properties();
+        props.setProperty("mapUnderscoreToCamelCase", "true");
+        configuration.setVariables(props);
+        sessionFactoryBean.setConfiguration(configuration);
+
+        // 注入 MyBatis-Plus 拦截器（包含分页）
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        // MySQL 分页拦截器
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(com.baomidou.mybatisplus.annotation.DbType.MYSQL));
+        sessionFactoryBean.setPlugins(interceptor);
+
         return sessionFactoryBean.getObject();
     }
 }

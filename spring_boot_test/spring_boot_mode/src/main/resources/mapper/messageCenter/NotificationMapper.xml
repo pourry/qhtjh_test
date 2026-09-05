@@ -2,7 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.spring_boot_mode.model.dao.messageCenter.NotificationDao">
-    
+
+    <sql id="notificationCols">id, title, description, type, is_read, receiver_id, batch_id, publisher_id, create_time</sql>
+
     <resultMap id="NotificationMap" type="com.example.spring_boot_mode.model.entity.messageCenter.Notification">
         <id column="id" property="id"/>
         <result column="title" property="title"/>
@@ -23,19 +25,19 @@
     
     <!-- 根据ID查询 -->
     <select id="selectById" resultMap="NotificationMap">
-        SELECT * FROM notification WHERE id = #{id}
+        SELECT <include refid="notificationCols"/> FROM notification WHERE id = #{id}
     </select>
     
     <!-- 根据接收者ID查询 -->
     <select id="selectByReceiverId" resultMap="NotificationMap">
-        SELECT * FROM notification 
+        SELECT <include refid="notificationCols"/> FROM notification 
         WHERE receiver_id = #{receiverId}
         ORDER BY create_time DESC
     </select>
     
     <!-- 分页查询用户的通知列表 -->
     <select id="selectByReceiverIdPaged" resultMap="NotificationMap">
-        SELECT * FROM notification 
+        SELECT <include refid="notificationCols"/> FROM notification 
         WHERE receiver_id = #{receiverId}
         ORDER BY create_time DESC
         LIMIT #{offset}, #{size}
@@ -81,7 +83,7 @@
     
     <!-- 查询发布者发布的通知列表 -->
     <select id="selectByPublisherId" resultMap="NotificationMap">
-        SELECT * FROM notification WHERE publisher_id = #{publisherId} ORDER BY create_time DESC
+        SELECT <include refid="notificationCols"/> FROM notification WHERE publisher_id = #{publisherId} ORDER BY create_time DESC
     </select>
     
     <!-- 根据ID删除通知（发布者删除自己发布的通知） -->
@@ -91,7 +93,7 @@
     
     <!-- 分页查询发布者发布的通知列表 -->
     <select id="selectByPublisherIdPaged" resultMap="NotificationMap">
-        SELECT * FROM notification WHERE publisher_id = #{publisherId} ORDER BY create_time DESC LIMIT #{offset}, #{size}
+        SELECT <include refid="notificationCols"/> FROM notification WHERE publisher_id = #{publisherId} ORDER BY create_time DESC LIMIT #{offset}, #{size}
     </select>
     
     <!-- 统计发布者发布的通知总数 -->

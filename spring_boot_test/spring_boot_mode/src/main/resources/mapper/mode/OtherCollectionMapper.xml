@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.spring_boot_mode.model.dao.OtherCollectionDao">
+
+    <resultMap id="OtherCollectionMap" type="com.example.spring_boot_mode.model.entity.OtherCollection">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="typeValue" column="type_value"/>
+        <result property="title" column="title"/>
+        <result property="linkUrl" column="link_url"/>
+        <result property="pictureUrl" column="picture_url"/>
+        <result property="note" column="note"/>
+        <result property="tags" column="tags"/>
+        <result property="status" column="status"/>
+        <result property="progress" column="progress"/>
+        <result property="pinned" column="pinned"/>
+        <result property="share" column="share"/>
+        <result property="shareTime" column="share_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectOc">
+        select id, user_id, type_value, title, link_url, picture_url, note, tags,
+               status, progress, pinned, share, share_time, create_time, update_time
+        from other_collection
+    </sql>
+
+    <select id="selectByUserId" resultMap="OtherCollectionMap">
+        <include refid="selectOc"/>
+        where user_id = #{userId}
+        order by pinned desc, create_time desc
+    </select>
+
+    <select id="selectById" resultMap="OtherCollectionMap">
+        <include refid="selectOc"/>
+        where id = #{id}
+    </select>
+
+    <!-- 首页展示：按 share_time desc 取前 N 条 -->
+    <select id="selectShowList" resultMap="OtherCollectionMap">
+        <include refid="selectOc"/>
+        where share = 1
+        order by share_time desc
+        limit #{limit}
+    </select>
+
+    <insert id="toadd">
+        insert into other_collection
+        (id, user_id, type_value, title, link_url, picture_url, note, tags,
+         status, progress, pinned, share, share_time, create_time, update_time)
+        values
+        (#{id}, #{userId}, #{typeValue}, #{title}, #{linkUrl}, #{pictureUrl}, #{note}, #{tags},
+         #{status}, #{progress}, #{pinned}, #{share}, #{shareTime}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="toedit">
+        update other_collection
+        <set>
+            <if test="typeValue != null">type_value = #{typeValue},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="linkUrl != null">link_url = #{linkUrl},</if>
+            <if test="pictureUrl != null">picture_url = #{pictureUrl},</if>
+            <if test="note != null">note = #{note},</if>
+            <if test="tags != null">tags = #{tags},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="progress != null">progress = #{progress},</if>
+            <if test="pinned != null">pinned = #{pinned},</if>
+            <if test="share != null">share = #{share},</if>
+            <if test="shareTime != null">share_time = #{shareTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="todelete">
+        delete from other_collection where id = #{id}
+    </delete>
+
+    <delete id="deleteByTypeValue">
+        delete from other_collection where user_id = #{userId} and type_value = #{typeValue}
+    </delete>
+
+</mapper>

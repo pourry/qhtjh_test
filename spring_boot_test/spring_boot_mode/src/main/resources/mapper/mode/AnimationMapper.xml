@@ -9,25 +9,55 @@
         <!--    property:实体类中       column:数据库中字段          -->
         <result property="id" column="id"/>
         <result property="name" column="name"/>
+        <result property="type" column="type"/>
         <result property="address" column="address"/>
         <result property="notes" column="notes"/>
         <result property="alias" column="alias"/>
         <result property="hasend" column="hasend"/>
+        <result property="rating" column="rating"/>
+        <result property="tags" column="tags"/>
+        <!-- 动画专属 -->
+        <result property="episodes" column="episodes"/>
+        <result property="studio" column="studio"/>
+        <result property="voiceActors" column="voice_actors"/>
+        <result property="source" column="source"/>
+        <!-- 漫画专属 -->
+        <result property="chapters" column="chapters"/>
+        <result property="comicAuthor" column="comic_author"/>
+        <result property="publisher" column="publisher"/>
+        <result property="serialization" column="serialization"/>
+        <!-- 小说专属 -->
+        <result property="wordCount" column="word_count"/>
+        <result property="novelAuthor" column="novel_author"/>
+        <result property="platform" column="platform"/>
+        <result property="category" column="category"/>
+        <!-- 游戏专属 -->
+        <result property="gamePlatform" column="game_platform"/>
+        <result property="developer" column="developer"/>
+        <result property="genre" column="genre"/>
+        <result property="hoursPlayed" column="hours_played"/>
+        <!-- 系统字段 -->
         <result property="pictureURL" column="pictureURL"/>
         <result property="sscollector" column="sscollectors"/>
         <result property="createTime" column="createTime"/>
         <result property="hasendLabel" column="hasendLabel"/>
         <result property="share" column="share"/>
         <result property="shareTime" column="shareTime"/>
-
     </resultMap>
     <sql id="selectAnimation">
         select id,
                name,
+               type,
                address,
                notes,
                alias,
                hasend,
+               rating,
+               tags,
+               episodes, studio, voice_actors, source,
+               chapters, comic_author, publisher, serialization,
+               word_count, novel_author, platform, category,
+               game_platform, developer, genre, hours_played,
                hasendLabel,
                pictureURL,
                sscollector,
@@ -39,49 +69,54 @@
     <insert id="toadd" parameterType="com.example.spring_boot_mode.model.entity.Animation" >
         insert into animation
         (
-            id,
-            name,
-            address,
-            notes,
-            alias,
-            hasend,
-            hasendLabel,
-            pictureURL,
-            sscollector,
-            createTime,
-            share,
-            shareTime
+            id, name, type, address, notes, alias, hasend, rating, tags,
+            episodes, studio, voice_actors, source,
+            chapters, comic_author, publisher, serialization,
+            word_count, novel_author, platform, category,
+            game_platform, developer, genre, hours_played,
+            pictureURL, sscollector, createTime, hasendLabel, share, shareTime
         )
         values(
-               #{id},
-               #{name},
-               #{address},
-               #{notes},
-               #{alias},
-               #{hasend},
-               #{hasendLabel},
-               #{pictureURL},
-               #{sscollector},
-               #{createTime},
-               #{share},
-               #{shareTime}
+               #{id}, #{name}, #{type}, #{address}, #{notes}, #{alias}, #{hasend}, #{rating}, #{tags},
+               #{episodes}, #{studio}, #{voiceActors}, #{source},
+               #{chapters}, #{comicAuthor}, #{publisher}, #{serialization},
+               #{wordCount}, #{novelAuthor}, #{platform}, #{category},
+               #{gamePlatform}, #{developer}, #{genre}, #{hoursPlayed},
+               #{pictureURL}, #{sscollector}, #{createTime}, #{hasendLabel}, #{share}, #{shareTime}
               )
-
     </insert>
     <update id="toedit" parameterType="com.example.spring_boot_mode.model.entity.Animation">
         update animation
         <set>
             <if test="name != null and name != ''"> name =#{name},</if>
+            <if test="type != null and type != ''"> type =#{type},</if>
             <if test="address != null and address != ''"> address =#{address},</if>
-            <if test="notes != null and notes != ''"> notes =#{notes},</if>
-            <if test="alias != null and alias != ''"> alias =#{alias},</if>
+            <if test="notes != null"> notes =#{notes},</if>
+            <if test="alias != null"> alias =#{alias},</if>
             <if test="hasend != null and hasend != ''"> hasend =#{hasend},</if>
-            <if test="hasendLabel != null and hasendLabel != ''"> hasendLabel =#{hasendLabel},</if>
-            <if test="pictureURL != null and pictureURL != ''"> pictureURL =#{pictureURL},</if>
+            <if test="rating != null"> rating =#{rating},</if>
+            <if test="tags != null"> tags =#{tags},</if>
+            <if test="episodes != null"> episodes =#{episodes},</if>
+            <if test="studio != null"> studio =#{studio},</if>
+            <if test="voiceActors != null"> voice_actors =#{voiceActors},</if>
+            <if test="source != null"> source =#{source},</if>
+            <if test="chapters != null"> chapters =#{chapters},</if>
+            <if test="comicAuthor != null"> comic_author =#{comicAuthor},</if>
+            <if test="publisher != null"> publisher =#{publisher},</if>
+            <if test="serialization != null"> serialization =#{serialization},</if>
+            <if test="wordCount != null"> word_count =#{wordCount},</if>
+            <if test="novelAuthor != null"> novel_author =#{novelAuthor},</if>
+            <if test="platform != null"> platform =#{platform},</if>
+            <if test="category != null"> category =#{category},</if>
+            <if test="gamePlatform != null"> game_platform =#{gamePlatform},</if>
+            <if test="developer != null"> developer =#{developer},</if>
+            <if test="genre != null"> genre =#{genre},</if>
+            <if test="hoursPlayed != null"> hours_played =#{hoursPlayed},</if>
+            <if test="pictureURL != null"> pictureURL =#{pictureURL},</if>
             <if test="sscollector != null and sscollector != ''"> sscollector =#{sscollector},</if>
-            <if test="createTime != null and createTime != ''"> createTime =#{createTime},</if>
+            <if test="hasendLabel != null"> hasendLabel =#{hasendLabel},</if>
             <if test="share != null"> share =#{share},</if>
-            <if test="shareTime != null and shareTime != ''"> shareTime =#{shareTime},</if>
+            <if test="shareTime != null"> shareTime =#{shareTime},</if>
         </set>
         where id = #{id}
     </update>

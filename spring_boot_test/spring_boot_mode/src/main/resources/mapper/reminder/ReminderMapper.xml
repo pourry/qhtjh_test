@@ -2,17 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.spring_boot_mode.model.dao.reminder.ReminderDao">
 
+    <!-- 统一列名片段，避免 SELECT * -->
+    <sql id="reminderCols">
+        id, target_type, target_id, target_name, alias, address, user_id,
+        remind_time, remind_msg, status, trigger_time, is_open, is_read,
+        repeat_type, repeat_interval, next_remind_time, repeat_end_time,
+        create_time, update_time
+    </sql>
+
     <resultMap id="ReminderMap" type="com.example.spring_boot_mode.model.entity.reminder.Reminder">
         <id property="id" column="id"/>
         <result property="targetType" column="target_type"/>
         <result property="targetId" column="target_id"/>
         <result property="targetName" column="target_name"/>
+        <result property="alias" column="alias"/>
+        <result property="address" column="address"/>
         <result property="userId" column="user_id"/>
         <result property="remindTime" column="remind_time"/>
         <result property="remindMsg" column="remind_msg"/>
         <result property="status" column="status"/>
         <result property="triggerTime" column="trigger_time"/>
         <result property="isOpen" column="is_open"/>
+        <result property="isRead" column="is_read"/>
+        <result property="repeatType" column="repeat_type"/>
+        <result property="repeatInterval" column="repeat_interval"/>
+        <result property="nextRemindTime" column="next_remind_time"/>
+        <result property="repeatEndTime" column="repeat_end_time"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
@@ -20,12 +35,14 @@
     <!-- 插入提醒 -->
     <insert id="insert" parameterType="com.example.spring_boot_mode.model.entity.reminder.Reminder">
         INSERT INTO reminder (
-            id, target_type, target_id, target_name, user_id,
-            remind_time, remind_msg, status, trigger_time, is_open,
+            id, target_type, target_id, target_name, alias, address, user_id,
+            remind_time, remind_msg, status, trigger_time, is_open, is_read,
+            repeat_type, repeat_interval, next_remind_time, repeat_end_time,
             create_time, update_time
         ) VALUES (
-            IFNULL(#{id}, UUID()), #{targetType}, #{targetId}, #{targetName}, #{userId},
-            #{remindTime}, #{remindMsg}, #{status}, #{triggerTime}, #{isOpen},
+            IFNULL(#{id}, UUID()), #{targetType}, #{targetId}, #{targetName}, #{alias}, #{address}, #{userId},
+            #{remindTime}, #{remindMsg}, #{status}, #{triggerTime}, #{isOpen}, #{isRead},
+            #{repeatType}, #{repeatInterval}, #{nextRemindTime}, #{repeatEndTime},
             #{createTime}, #{updateTime}
         )
     </insert>
@@ -37,12 +54,19 @@
             <if test="targetType != null">target_type = #{targetType},</if>
             <if test="targetId != null">target_id = #{targetId},</if>
             <if test="targetName != null">target_name = #{targetName},</if>
+            <if test="alias != null">alias = #{alias},</if>
+            <if test="address != null">address = #{address},</if>
             <if test="userId != null">user_id = #{userId},</if>
             <if test="remindTime != null">remind_time = #{remindTime},</if>
             <if test="remindMsg != null">remind_msg = #{remindMsg},</if>
             <if test="status != null">status = #{status},</if>
             <if test="triggerTime != null">trigger_time = #{triggerTime},</if>
             <if test="isOpen != null">is_open = #{isOpen},</if>
+            <if test="isRead != null">is_read = #{isRead},</if>
+            <if test="repeatType != null">repeat_type = #{repeatType},</if>
+            <if test="repeatInterval != null">repeat_interval = #{repeatInterval},</if>
+            <if test="nextRemindTime != null">next_remind_time = #{nextRemindTime},</if>
+            <if test="repeatEndTime != null">repeat_end_time = #{repeatEndTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </set>
         WHERE id = #{id}
@@ -55,22 +79,26 @@
 
     <!-- 根据ID查询 -->
     <select id="selectById" resultMap="ReminderMap">
-        SELECT * FROM reminder WHERE id = #{id}
+        SELECT <include refid="reminderCols"/> FROM reminder WHERE id = #{id}
     </select>
 
-    <!-- 分页查询我的提醒列表 -->
+    <!-- 分页查询我的提醒列表，已触发未读排最前 -->
     <select id="selectMyList" resultMap="ReminderMap">
-        SELECT * FROM reminder
+        SELECT <include refid="reminderCols"/> FROM reminder
         <where>
             user_id = #{userId}
             <if test="status != null and status != ''">AND status = #{status}</if>
             <if test="targetType != null and targetType != ''">AND target_type = #{targetType}</if>
             <if test="keyword != null and keyword != ''">
                 AND (target_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR alias LIKE CONCAT('%', #{keyword}, '%')
+                     OR address LIKE CONCAT('%', #{keyword}, '%')
                      OR remind_msg LIKE CONCAT('%', #{keyword}, '%'))
             </if>
         </where>
-        ORDER BY remind_time DESC
+        ORDER BY
+            CASE WHEN status = 'triggered' AND is_read = 0 THEN 0 ELSE 1 END ASC,
+            CASE WHEN status = 'triggered' AND is_read = 0 THEN trigger_time ELSE IFNULL(next_remind_time, remind_time) END DESC
         LIMIT #{offset}, #{limit}
     </select>
 
@@ -83,23 +111,33 @@
             <if test="targetType != null and targetType != ''">AND target_type = #{targetType}</if>
             <if test="keyword != null and keyword != ''">
                 AND (target_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR alias LIKE CONCAT('%', #{keyword}, '%')
+                     OR address LIKE CONCAT('%', #{keyword}, '%')
                      OR remind_msg LIKE CONCAT('%', #{keyword}, '%'))
             </if>
         </where>
     </select>
 
-    <!-- 查询待触发且已到时间的提醒 -->
+    <!-- 查询待触发且已到时间的提醒（周期提醒也用 remind_time，触发后新建续期记录） -->
     <select id="selectPendingReminders" resultMap="ReminderMap">
-        SELECT * FROM reminder
+        SELECT <include refid="reminderCols"/> FROM reminder
         WHERE status = 'pending'
           AND is_open = 1
           <![CDATA[AND remind_time <= #{beforeTime}]]>
         ORDER BY remind_time ASC
     </select>
 
+    <!-- 查询已触发但未读的提醒数量 -->
+    <select id="countTriggeredUnread" resultType="int">
+        SELECT COUNT(*) FROM reminder
+        WHERE user_id = #{userId}
+          AND status = 'triggered'
+          AND is_read = 0
+    </select>
+
     <!-- 根据目标信息查询 -->
     <select id="selectByTarget" resultMap="ReminderMap">
-        SELECT * FROM reminder
+        SELECT <include refid="reminderCols"/> FROM reminder
         WHERE target_type = #{targetType}
           AND target_id = #{targetId}
           <if test="userId != null and userId != ''">AND user_id = #{userId}</if>
@@ -108,13 +146,33 @@
 
     <!-- 根据条件查询单条记录 -->
     <select id="selectOneByCondition" resultMap="ReminderMap">
-        SELECT * FROM reminder
+        SELECT <include refid="reminderCols"/> FROM reminder
         WHERE target_type = #{targetType}
           AND target_id = #{targetId}
           <if test="userId != null and userId != ''">AND user_id = #{userId}</if>
           <if test="isOpen != null">AND is_open = #{isOpen}</if>
           <if test="status != null and status != ''">AND status = #{status}</if>
+        ORDER BY update_time DESC
         LIMIT 1
     </select>
 
+    <!-- 标记单条已读 -->
+    <update id="markAsRead">
+        UPDATE reminder SET is_read = 1, update_time = NOW() WHERE id = #{id}
+    </update>
+
+    <!-- 标记全部已读 -->
+    <update id="markAllAsRead">
+        UPDATE reminder SET is_read = 1, update_time = NOW()
+        WHERE user_id = #{userId}
+          AND status = 'triggered'
+          AND is_read = 0
+    </update>
+
+
+    <!-- 查询所有提醒（调试用） -->
+    <select id="selectAll" resultMap="ReminderMap">
+        SELECT <include refid="reminderCols"/> FROM reminder ORDER BY remind_time ASC
+    </select>
 </mapper>
+

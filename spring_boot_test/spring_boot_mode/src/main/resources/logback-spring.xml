@@ -45,6 +45,9 @@ true -->
     <!--logger  ： 单个定义
         root    ： 全部定义-->
     <logger name="com.lcr.springboot.mapper" level="DEBUG" />
+    <!-- 项目 MyBatis mapper 包，DEBUG 级别才会打印 SQL（Slf4jImpl 模式） -->
+    <logger name="com.example.spring_boot_mode.model.dao" level="DEBUG" />
+    <logger name="com.example.spring_boot_mode.flowable.dao" level="DEBUG" />
 
     <!--如果root标签在指定的日志级别那么以根日志级别为准，如果没有则以当前追加器（appender标签）日志级别为准-->
     <root level="INFO">

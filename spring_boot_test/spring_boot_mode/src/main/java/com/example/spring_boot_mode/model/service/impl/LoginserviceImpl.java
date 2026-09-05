@@ -5,9 +5,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.spring_boot_mode.flowable.dao.FlowableDao;
 import com.example.spring_boot_mode.model.dao.LoginDao;
 import com.example.spring_boot_mode.entity.ResponseObjectEntity;
-import com.example.spring_boot_mode.model.entity.SysUser;
 import com.example.spring_boot_mode.exception.ThrowMsgException;
+import com.example.spring_boot_mode.model.entity.SysUser;
+import com.example.spring_boot_mode.model.entity.rolePermission.SysRole;
 import com.example.spring_boot_mode.model.service.Loginservice;
+import com.example.spring_boot_mode.model.service.rolePermission.RoleService;
+import com.example.spring_boot_mode.utils.DateUtil;
 import com.example.spring_boot_mode.utils.ResponseUtil;
 import com.example.spring_boot_mode.utils.TokenUtill;
 import com.example.spring_boot_mode.utils.UUidUtil;
@@ -26,6 +29,8 @@ public class LoginserviceImpl implements Loginservice {
     private LoginDao loginDao;
     @Autowired
     private FlowableDao flowableDao;
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public List<SysUser> getSysUser() {
@@ -79,6 +84,20 @@ public class LoginserviceImpl implements Loginservice {
         sysUser.setId(UUidUtil.getuuid());
         int insert = loginDao.tosignUp(sysUser);
         if (insert >0){
+            // 注册成功后自动分配"普通用户"角色
+            try {
+                SysRole defaultRole = roleService.getByCode("user");
+                if (defaultRole != null) {
+                    SysUser updateUser = new SysUser();
+                    updateUser.setId(sysUser.getId());
+                    updateUser.setRoleId(defaultRole.getId());
+                    updateUser.setUpdateTime(DateUtil.getStrYmd("yyyy-MM-dd HH:mm:ss", new java.util.Date()));
+                    loginDao.updateInfo(updateUser);
+                }
+            } catch (Exception e) {
+                // 角色分配失败不影响注册，用户可以后续手动分配
+                System.out.println("Warning: Failed to assign default role for new user: " + e.getMessage());
+            }
             return ResponseUtil.success("创建成功");
         }
         return ResponseUtil.error("创建失败");

@@ -71,4 +71,22 @@ public interface ReminderDao {
                                    @Param("userId") String userId,
                                    @Param("isOpen") Integer isOpen,
                                    @Param("status") String status);
+
+    /**
+     * 统计某用户已触发但未读的提醒数量
+     */
+    int countTriggeredUnread(@Param("userId") String userId);
+
+    /**
+     * 标记单条提醒为已读
+     */
+    int markAsRead(@Param("id") String id);
+
+    /**
+     * 标记某用户所有已触发提醒为已读
+     */
+    int markAllAsRead(@Param("userId") String userId);
+
+    /** 查询所有提醒（调试用） */
+    List<Reminder> selectAll();
 }

@@ -182,6 +182,147 @@ public class DatabaseInitializer implements ApplicationRunner {
             jdbcTemplate.execute(createReminderSql);
             log.info("=== Reminder table initialized successfully ===");
 
+            // 为 reminder 表添加 is_read 列（如果不存在）
+            addColumnIfNotExists("reminder", "is_read", "tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否已读：0-未读, 1-已读' AFTER is_open");
+            // 为 reminder 表添加 repeat_type 列（如果不存在）
+            addColumnIfNotExists("reminder", "repeat_type", "varchar(20) NOT NULL DEFAULT 'none' COMMENT '重复类型：none-不重复, hourly-每小时, daily-每天, weekly-每周, monthly-每月, yearly-每年, custom-自定义' AFTER is_read");
+            // 为 reminder 表添加 repeat_interval 列（如果不存在）
+            addColumnIfNotExists("reminder", "repeat_interval", "int DEFAULT NULL COMMENT '自定义重复间隔（分钟），仅当repeat_type=custom时有效' AFTER repeat_type");
+            // 为 reminder 表添加 next_remind_time 列（如果不存在）
+            addColumnIfNotExists("reminder", "next_remind_time", "datetime DEFAULT NULL COMMENT '下次提醒时间（周期性提醒触发后自动计算）' AFTER repeat_interval");
+            // 为 reminder 表添加 repeat_end_time 列（如果不存在）
+            addColumnIfNotExists("reminder", "repeat_end_time", "datetime DEFAULT NULL COMMENT '周期结束时间（为空表示无限重复）' AFTER next_remind_time");
+            // 为 reminder 表添加 alias 列（如果不存在）
+            addColumnIfNotExists("reminder", "alias", "varchar(255) DEFAULT NULL COMMENT '目标别名（冗余字段，方便展示）' AFTER target_name");
+            // 为 reminder 表添加 address 列（如果不存在）
+            addColumnIfNotExists("reminder", "address", "varchar(500) DEFAULT NULL COMMENT '目标地址（冗余字段，方便展示）' AFTER alias");
+
+            // 9. 创建 other_collection_type 表（综合收藏类型，按用户隔离）
+            String createOctSql = "CREATE TABLE IF NOT EXISTS other_collection_type (" +
+                    "id varchar(64) NOT NULL COMMENT '主键ID'," +
+                    "user_id varchar(64) NOT NULL COMMENT '归属用户ID'," +
+                    "type_value varchar(50) NOT NULL COMMENT '类型标识'," +
+                    "label varchar(50) NOT NULL COMMENT '类型标签'," +
+                    "icon varchar(50) DEFAULT NULL COMMENT '图标名称'," +
+                    "color varchar(20) DEFAULT NULL COMMENT '颜色HEX值'," +
+                    "sort int DEFAULT 0 COMMENT '排序'," +
+                    "create_time datetime DEFAULT NULL COMMENT '创建时间'," +
+                    "PRIMARY KEY (id)," +
+                    "KEY idx_user_id (user_id)" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='综合收藏类型表'";
+            jdbcTemplate.execute(createOctSql);
+            log.info("=== OtherCollectionType table initialized successfully ===");
+
+            // 10. 创建 other_collection 表（综合收藏）
+            String createOcSql = "CREATE TABLE IF NOT EXISTS other_collection (" +
+                    "id varchar(64) NOT NULL COMMENT '主键ID'," +
+                    "user_id varchar(64) NOT NULL COMMENT '收藏者用户ID'," +
+                    "type_value varchar(50) DEFAULT NULL COMMENT '类型标识'," +
+                    "title varchar(255) NOT NULL COMMENT '标题'," +
+                    "link_url varchar(500) DEFAULT NULL COMMENT '链接'," +
+                    "picture_url varchar(500) DEFAULT NULL COMMENT '封面图路径'," +
+                    "note text COMMENT '备注'," +
+                    "tags varchar(500) DEFAULT NULL COMMENT '标签JSON数组字符串'," +
+                    "status varchar(20) DEFAULT 'wish' COMMENT '状态: wish/doing/done'," +
+                    "progress int DEFAULT 0 COMMENT '进度 0-100'," +
+                    "pinned tinyint(1) DEFAULT 0 COMMENT '是否置顶'," +
+                    "share tinyint(1) DEFAULT 0 COMMENT '是否分享到首页'," +
+                    "share_time datetime DEFAULT NULL COMMENT '分享时间'," +
+                    "create_time datetime DEFAULT NULL COMMENT '创建时间'," +
+                    "update_time datetime DEFAULT NULL COMMENT '更新时间'," +
+                    "PRIMARY KEY (id)," +
+                    "KEY idx_user_id (user_id)," +
+                    "KEY idx_type (type_value)," +
+                    "KEY idx_share (share)" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='综合收藏表'";
+            jdbcTemplate.execute(createOcSql);
+            log.info("=== OtherCollection table initialized successfully ===");
+
+            // ========== 角色权限表初始化 ==========
+
+            // 10. 创建 sys_role 表
+            String createRoleSql = "CREATE TABLE IF NOT EXISTS sys_role (" +
+                    "id varchar(64) NOT NULL COMMENT '主键ID'," +
+                    "roleName varchar(100) NOT NULL COMMENT '角色名称'," +
+                    "roleCode varchar(50) NOT NULL COMMENT '角色编码（唯一标识）'," +
+                    "description varchar(500) DEFAULT NULL COMMENT '角色描述'," +
+                    "isBuiltin tinyint(1) DEFAULT 0 COMMENT '是否内置：0-否, 1-是'," +
+                    "createTime varchar(20) DEFAULT NULL COMMENT '创建时间'," +
+                    "updateTime varchar(20) DEFAULT NULL COMMENT '更新时间'," +
+                    "PRIMARY KEY (id)," +
+                    "UNIQUE KEY uk_roleCode (roleCode)" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色表'";
+            jdbcTemplate.execute(createRoleSql);
+            log.info("=== SysRole table initialized successfully ===");
+
+            // 11. 创建 sys_permission 表
+            String createPermissionSql = "CREATE TABLE IF NOT EXISTS sys_permission (" +
+                    "id varchar(64) NOT NULL COMMENT '主键ID'," +
+                    "permissionName varchar(100) NOT NULL COMMENT '权限名称'," +
+                    "permissionCode varchar(100) NOT NULL COMMENT '权限编码（唯一标识）'," +
+                    "path varchar(255) DEFAULT NULL COMMENT '对应路由路径'," +
+                    "groupName varchar(50) DEFAULT NULL COMMENT '所属分组'," +
+                    "description varchar(500) DEFAULT NULL COMMENT '描述'," +
+                    "isBuiltin tinyint(1) DEFAULT 0 COMMENT '是否内置：0-否, 1-是'," +
+                    "sort int(11) DEFAULT 0 COMMENT '排序序号'," +
+                    "createTime varchar(20) DEFAULT NULL COMMENT '创建时间'," +
+                    "updateTime varchar(20) DEFAULT NULL COMMENT '更新时间'," +
+                    "PRIMARY KEY (id)," +
+                    "UNIQUE KEY uk_permissionCode (permissionCode)" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='权限/页面表'";
+            jdbcTemplate.execute(createPermissionSql);
+            log.info("=== SysPermission table initialized successfully ===");
+
+            // 12. 创建 sys_role_permission 表
+            String createRolePermSql = "CREATE TABLE IF NOT EXISTS sys_role_permission (" +
+                    "id varchar(64) NOT NULL COMMENT '主键ID'," +
+                    "roleId varchar(64) NOT NULL COMMENT '角色ID'," +
+                    "permissionId varchar(64) NOT NULL COMMENT '权限ID'," +
+                    "createTime varchar(20) DEFAULT NULL COMMENT '创建时间'," +
+                    "PRIMARY KEY (id)," +
+                    "UNIQUE KEY uk_role_perm (roleId, permissionId)," +
+                    "KEY idx_permissionId (permissionId)" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色-权限关联表'";
+            jdbcTemplate.execute(createRolePermSql);
+            log.info("=== SysRolePermission table initialized successfully ===");
+
+            // 为 sys_user 表添加 roleId 字段
+            addColumnIfNotExists("sys_user", "roleId", "varchar(64) DEFAULT NULL COMMENT '用户角色ID'");
+            log.info("=== SysUser roleId column initialized successfully ===");
+
+            // 初始化内置角色和权限数据（幂等，通过 NOT EXISTS 检查）
+            initDefaultRoles();
+            initDefaultPermissions();
+            initDefaultRolePermissions();
+            log.info("=== Default role/permission data initialized ===");
+
+            // ========== animation 表新增字段（ACG 收藏扩展） ==========
+            // 说明：全部不加 AFTER，让 MySQL 直接追加到表末尾，避免 AFTER 目标列还不存在导致的错误
+            // 通用字段
+            addColumnIfNotExists("animation", "type", "varchar(20) DEFAULT 'animation' COMMENT '类型: animation/comic/novel/game'");
+            addColumnIfNotExists("animation", "rating", "DECIMAL(3,1) DEFAULT NULL COMMENT '评分 0-10'");
+            addColumnIfNotExists("animation", "tags", "varchar(200) DEFAULT NULL COMMENT '标签,逗号分隔'");
+            // 动画专属
+            addColumnIfNotExists("animation", "episodes", "int DEFAULT NULL COMMENT '总集数(动画)'");
+            addColumnIfNotExists("animation", "studio", "varchar(100) DEFAULT NULL COMMENT '制作公司(动画)'");
+            addColumnIfNotExists("animation", "voice_actors", "varchar(300) DEFAULT NULL COMMENT '声优(动画)'");
+            addColumnIfNotExists("animation", "source", "varchar(50) DEFAULT NULL COMMENT '原作来源(动画): 漫改/轻改/原创/游戏改'");
+            // 漫画专属
+            addColumnIfNotExists("animation", "chapters", "int DEFAULT NULL COMMENT '总话数(漫画)'");
+            addColumnIfNotExists("animation", "comic_author", "varchar(100) DEFAULT NULL COMMENT '作者(漫画)'");
+            addColumnIfNotExists("animation", "publisher", "varchar(100) DEFAULT NULL COMMENT '出版社(漫画)'");
+            addColumnIfNotExists("animation", "serialization", "varchar(50) DEFAULT NULL COMMENT '连载周期(漫画)'");
+            // 小说专属
+            addColumnIfNotExists("animation", "word_count", "int DEFAULT NULL COMMENT '总字数(千字,小说)'");
+            addColumnIfNotExists("animation", "novel_author", "varchar(100) DEFAULT NULL COMMENT '作者(小说)'");
+            addColumnIfNotExists("animation", "platform", "varchar(100) DEFAULT NULL COMMENT '平台(小说)'");
+            addColumnIfNotExists("animation", "category", "varchar(50) DEFAULT NULL COMMENT '分类(小说)'");
+            // 游戏专属
+            addColumnIfNotExists("animation", "game_platform", "varchar(100) DEFAULT NULL COMMENT '游戏平台'");
+            addColumnIfNotExists("animation", "developer", "varchar(100) DEFAULT NULL COMMENT '开发商(游戏)'");
+            addColumnIfNotExists("animation", "genre", "varchar(50) DEFAULT NULL COMMENT '游戏类型'");
+            addColumnIfNotExists("animation", "hours_played", "int DEFAULT NULL COMMENT '游玩小时数(游戏)'");
+
         } catch (Exception e) {
             log.error("=== Database initialization failed: {} ===", e.getMessage());
         }
@@ -199,6 +340,144 @@ public class DatabaseInitializer implements ApplicationRunner {
         } catch (Exception e) {
             // 列已存在或其他错误，记录警告但不中断
             log.warn("=== Column '{}' in table '{}' check result: {} ===", columnName, tableName, e.getMessage());
+        }
+    }
+
+    /**
+     * 初始化默认角色（内置，不可删除）
+     */
+    private void initDefaultRoles() {
+        String now = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        // 管理员角色
+        String insertAdminRole = "INSERT INTO sys_role (id, roleName, roleCode, description, isBuiltin, createTime, updateTime) " +
+                "SELECT 'role_admin', '管理员', 'admin', '拥有所有页面访问权限', 1, '" + now + "', '" + now + "' " +
+                "WHERE NOT EXISTS (SELECT 1 FROM sys_role WHERE roleCode = 'admin')";
+        jdbcTemplate.execute(insertAdminRole);
+
+        // 普通用户角色
+        String insertUserRole = "INSERT INTO sys_role (id, roleName, roleCode, description, isBuiltin, createTime, updateTime) " +
+                "SELECT 'role_user', '普通用户', 'user', '基础页面访问权限，无法访问管理功能', 1, '" + now + "', '" + now + "' " +
+                "WHERE NOT EXISTS (SELECT 1 FROM sys_role WHERE roleCode = 'user')";
+        jdbcTemplate.execute(insertUserRole);
+
+        // 访客角色（未登录时）
+        String insertGuestRole = "INSERT INTO sys_role (id, roleName, roleCode, description, isBuiltin, createTime, updateTime) " +
+                "SELECT 'role_guest', '访客', 'guest', '未登录状态下的只读权限', 1, '" + now + "', '" + now + "' " +
+                "WHERE NOT EXISTS (SELECT 1 FROM sys_role WHERE roleCode = 'guest')";
+        jdbcTemplate.execute(insertGuestRole);
+    }
+
+    /**
+     * 初始化默认权限/页面（内置）
+     */
+    private void initDefaultPermissions() {
+        String now = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        // 首页
+        insertPermissionIfNotExists("perm_home", "首页", "page:home", "/home", "首页", "系统首页", 0, now);
+
+        // 收藏夹相关
+        insertPermissionIfNotExists("perm_favorites", "收藏夹", "page:favorites", "/favorites", "收藏夹", "收藏夹入口", 1, now);
+        insertPermissionIfNotExists("perm_twod_animation", "动画收藏", "page:favorites:animation", "/twoDimensions/animation", "收藏夹", "二次元-动画", 2, now);
+        insertPermissionIfNotExists("perm_twod_comic", "漫画收藏", "page:favorites:comic", "/twoDimensions/comic", "收藏夹", "二次元-漫画", 3, now);
+        insertPermissionIfNotExists("perm_twod_novel", "小说收藏", "page:favorites:novel", "/twoDimensions/novel", "收藏夹", "二次元-小说", 4, now);
+        insertPermissionIfNotExists("perm_twod_game", "游戏收藏", "page:favorites:game", "/twoDimensions/game", "收藏夹", "二次元-游戏", 5, now);
+        insertPermissionIfNotExists("perm_url_collect", "网站收藏", "page:favorites:url", "/oneDimensions/uRLcollect", "收藏夹", "一次元-网站收藏", 7, now);
+        insertPermissionIfNotExists("perm_other_collect", "综合收藏", "page:favorites:other", "/otherDimensions", "收藏夹", "书籍/电影/音乐/名言等综合收藏", 9, now);
+
+        // 清理已废弃的三次元/四次元权限（关联和主表）
+        try {
+            jdbcTemplate.execute("DELETE FROM sys_role_permission WHERE permissionId IN ('perm_threed_tv', 'perm_fourdimensions', 'perm_user_apply')");
+            jdbcTemplate.execute("DELETE FROM sys_permission WHERE id IN ('perm_threed_tv', 'perm_fourdimensions', 'perm_user_apply')");
+            log.info("=== Cleaned up deprecated permissions ===");
+        } catch (Exception e) {
+            log.warn("Cleanup deprecated permissions warn: {}", e.getMessage());
+        }
+
+        // 我的相关 - 基础（所有登录用户可用）
+        insertPermissionIfNotExists("perm_user_self", "我的", "page:self", "/userSelf", "我的", "我的入口", 10, now);
+        insertPermissionIfNotExists("perm_user_my_msg", "我的信息", "page:self:msg", "/userSelf/myMsg", "我的", "个人信息", 11, now);
+
+        // 我的相关 - 管理功能（仅管理员）
+        insertPermissionIfNotExists("perm_user_carousel", "走马灯管理", "page:self:carousel", "/userSelf/carousel", "管理", "走马灯控制", 20, now);
+        insertPermissionIfNotExists("perm_user_footer", "底部内容管理", "page:self:footer", "/userSelf/footer", "管理", "底部内容控制", 21, now);
+        insertPermissionIfNotExists("perm_user_basic_config", "基本配置", "page:self:basicConfig", "/userSelf/basicConfig", "管理", "系统基本配置", 22, now);
+        insertPermissionIfNotExists("perm_user_total_feedback", "总反馈管理", "page:self:totalFeedback", "/userSelf/totalFeedback", "管理", "反馈管理", 23, now);
+        insertPermissionIfNotExists("perm_user_publish_notification", "发布通知", "page:self:publishNotification", "/userSelf/publishNotification", "管理", "通知发布", 24, now);
+        insertPermissionIfNotExists("perm_user_role_manage", "角色权限管理", "page:self:rolePermission", "/userSelf/rolePermission", "管理", "角色权限配置", 25, now);
+
+        // 消息中心
+        insertPermissionIfNotExists("perm_message_center", "消息中心", "page:messageCenter", "/messageCenter", "消息", "消息中心", 30, now);
+    }
+
+    /**
+     * 初始化默认角色-权限关联
+     */
+    private void initDefaultRolePermissions() {
+        String now = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        // 管理员角色：拥有所有权限
+        assignRoleAllPermissions("role_admin", now);
+
+        // 普通用户角色：只有基础页面（首页、收藏夹全部、我的基础、消息中心）
+        String[] userPerms = {
+                "perm_home", "perm_favorites", "perm_twod_animation", "perm_twod_comic",
+                "perm_twod_novel", "perm_twod_game", "perm_url_collect",
+                "perm_other_collect", "perm_user_self", "perm_user_my_msg",
+                "perm_message_center"
+        };
+        assignRoleSpecificPermissions("role_user", userPerms, now);
+
+        // 访客角色：只有首页（未登录状态下前端不会进入除首页外的页面，但保留配置）
+        String[] guestPerms = {"perm_home"};
+        assignRoleSpecificPermissions("role_guest", guestPerms, now);
+    }
+
+    /**
+     * 插入权限（如果不存在）
+     */
+    private void insertPermissionIfNotExists(String id, String name, String code, String path, String group, String desc, int sort, String now) {
+        String sql = "INSERT INTO sys_permission (id, permissionName, permissionCode, path, groupName, description, isBuiltin, sort, createTime, updateTime) " +
+                "SELECT '" + id + "', '" + name + "', '" + code + "', '" + path + "', '" + group + "', '" + desc + "', 1, " + sort + ", '" + now + "', '" + now + "' " +
+                "WHERE NOT EXISTS (SELECT 1 FROM sys_permission WHERE permissionCode = '" + code + "')";
+        try {
+            jdbcTemplate.execute(sql);
+        } catch (Exception e) {
+            log.warn("Init permission {} warn: {}", code, e.getMessage());
+        }
+    }
+
+    /**
+     * 为角色分配所有权限
+     */
+    private void assignRoleAllPermissions(String roleId, String now) {
+        // 查询所有已存在的权限ID并关联
+        String assignAll = "INSERT INTO sys_role_permission (id, roleId, permissionId, createTime) " +
+                "SELECT CONCAT('rp_', p.id), '" + roleId + "', p.id, '" + now + "' " +
+                "FROM sys_permission p " +
+                "WHERE NOT EXISTS (SELECT 1 FROM sys_role_permission rp WHERE rp.roleId = '" + roleId + "' AND rp.permissionId = p.id)";
+        try {
+            jdbcTemplate.execute(assignAll);
+        } catch (Exception e) {
+            log.warn("Assign all permissions to role {} warn: {}", roleId, e.getMessage());
+        }
+    }
+
+    /**
+     * 为角色分配指定权限
+     */
+    private void assignRoleSpecificPermissions(String roleId, String[] permIds, String now) {
+        for (String permId : permIds) {
+            String assign = "INSERT INTO sys_role_permission (id, roleId, permissionId, createTime) " +
+                    "SELECT CONCAT('rp_', '" + roleId + "', '_', '" + permId + "'), '" + roleId + "', '" + permId + "', '" + now + "' " +
+                    "WHERE EXISTS (SELECT 1 FROM sys_permission WHERE id = '" + permId + "') " +
+                    "AND NOT EXISTS (SELECT 1 FROM sys_role_permission rp WHERE rp.roleId = '" + roleId + "' AND rp.permissionId = '" + permId + "')";
+            try {
+                jdbcTemplate.execute(assign);
+            } catch (Exception e) {
+                log.warn("Assign permission {} to role {} warn: {}", permId, roleId, e.getMessage());
+            }
         }
     }
 }

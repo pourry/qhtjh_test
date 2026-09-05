@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring_boot_mode.model.dao.rolePermission.RoleDao">
+
+    <!-- 列定义片段 -->
+    <sql id="roleCols">
+        id, roleName, roleCode, description, isBuiltin, createTime, updateTime
+    </sql>
+
+    <resultMap id="RoleResultMap" type="com.example.spring_boot_mode.model.entity.rolePermission.SysRole">
+        <id column="id" property="id"/>
+        <result column="roleName" property="roleName"/>
+        <result column="roleCode" property="roleCode"/>
+        <result column="description" property="description"/>
+        <result column="isBuiltin" property="isBuiltin"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectAllRoles" resultMap="RoleResultMap">
+        SELECT <include refid="roleCols"/> FROM sys_role ORDER BY createTime ASC
+    </select>
+
+    <!-- 角色分页查询（原生 SQL） -->
+    <select id="selectRolePage" resultMap="RoleResultMap">
+        SELECT <include refid="roleCols"/> FROM sys_role
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (roleName LIKE CONCAT('%', #{keyword}, '%') OR roleCode LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY createTime ASC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 统计角色总数 -->
+    <select id="countRoles" resultType="long">
+        SELECT COUNT(*) FROM sys_role
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (roleName LIKE CONCAT('%', #{keyword}, '%') OR roleCode LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+    </select>
+
+    <select id="selectById" resultMap="RoleResultMap">
+        SELECT <include refid="roleCols"/> FROM sys_role WHERE id = #{id}
+    </select>
+
+    <select id="selectByCode" resultMap="RoleResultMap">
+        SELECT <include refid="roleCols"/> FROM sys_role WHERE roleCode = #{roleCode}
+    </select>
+
+    <select id="selectByIds" resultMap="RoleResultMap">
+        SELECT <include refid="roleCols"/> FROM sys_role WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insert" parameterType="com.example.spring_boot_mode.model.entity.rolePermission.SysRole">
+        INSERT INTO sys_role (id, roleName, roleCode, description, isBuiltin, createTime, updateTime)
+        VALUES (#{id}, #{roleName}, #{roleCode}, #{description}, #{isBuiltin}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="update" parameterType="com.example.spring_boot_mode.model.entity.rolePermission.SysRole">
+        UPDATE sys_role
+        <set>
+            <if test="roleName != null">roleName = #{roleName},</if>
+            <if test="roleCode != null">roleCode = #{roleCode},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="updateTime != null">updateTime = #{updateTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM sys_role WHERE id = #{id}
+    </delete>
+
+</mapper>

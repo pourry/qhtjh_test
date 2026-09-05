@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring_boot_mode.model.dao.rolePermission.PermissionDao">
+
+    <!-- 列定义片段 -->
+    <sql id="permissionCols">
+        id, permissionName, permissionCode, path, groupName, description, isBuiltin, sort, createTime, updateTime
+    </sql>
+
+    <!-- 带表别名前缀的列定义（用于 JOIN 查询） -->
+    <sql id="permissionColsWithAlias">
+        p.id, p.permissionName, p.permissionCode, p.path, p.groupName, p.description, p.isBuiltin, p.sort, p.createTime, p.updateTime
+    </sql>
+
+    <resultMap id="PermissionResultMap" type="com.example.spring_boot_mode.model.entity.rolePermission.SysPermission">
+        <id column="id" property="id"/>
+        <result column="permissionName" property="permissionName"/>
+        <result column="permissionCode" property="permissionCode"/>
+        <result column="path" property="path"/>
+        <result column="groupName" property="groupName"/>
+        <result column="description" property="description"/>
+        <result column="isBuiltin" property="isBuiltin"/>
+        <result column="sort" property="sort"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectAllPermissions" resultMap="PermissionResultMap">
+        SELECT <include refid="permissionCols"/> FROM sys_permission ORDER BY sort ASC, createTime ASC
+    </select>
+
+    <!-- 权限分页查询（原生 SQL） -->
+    <select id="selectPermissionPage" resultMap="PermissionResultMap">
+        SELECT <include refid="permissionCols"/> FROM sys_permission
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (permissionName LIKE CONCAT('%', #{keyword}, '%')
+                     OR permissionCode LIKE CONCAT('%', #{keyword}, '%')
+                     OR path LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY sort ASC, createTime ASC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 统计权限总数 -->
+    <select id="countPermissions" resultType="long">
+        SELECT COUNT(*) FROM sys_permission
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (permissionName LIKE CONCAT('%', #{keyword}, '%')
+                     OR permissionCode LIKE CONCAT('%', #{keyword}, '%')
+                     OR path LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+    </select>
+
+    <select id="selectById" resultMap="PermissionResultMap">
+        SELECT <include refid="permissionCols"/> FROM sys_permission WHERE id = #{id}
+    </select>
+
+    <select id="selectByCode" resultMap="PermissionResultMap">
+        SELECT <include refid="permissionCols"/> FROM sys_permission WHERE permissionCode = #{permissionCode}
+    </select>
+
+    <select id="selectByRoleId" resultMap="PermissionResultMap">
+        SELECT <include refid="permissionColsWithAlias"/>
+        FROM sys_permission p
+        INNER JOIN sys_role_permission rp ON p.id = rp.permissionId
+        WHERE rp.roleId = #{roleId}
+        ORDER BY p.sort ASC
+    </select>
+
+    <select id="selectByRoleCode" resultMap="PermissionResultMap">
+        SELECT <include refid="permissionColsWithAlias"/>
+        FROM sys_permission p
+        INNER JOIN sys_role_permission rp ON p.id = rp.permissionId
+        INNER JOIN sys_role r ON rp.roleId = r.id
+        WHERE r.roleCode = #{roleCode}
+        ORDER BY p.sort ASC
+    </select>
+
+    <select id="selectByUserId" resultMap="PermissionResultMap">
+        SELECT <include refid="permissionColsWithAlias"/>
+        FROM sys_permission p
+        INNER JOIN sys_role_permission rp ON p.id = rp.permissionId
+        INNER JOIN sys_user u ON rp.roleId = u.roleId
+        WHERE u.id = #{userId}
+        ORDER BY p.sort ASC
+    </select>
+
+    <insert id="insert" parameterType="com.example.spring_boot_mode.model.entity.rolePermission.SysPermission">
+        INSERT INTO sys_permission (id, permissionName, permissionCode, path, groupName, description, isBuiltin, sort, createTime, updateTime)
+        VALUES (#{id}, #{permissionName}, #{permissionCode}, #{path}, #{groupName}, #{description}, #{isBuiltin}, #{sort}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="update" parameterType="com.example.spring_boot_mode.model.entity.rolePermission.SysPermission">
+        UPDATE sys_permission
+        <set>
+            <if test="permissionName != null">permissionName = #{permissionName},</if>
+            <if test="permissionCode != null">permissionCode = #{permissionCode},</if>
+            <if test="path != null">path = #{path},</if>
+            <if test="groupName != null">groupName = #{groupName},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="updateTime != null">updateTime = #{updateTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM sys_permission WHERE id = #{id}
+    </delete>
+
+</mapper>

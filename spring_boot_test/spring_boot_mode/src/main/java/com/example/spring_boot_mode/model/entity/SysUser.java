@@ -36,6 +36,8 @@ public class SysUser {
     private String updateTime;
     /** 在线状态：true-在线，false-离线 */
     private Boolean onlineStatus = false;
+    /** 用户角色ID */
+    private String roleId;
 
     public String getTheme() {
         return theme;

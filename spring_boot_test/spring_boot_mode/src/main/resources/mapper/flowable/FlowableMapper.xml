@@ -6,7 +6,7 @@
 
 <mapper namespace="com.example.spring_boot_mode.flowable.dao.FlowableDao">
     <select id="testFlowAble" resultType="map">
-    select * from  flowable
+    SELECT id, name FROM flowable
     </select>
 
 </mapper>

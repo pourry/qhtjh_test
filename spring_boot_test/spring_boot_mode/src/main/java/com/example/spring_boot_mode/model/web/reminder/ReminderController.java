@@ -128,4 +128,41 @@ public class ReminderController {
         reminderService.checkAndTrigger();
         return ResponseUtil.success(null);
     }
+
+    /**
+     * 调试：查看所有提醒（测试用）
+     */
+    @GetMapping("/debug")
+    public ResponseObjectEntity debug() {
+        List<Reminder> all = reminderService.getAllReminders();
+        return ResponseUtil.success(all);
+    }
+
+    /**
+     * 获取某用户已触发但未读的提醒数量
+     * 用于消息中心弹框的红点角标
+     */
+    @GetMapping("/unreadCount")
+    public ResponseObjectEntity unreadCount(@RequestParam("userId") String userId) {
+        int count = reminderService.getUnreadCount(userId);
+        return ResponseUtil.success(count);
+    }
+
+    /**
+     * 标记单条提醒为已读
+     */
+    @PostMapping("/markRead/{id}")
+    public ResponseObjectEntity markRead(@PathVariable String id) {
+        reminderService.markAsRead(id);
+        return ResponseUtil.success(null);
+    }
+
+    /**
+     * 标记某用户所有已触发提醒为已读
+     */
+    @PostMapping("/markAllRead")
+    public ResponseObjectEntity markAllRead(@RequestParam("userId") String userId) {
+        reminderService.markAllAsRead(userId);
+        return ResponseUtil.success(null);
+    }
 }

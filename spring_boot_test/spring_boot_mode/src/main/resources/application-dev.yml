@@ -11,19 +11,27 @@ server:
 spring:
   main:
     allow-bean-definition-overriding: true
+  # Jackson 全局时区配置，LocalDateTime 序列化/反序列化都用 Asia/Shanghai
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
   datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
+#    url: jdbc:mysql://localhost:3306/flowable?serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
 #    username: root
 #    password: l1998C12r05
     mode:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://192.168.93.128:3306/test_all?serverTimezone=UTC&nullCatalogMeansCurrent=true
+      jdbc-url: jdbc:mysql://192.168.93.128:3306/test_all?serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
       username: root
       password: '@l1998C12r05'
     flowable:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://192.168.93.128:3306/flowable?serverTimezone=UTC&nullCatalogMeansCurrent=true
+      jdbc-url: jdbc:mysql://192.168.93.128:3306/flowable?serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
       username: root
       password: '@l1998C12r05'
 
@@ -83,6 +91,9 @@ picture:
   user:
     path: D:\picture\user
     mappingPath: http://localhost:${server.port}/localPicture/user/
+  other:
+    path: D:\picture\other
+    mappingPath: http://localhost:${server.port}/localPicture/other/
 
 # ==================== 聊天室配置 ====================
 chat:

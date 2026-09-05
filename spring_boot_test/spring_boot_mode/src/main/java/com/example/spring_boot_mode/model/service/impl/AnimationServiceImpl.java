@@ -129,16 +129,27 @@ public class AnimationServiceImpl implements AnimationService {
                 animation.setRemindtime(reminder.getRemindTime() != null ?
                         reminder.getRemindTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : null);
                 animation.setRemindmsg(reminder.getRemindMsg());
+                // 补充周期性提醒字段
+                animation.setRepeatType(reminder.getRepeatType());
+                animation.setRepeatInterval(reminder.getRepeatInterval());
+                animation.setRepeatEndTime(reminder.getRepeatEndTime() != null ?
+                        reminder.getRepeatEndTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : null);
             } else {
                 animation.setRemindopen(false);
                 animation.setRemindtime(null);
                 animation.setRemindmsg(null);
+                animation.setRepeatType("none");
+                animation.setRepeatInterval(null);
+                animation.setRepeatEndTime(null);
             }
         } catch (Exception e) {
             // 查询失败不影响主流程
             animation.setRemindopen(false);
             animation.setRemindtime(null);
             animation.setRemindmsg(null);
+            animation.setRepeatType("none");
+            animation.setRepeatInterval(null);
+            animation.setRepeatEndTime(null);
         }
     }
 
@@ -297,19 +308,32 @@ public class AnimationServiceImpl implements AnimationService {
                 }
                 // 设置提醒信息
                 reminder.setTargetName(animation.getName());
+                reminder.setAlias(animation.getAlias());
+                reminder.setAddress(animation.getAddress());
                 reminder.setStatus(Reminder.STATUS_PENDING);
                 reminder.setIsOpen(1);
                 // 提醒消息默认为空字符串
                 reminder.setRemindMsg(animation.getRemindmsg() != null ? animation.getRemindmsg() : "");
 
-                // 解析提醒时间，如果为空则使用当前时间
-                if (animation.getRemindtime() != null && !animation.getRemindtime().isEmpty()) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                    reminder.setRemindTime(LocalDateTime.parse(animation.getRemindtime(), formatter));
+                // 解析提醒时间，如果为空则跳过保存（前端已验证，后端兜底）
+                if (animation.getRemindtime() == null || animation.getRemindtime().isEmpty()) {
+                    log.warn("提醒时间为空，跳过提醒保存: targetId={}", targetId);
+                    return;  // 不保存提醒，避免用当前时间兜底
+                }
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                reminder.setRemindTime(LocalDateTime.parse(animation.getRemindtime(), formatter));
+
+                // 设置周期性提醒字段
+                String repeatType = animation.getRepeatType();
+                boolean isRepeat = repeatType != null && !repeatType.isEmpty() && !"none".equals(repeatType);
+                reminder.setRepeatType(isRepeat ? repeatType : Reminder.REPEAT_NONE);
+                reminder.setRepeatInterval(isRepeat ? animation.getRepeatInterval() : null);
+                // 没有开周期 → 必须清 nextRemindTime！否则查询条件 IFNULL(next, remind) 会用旧值
+                reminder.setNextRemindTime(null);
+                if (isRepeat && animation.getRepeatEndTime() != null && !animation.getRepeatEndTime().isEmpty()) {
+                    reminder.setRepeatEndTime(LocalDateTime.parse(animation.getRepeatEndTime(), formatter));
                 } else {
-                    // 默认使用当前时间
-                    reminder.setRemindTime(LocalDateTime.now());
-                    log.warn("提醒时间为空，使用当前时间: {}", reminder.getRemindTime());
+                    reminder.setRepeatEndTime(null);
                 }
 
                 reminderService.saveReminder(reminder);

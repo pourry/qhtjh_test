@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spring_boot_mode.model.dao.rolePermission.RolePermissionDao">
+
+    <sql id="rolePermissionCols">
+        id, roleId, permissionId, createTime
+    </sql>
+
+    <select id="selectPermissionIdsByRoleId" resultType="java.lang.String">
+        SELECT permissionId FROM sys_role_permission WHERE roleId = #{roleId}
+    </select>
+
+    <select id="selectRoleIdsByPermissionId" resultType="java.lang.String">
+        SELECT roleId FROM sys_role_permission WHERE permissionId = #{permissionId}
+    </select>
+
+    <insert id="batchInsert">
+        INSERT INTO sys_role_permission (id, roleId, permissionId, createTime)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.roleId}, #{item.permissionId}, #{item.createTime})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByRoleId">
+        DELETE FROM sys_role_permission WHERE roleId = #{roleId}
+    </delete>
+
+    <delete id="deleteByPermissionId">
+        DELETE FROM sys_role_permission WHERE permissionId = #{permissionId}
+    </delete>
+
+    <!-- 更新用户角色 -->
+    <update id="updateUserRoleId">
+        UPDATE sys_user SET roleId = #{roleId} WHERE id = #{userId}
+    </update>
+
+    <!-- 分页查询用户（原生 SQL 方式） -->
+    <select id="selectUserPage" resultType="com.example.spring_boot_mode.model.entity.SysUser">
+        SELECT id, username, nickName, roleId, createTime
+        FROM sys_user
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (username LIKE CONCAT('%', #{keyword}, '%') OR nickName LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY createTime DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 统计用户总数 -->
+    <select id="countUsers" resultType="long">
+        SELECT COUNT(*) FROM sys_user
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (username LIKE CONCAT('%', #{keyword}, '%') OR nickName LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+    </select>
+
+</mapper>
